@@ -71,6 +71,17 @@ fi
   "$airbyte_python" generate_schemas.py --check
   "$airbyte_python" -m pytest test_source.py -q
 )
+meltano_python="${ARCMIRA_MELTANO_PYTHON:-$PWD/packages/meltano/.venv/bin/python}"
+if [[ ! -x "$meltano_python" ]]; then
+  echo "Meltano checks need the locked Python environment; see packages/meltano/README.md." >&2
+  exit 1
+fi
+(
+  cd packages/meltano
+  "$meltano_python" check_schemas.py
+  "$meltano_python" -m pytest tests -q
+  "$meltano_python" -m hatchling build
+)
 python3 scripts/test-python-release.py
 git diff --check
 git diff --cached --check

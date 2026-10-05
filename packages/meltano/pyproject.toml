@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tap-arcmira"
+version = "0.1.0"
+description = "Arcmira YouTube mentions and recommendations for Meltano"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+dependencies = ["singer-sdk==0.54.6", "requests==2.34.2", "jsonschema==4.26.0"]
+
+[project.urls]
+Documentation = "https://arcmira.com/docs"
+Homepage = "https://arcmira.com"
+
+[project.scripts]
+tap-arcmira = "tap_arcmira.tap:TapArcmira.cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["tap_arcmira"]

@@ -1,0 +1,38 @@
+requires_meltano: '>=4.3,<5'
+default_environment: dev
+environments:
+- name: dev
+plugins:
+  extractors:
+  - name: tap-arcmira
+    namespace: tap_arcmira
+    label: Arcmira
+    pip_url: .
+    executable: tap-arcmira
+    description: Export YouTube mentions and recommendations for a defined entity and publication window.
+    capabilities: [catalog, discover, activate-version, about]
+    settings:
+    - name: api_key
+      kind: string
+      sensitive: true
+    - name: entity_ids
+      kind: array
+    - name: after
+      kind: string
+    - name: before
+      kind: string
+    - name: channel_id
+      kind: string
+    - name: page_size
+      kind: integer
+      value: 100
+    - name: max_pages_per_entity
+      kind: integer
+      value: 10
+    - name: include_recommendations
+      kind: boolean
+      value: false
+    config:
+      entity_ids: [ent_14]
+      after: '2026-09-01'
+      before: '2026-10-01'

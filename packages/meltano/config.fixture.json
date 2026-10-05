@@ -1,0 +1,9 @@
+{
+  "api_key": "synthetic-test-secret",
+  "entity_ids": [
+    "ent_14"
+  ],
+  "after": "2026-09-01",
+  "before": "2026-10-01",
+  "include_recommendations": true
+}
