@@ -1,0 +1,40 @@
+name: Publish Python LangChain package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-langchain-python
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'arcmira/integrations' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Download locally verified release artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="$(python3 -c 'import json; print(json.load(open("release-artifacts/langchain-python/current.json"))["tag"])')"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern 'langchain_arcmira-*.whl' --pattern 'langchain_arcmira-*.tar.gz' --dir dist
+          python3 scripts/verify-python-release.py --tag "$tag" dist
+      - name: Publish with PyPI trusted publishing
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        with:
+          packages-dir: dist
+          attestations: true
+          print-hash: true
+          verbose: false

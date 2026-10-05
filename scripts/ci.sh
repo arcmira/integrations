@@ -39,5 +39,6 @@ done
   uv build
   uv run --frozen twine check dist/*
 )
+python3 scripts/test-python-release.py
 git diff --check
 git diff --cached --check

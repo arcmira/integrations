@@ -39,3 +39,30 @@ Dify dependencies retain the September 26, 2026 cutoff in `pyproject.toml` and `
 ## Before Python LangChain publication
 
 Publish the verified wheel to PyPI as `langchain-arcmira`, then file an Integration listing issue with LangChain. The package README is the dedicated guide. A source preview alone does not qualify for the catalog. First publication and trusted publishing must use the branded Arcmira publisher account. No listing issue has been filed.
+
+
+### Configure PyPI trusted publishing
+
+Create a pending publisher in the branded PyPI account with these fields:
+
+| Field | Value |
+| --- | --- |
+| PyPI project | `langchain-arcmira` |
+| GitHub owner | `arcmira` |
+| GitHub repository | `integrations` |
+| Workflow filename | `publish-langchain-python.yml` |
+| Environment | `pypi` |
+
+The manual workflow runs on `master` and uploads prebuilt GitHub release assets. It does not build or test packages. It verifies artifact SHA-256 checksums, the package source tree at both `HEAD` and the release tag, and a clean package directory before obtaining PyPI publishing credentials.
+
+### Prepare and publish the Python release
+
+1. Run `scripts/ci.sh` locally on the release source. The Python checks build the wheel and source archive in `packages/langchain-python/dist/`.
+2. Record their SHA-256 checksums and the committed package tree in `release-artifacts/langchain-python/current.json`.
+3. Commit the manifest and run `python3 scripts/verify-python-release.py packages/langchain-python/dist`.
+4. Merge the reviewed release commit to `master`. Create the manifest's signed tag at that commit and attach the verified wheel and source archive to its GitHub release.
+5. Run `python3 scripts/verify-python-release.py --tag langchain-python-v0.1.0 packages/langchain-python/dist` on the release checkout.
+6. Confirm that the PyPI publisher configuration matches the table above. Dispatch **Publish Python LangChain package** from `master`.
+7. Verify the PyPI files, provenance, clean installation, and import before marking the package published or submitting the LangChain catalog issue.
+
+Never rebuild or replace assets after their checksums are recorded without repeating the local checks and updating the manifest. The verifier permits only the two recorded artifacts and the exact `.gitignore` metadata file that `uv build` adds locally.

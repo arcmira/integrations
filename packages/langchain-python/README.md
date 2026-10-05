@@ -4,7 +4,7 @@
 
 Give your agent timestamped evidence from YouTube videos and livestreams. Find who said what, search mentions of people and products, and filter passages classified as sponsored or organic.
 
-**Source preview.** This package is not yet published to PyPI or listed in LangChain's catalog.
+See [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md) for package and catalog availability. The quick start below installs the source checkout.
 
 ## Quick start
 
