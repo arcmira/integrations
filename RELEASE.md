@@ -59,6 +59,8 @@ Dify dependencies retain the September 26, 2026 cutoff in `pyproject.toml` and `
 
 The package README is the dedicated guide. Catalog inclusion remains pending maintainer review.
 
+The guide on `master` now leads with the published pip install. PyPI 0.1.0 retains its original source-checkout guide inside the immutable release artifacts. That registry copy will refresh with the next package release; this documentation update does not change version 0.1.0 or replace its artifacts. A future publication must record the new package source tree and artifact checksums.
+
 
 ### Configure PyPI trusted publishing
 

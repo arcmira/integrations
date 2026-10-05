@@ -1,5 +1,7 @@
 # Arcmira: YouTube Transcript Search
 
+[API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
+
 Source preview for the Vercel AI SDK. This package is not published to npm yet.
 
 Search indexed YouTube transcripts for timestamped passages. Resolve names to IDs, then filter by channel, speaker, topic, transcript source, or sponsored and organic passages.
@@ -40,7 +42,6 @@ The tools accept the AI SDK cancellation signal. This candidate exposes search a
 
 ## Documentation
 
-- [API docs](https://arcmira.com/docs)
 - [Search reference](https://arcmira.com/docs/search)
 - [Arcmira libraries](https://arcmira.com/docs/libraries)
 

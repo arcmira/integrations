@@ -4,16 +4,14 @@
 
 Give your agent timestamped evidence from YouTube videos and livestreams. Find who said what, search mentions of people and products, and filter passages classified as sponsored or organic.
 
-See [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md) for package and catalog availability. The quick start below installs the source checkout.
+Install the published PyPI package below. See [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md) for verification details and catalog availability.
 
 ## Quick start
 
 ```sh
-git clone https://github.com/arcmira/integrations.git
-cd integrations/packages/langchain-python
-uv sync --frozen
+pip install langchain-arcmira==0.1.0
 export ARCMIRA_API_KEY='your-key'
-uv run --frozen python - <<'PY'
+python - <<'PY'
 from langchain_arcmira import ArcmiraSearch
 
 result = ArcmiraSearch().invoke({"q": "AI agents", "limit": 5})
@@ -33,7 +31,7 @@ Keep the API key in server-side configuration. It is excluded from model tool ar
 | `ArcmiraSearch` | Search transcript passages with timestamps, source labels, speaker and entity filters, dates, and sponsored or organic classifications. |
 | `ArcmiraResolve` | Resolve a person, organization, product, topic or channel before using its IDs in a search. |
 
-Both are native LangChain `BaseTool` classes. Pass them to a LangChain agent or LangGraph `ToolNode`:
+Both are native LangChain `BaseTool` classes. Pass them to a LangChain agent or LangGraph `ToolNode`. For the LangGraph example, also install `langgraph`:
 
 ```python
 from langgraph.prebuilt import ToolNode
@@ -68,9 +66,12 @@ A refused Premium filter remains an error. The tools do not substitute captions,
 
 These two tools do not fetch full transcripts or write monitors. Use the [SDK](https://arcmira.com/docs/libraries) or [MCP server](https://arcmira.com/docs/mcp-server) for those operations.
 
-## Verify locally
+## Develop and verify locally
 
 ```sh
+git clone https://github.com/arcmira/integrations.git
+cd integrations/packages/langchain-python
+uv sync --frozen
 uv run --frozen ruff check .
 uv run --frozen pytest tests/unit_tests -q
 # Optional, with your own API key. Searches return at most one passage per call.
