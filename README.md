@@ -7,7 +7,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Integration | Source | Status |
 | --- | --- | --- |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Source preview; npm and catalog publication pending |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | Source preview; PyPI and catalog publication pending |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/); [catalog review pending](https://github.com/langchain-ai/docs/issues/6442) |
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
@@ -15,7 +15,24 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 
 For a standard MCP connection, use the authenticated [OpenAI Agents SDK](examples/openai-agents) or [Pydantic AI](examples/pydantic-ai) research example. Both retrieve a timestamped passage without an external model call.
 
-## Try the LangChain source preview
+## Install the Python package
+
+```sh
+pip install langchain-arcmira==0.1.0
+export ARCMIRA_API_KEY='your-key'
+python - <<'PYTHON'
+from langchain_arcmira import ArcmiraSearch
+
+result = ArcmiraSearch().invoke({"q": "AI agents", "limit": 5})
+for chunk in result["chunks"]:
+    print(chunk["text"], chunk["watch_url"])
+print(result["note"])
+PYTHON
+```
+
+See the [Python guide](packages/langchain-python) for entity resolution, filters, async calls, and LangGraph setup.
+
+## Try the TypeScript source preview
 
 ```sh
 git clone https://github.com/arcmira/integrations.git

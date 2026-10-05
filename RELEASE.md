@@ -1,6 +1,6 @@
 # Release status
 
-The four JavaScript packages are source previews, version 0.1.0, with `private: true`. They are not available on npm. Dify is a source preview at version 0.1.1, installed as a local Cloud plugin. The Python LangChain package is a tested source preview at 0.1.0; PyPI publication remains. None has completed its framework catalog review.
+The four JavaScript packages are source previews, version 0.1.0, with `private: true`. They are not available on npm. Dify is a source preview at version 0.1.1, installed as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). None has completed its framework catalog review.
 
 ## Verified versions
 
@@ -36,9 +36,16 @@ n8n has no runtime dependencies beyond its host peer. Its frozen pnpm lock inclu
 
 Dify dependencies retain the September 26, 2026 cutoff in `pyproject.toml` and `uv.lock`. Its requirements export is pinned. The Marketplace artifact must exclude tests, local environments and credentials. Authenticated Cloud workflow and Community Edition tests, publisher agreement and Marketplace review remain. See [Dify submission requirements](https://github.com/langgenius/dify-plugins/blob/main/docs/plugin-submission-requirements.md).
 
-## Before Python LangChain publication
+## Python LangChain publication
 
-Publish the verified wheel to PyPI as `langchain-arcmira`, then file an Integration listing issue with LangChain. The package README is the dedicated guide. A source preview alone does not qualify for the catalog. First publication and trusted publishing must use the branded Arcmira publisher account. No listing issue has been filed.
+`langchain-arcmira==0.1.0` is published with PyPI trusted-publisher attestations. Both PyPI artifact hashes match the signed GitHub release. A fresh environment installed the public package and passed all 41 offline package tests, including native LangGraph `ToolNode` execution.
+
+- [PyPI package](https://pypi.org/project/langchain-arcmira/0.1.0/)
+- [Signed source and artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.0)
+- [Successful publication run](https://github.com/arcmira/integrations/actions/runs/37342305530)
+- [LangChain listing request, pending review](https://github.com/langchain-ai/docs/issues/6442)
+
+The package README is the dedicated guide. Catalog inclusion remains pending maintainer review.
 
 
 ### Configure PyPI trusted publishing
