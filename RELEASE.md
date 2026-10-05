@@ -87,3 +87,7 @@ The manual workflow runs on `master` and uploads prebuilt GitHub release assets.
 7. Verify the PyPI files, provenance, clean installation, and import before marking the package published or submitting the LangChain catalog issue.
 
 Never rebuild or replace assets after their checksums are recorded without repeating the local checks and updating the manifest. The verifier permits only the two recorded artifacts and the exact `.gitignore` metadata file that `uv build` adds locally.
+
+## Homebrew CLI
+
+The root `Formula/arcmira.rb` packages CLI 0.4.3 through this repository's first-party tap. See the [Homebrew guide](Formula) for installation and validation limits. Native installation, the actual offline formula test and local-tap `brew audit --new` passed on Apple Silicon macOS with Node 24.19.0. Standard `brew test --force` remains blocked by locally older dependencies relative to Homebrew's current catalog; Linux and Intel macOS remain unverified. No Homebrew core inclusion is claimed.
