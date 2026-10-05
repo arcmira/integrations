@@ -6,7 +6,8 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 
 | Integration | Source | Status |
 | --- | --- | --- |
-| LangChain / LangGraph | [Setup and tools](packages/langchain) | Source preview; npm and catalog publication pending |
+| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Source preview; npm and catalog publication pending |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | Source preview; PyPI and catalog publication pending |
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
@@ -43,11 +44,13 @@ A paid read uses credits from your plan, then your on-demand budget. Coverage an
 
 ## Verification
 
-LangChain and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
+The Python LangChain package passes 41 local checks and 11 live integration checks, including LangChain standard tests. Its compiled LangGraph test preserves tool-call IDs and source evidence. The live checks used no credits or model inference.
+
+The TypeScript LangChain package and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
 
 Activepieces has 13 tests, a bundled-package check, and a successful authenticated search through its native host. n8n has seven routing-engine tests, a parameter-contract check, and successful authenticated search and entity resolution through its native host. Dify has 18 SDK tests and successful local SDK calls to the live API; hosted workflow research remains unverified. The Activepieces and n8n adapters retain their MIT licenses; LangChain, AI SDK and Dify use Apache-2.0.
 
-Run `./scripts/ci.sh` to install locked dependencies and check all packages locally. The JavaScript checks need Node.js 22 or later and pnpm 10.4.1. Dify needs Python 3.12 and uv. See [release status](RELEASE.md) for tested versions and remaining publication steps.
+Run `./scripts/ci.sh` to install locked dependencies and check all packages locally. The JavaScript checks need Node.js 22 or later and pnpm 10.4.1. Dify and the Python LangChain checks need Python 3.12 and uv. See [release status](RELEASE.md) for tested versions and remaining publication steps.
 
 ## Feedback
 

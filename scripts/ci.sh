@@ -31,5 +31,13 @@ done
   uv sync --frozen
   uv run --frozen python -m unittest discover -s test -v
 )
+(
+  cd packages/langchain-python
+  uv sync --frozen
+  uv run --frozen ruff check .
+  uv run --frozen pytest tests/unit_tests -q
+  uv build
+  uv run --frozen twine check dist/*
+)
 git diff --check
 git diff --cached --check
