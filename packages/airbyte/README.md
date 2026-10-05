@@ -4,7 +4,7 @@
 
 Export explicitly scoped YouTube channel videos, entity mentions and commercial recommendations from Arcmira's indexed API.
 
-This is a locally tested Python CDK source preview, version 0.1.0. It is not an installable Airbyte host artifact, accepted catalog connector or published Python package. It has not run in a deployed Airbyte host.
+This is a locally tested Python CDK source preview, version 0.1.0. A local custom connector image is available to build. It is not a published registry image, accepted catalog connector or published Python package. It has not run in a deployed Airbyte host.
 
 ## Run locally
 
@@ -22,6 +22,28 @@ python3.12 -m venv .venv
 Use the Airbyte configured catalog returned by your host or construct it from `discover`, with `sync_mode: full_refresh`. `config.fixture.json` contains a deliberately nonfunctional synthetic key. Keep your actual `config.json` outside version control. The API key is a secret in the connector specification. The API origin is fixed and redirects are refused.
 
 `check` validates configuration and calls only `/v1/me`. It does not prove access to every configured stream. Sync preserves permission and quota errors, including Pro+ requirements for recommendations and full mention details.
+
+## Build a custom connector image
+
+From this directory, use Docker to build the local image:
+
+```sh
+./build-container.sh
+docker run --rm arcmira/source-arcmira:0.1.0-local spec
+docker run --rm -v "$PWD/config.json:/config.json:ro" \
+  arcmira/source-arcmira:0.1.0-local discover --config /config.json
+docker run --rm -v "$PWD/config.json:/config.json:ro" \
+  arcmira/source-arcmira:0.1.0-local check --config /config.json
+docker run --rm -v "$PWD/config.json:/config.json:ro" \
+  -v "$PWD/catalog.json:/catalog.json:ro" \
+  arcmira/source-arcmira:0.1.0-local read --config /config.json --catalog /catalog.json
+```
+
+The build uses Airbyte's Python connector base 4.1.1, pinned by its multi-platform digest. It downloads only wheels from the existing hash-locked dependency list, then installs them with networking disabled into an isolated virtual environment. It does not run apt, update dependencies or copy local credentials into the image. The final image runs as the `airbyte` user. To reuse downloaded wheels, set `ARCMIRA_AIRBYTE_WHEELHOUSE` to their directory. Installation still verifies their hashes.
+
+The ARM64 image was tested with Python 3.13.14 and CDK 7.31.0. Its actual entrypoint passed `spec`, three-stream `discover`, successful and refused `check`, and paginated `read` through synthetic HTTP responses with networking disabled. A successful read emitted six records. A later-page HTTP 403 emitted five records and returned exit 1 with the API error intact. A refused connection check returned protocol status `FAILED` with exit 0, as the CDK check command specifies. Inspect the protocol status as well as process exits.
+
+This follows Airbyte's [custom Dockerfile build option](https://docs.airbyte.com/platform/connector-development/testing-connectors/connector-acceptance-tests-reference). That option is not supported for certified connectors. Airbyte's preferred catalog build requires its generated template and `metadata.yaml`; migrating to that packaging remains pending. AMD64 execution, registry publication, deployed platform sync and official acceptance tests are unverified. The synthetic tests did not authenticate to Arcmira or consume usage.
 
 ## Choose the scope
 
@@ -83,4 +105,4 @@ Before a production connector release: validate it in an approved Airbyte host a
 
 From the repository root, `ARCMIRA_AIRBYTE_PYTHON=/absolute/path/to/existing/python ./scripts/ci.sh --offline` runs all local integration checks with cached dependencies and this existing Airbyte environment. Without the override, Airbyte checks use `packages/airbyte/.venv/bin/python`. The script does not create the Airbyte environment. Offline mode forbids dependency downloads and fails on a cache miss; it does not skip builds or tests.
 
-The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. This source still has no validated connector container artifact, deployed Airbyte platform sync, live authenticated Arcmira sync or completed connector acceptance suite. Those remain unverified before any production-connector claim.
+The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. The custom source image has the separate ARM64 checks described above. Deployed Airbyte platform sync, live authenticated Arcmira sync and the connector acceptance suite remain unverified before any production-connector claim.
