@@ -3,3 +3,8 @@ dist/
 *.tgz
 .env*
 .DS_Store
+bundle/
+pack.json
+bundle-evidence.json
+package-verification.json
+isolated-package-check.txt

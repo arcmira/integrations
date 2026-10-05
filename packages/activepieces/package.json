@@ -1,0 +1,49 @@
+{
+  "name": "@arcmira/piece-arcmira",
+  "version": "0.1.0",
+  "description": "YouTube transcript search with timestamped evidence for Activepieces workflows.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "homepage": "https://arcmira.com/docs",
+  "keywords": [
+    "activepieces",
+    "piece",
+    "arcmira",
+    "youtube",
+    "transcript",
+    "search"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test test/*.test.cjs",
+    "bundle": "npm run build && node scripts/bundle.mjs",
+    "pack:piece": "npm run bundle && npm pack ./bundle"
+  },
+  "dependencies": {
+    "@activepieces/pieces-framework": "0.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.0",
+    "esbuild": "0.25.12",
+    "typescript": "5.9.3"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arcmira/integrations.git",
+    "directory": "packages/activepieces"
+  },
+  "bugs": {
+    "url": "https://github.com/arcmira/integrations/issues"
+  },
+  "author": "Arcmira"
+}
