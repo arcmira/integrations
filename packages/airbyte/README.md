@@ -45,11 +45,24 @@ API row fields remain intact. `_arcmira` adds the exact scope, a stable scope ID
 
 ## Failure behavior
 
-Preview, unlock, partial and unfamiliar access/coverage envelopes stop the sync. Mentions/recommendations with preview notes stop before page records are emitted. Channel notes are informational, are retained and do not imply a preview. The connector validates each response and all rows against the captured released schema before emitting the page. Missing required fields, inconsistent pagination, count mismatches and repeated cursors fail visibly.
+Preview, unlock, partial and unfamiliar access/coverage envelopes fail the affected stream and mark the sync unsuccessful. The CDK can continue reading other configured streams. Mentions/recommendations with preview notes stop before page records are emitted. Channel notes are informational, are retained and do not imply a preview. The connector validates each response and all rows against the captured released schema before emitting the page. Missing required fields, inconsistent pagination, count mismatches and repeated cursors fail visibly.
 
 HTTP 402 and 403 stop without retry or a scope fallback. HTTP 429, server failures and transport errors share one limit of three retries per page. A successful page resets that limit. Error diagnostics reset for every response or transport failure and every new read, so a prior rate-limit error cannot replace a later network error. The framework retry window is 120 seconds; individual requests have a 10-second connection timeout and a 60-second read timeout, so this is not a strict total sync deadline. `Retry-After` is honored up to 60 seconds. Longer or malformed waits fail instead of retrying early. Error traces retain HTTP status, API type, code, gate and request ID when provided. URLs in an error are not followed.
 
-Airbyte streams records as it reads them. A later page can fail after earlier records were emitted. Treat that run as incomplete; the connector does not promise an atomic destination rollback. Validate overwrite/failure behavior in the chosen destination before production use.
+Airbyte streams records as it reads them. A later page can fail after earlier records were emitted. Treat that run as incomplete; the connector does not promise an atomic destination rollback.
+
+A native source CLI-to-destination protocol test used the official `airbyte/destination-duckdb:0.6.0` ARM64 image at digest `sha256:dce7cfb77edefd252adcb848a4656b14c6e110d6888d554e239b73388547b519`. Its runtime contains DuckDB 1.4.2 and Airbyte CDK 0.51.44. Synthetic HTTP responses passed through this source's unchanged CLI into the network-disabled destination container. The complete protocol stream was forwarded, including logs, states and error traces.
+
+| Case | Source / destination exit | Observed destination data |
+| --- | --- | --- |
+| Initial overwrite | 0 / 0 | Two records in each stream |
+| Repeated overwrite | 0 / 0 | One updated record per stream; omitted records removed |
+| Append | 0 / 0 | Two copies of the repeated record per stream |
+| Overwrite with a later-page HTTP 403 | 1 / 0 | Partial mentions replaced prior mentions; other streams continued and wrote records |
+
+Every stored JSON payload matched its source record, including `_arcmira` scope/window metadata and research fields. A successful destination exit did not establish source success, and overwrite was not atomic. Check the source outcome and use an independently verified staging/promotion policy when incomplete replacement data must not become visible.
+
+This was a source CLI-to-official-destination protocol test, not an Airbyte platform sync. The platform's orchestration, staging and commit behavior remain unverified, as do other destinations and a live authenticated sync.
 
 ## Validation and release work
 
@@ -62,7 +75,7 @@ All 58 tests pass using synthetic HTTP fixtures through the actual Airbyte CDK t
 
 A declarative `DefaultErrorHandler` predicate was also tested and can reject an unlock envelope before extraction. This candidate uses a supported Python `HttpStream` so whole-envelope validation, cursor-cycle detection and typed final errors are explicit and tested.
 
-Before publication: review the candidate, validate it in an approved Airbyte host against a dedicated sandbox, run the required connector acceptance tests and verify destination overwrite behavior. The existing [connector proposal](https://github.com/airbytehq/airbyte/discussions/87666) is the coordination point. See the [official contribution requirements](https://docs.airbyte.com/platform/connector-development/submit-new-connector).
+Before a production connector release: validate it in an approved Airbyte host against a dedicated sandbox, run the required connector acceptance tests and verify the chosen platform/destination commit policy. The native destination test above does not establish those platform guarantees. The existing [connector proposal](https://github.com/airbytehq/airbyte/discussions/87666) is the coordination point. See the [official contribution requirements](https://docs.airbyte.com/platform/connector-development/submit-new-connector).
 
 ## Included contract and repository checks
 
@@ -70,4 +83,4 @@ Before publication: review the candidate, validate it in an approved Airbyte hos
 
 From the repository root, `ARCMIRA_AIRBYTE_PYTHON=/absolute/path/to/existing/python ./scripts/ci.sh --offline` runs all local integration checks with cached dependencies and this existing Airbyte environment. Without the override, Airbyte checks use `packages/airbyte/.venv/bin/python`. The script does not create the Airbyte environment. Offline mode forbids dependency downloads and fails on a cache miss; it does not skip builds or tests.
 
-The unit tests mock HTTP responses through the native CDK transport and read protocol. They do not validate a Docker image, deployed scheduler, live Arcmira sync, destination behavior or Airbyte's connector acceptance suite. Those remain required before claiming a production connector.
+The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. This source still has no validated connector container artifact, deployed Airbyte platform sync, live authenticated Arcmira sync or completed connector acceptance suite. Those remain unverified before any production-connector claim.
