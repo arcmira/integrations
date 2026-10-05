@@ -91,3 +91,7 @@ Never rebuild or replace assets after their checksums are recorded without repea
 ## Homebrew CLI
 
 The root `Formula/arcmira.rb` packages CLI 0.4.3 through this repository's first-party tap. See the [Homebrew guide](Formula) for installation and validation limits. Native installation and the actual offline formula test passed on Apple Silicon macOS with Node 24.19.0. `brew audit --new` passed against the published remote tap. Standard `brew test --force` remains blocked by locally older dependencies relative to Homebrew's current catalog; Linux and Intel macOS remain unverified. No Homebrew core inclusion is claimed.
+
+## Nix CLI
+
+The [first-party Nix package](nix) builds CLI 0.4.3 from its GitHub release source with pinned npm dependencies. Nix 2.24.11, Nixpkgs `bfdc17373049aec7e5a4ad159f614c7a7c2e050c` and Node 24.20.0 passed the source build, 68 fixture-based tests and installed CLI checks on aarch64-linux in Docker on Apple Silicon. Nix sandboxing was disabled inside that disposable container; a sandboxed native-host build and other platforms remain unverified. The package adjusts only the setup test's shell and utility paths for Nix. All six skill guides are present. No live API credentials or paid calls were used. This is an Arcmira install route, with no Nixpkgs catalog inclusion claimed.
