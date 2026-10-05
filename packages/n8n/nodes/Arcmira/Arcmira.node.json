@@ -1,0 +1,26 @@
+{
+  "node": "n8n-nodes-arcmira.arcmira",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Analytics"
+  ],
+  "resources": {
+    "credentialDocumentation": [
+      {
+        "url": "https://arcmira.com/docs"
+      }
+    ],
+    "primaryDocumentation": [
+      {
+        "url": "https://arcmira.com/docs"
+      }
+    ]
+  },
+  "alias": [
+    "YouTube",
+    "transcript search",
+    "speaker appearances",
+    "sponsors"
+  ]
+}

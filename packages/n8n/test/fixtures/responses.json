@@ -1,0 +1,82 @@
+{
+  "TranscriptSearchResponse": {
+    "example": {
+      "query": "Synthetic topic",
+      "limit": 5,
+      "returned": 1,
+      "filters": {
+        "channel_ids": [
+          "UC-DRzaGnL_vtBUpCFH5M0tg"
+        ],
+        "entity_ids": [],
+        "about": [
+          {
+            "id": "ent_14",
+            "name": "Ramp",
+            "type": "organization"
+          }
+        ],
+        "by": [],
+        "kind": [
+          "sponsored"
+        ]
+      },
+      "window": {
+        "after": "2026-08-01T00:00:00Z",
+        "before": null
+      },
+      "chunks": [
+        {
+          "id": "UC-DRzaGnL_vtBUpCFH5M0tg/2026-08-04/dQw4w9WgXcQ.md#12",
+          "video_id": "dQw4w9WgXcQ",
+          "channel_id": "UC-DRzaGnL_vtBUpCFH5M0tg",
+          "channel_name": "Synthetic channel",
+          "video_title": "Synthetic video",
+          "speakers": [
+            "Synthetic speaker"
+          ],
+          "source": "creator_captions",
+          "source_label": "Creator captions",
+          "published_at": "2026-08-04T17:00:00.000Z",
+          "text": "Synthetic transcript passage for adapter tests.",
+          "start_seconds": 4787,
+          "watch_url": "/watch?v=dQw4w9WgXcQ&t=4787",
+          "cite_line": "Synthetic citation",
+          "score": 0.71,
+          "about": [
+            {
+              "id": "ent_14",
+              "name": "Ramp",
+              "type": "organization"
+            }
+          ],
+          "speakers_by": [
+            {
+              "id": "ent_27",
+              "name": "John Coogan",
+              "type": "person"
+            }
+          ]
+        }
+      ],
+      "as_of": "2026-08-04T17:00:00.000Z",
+      "search_index": {
+        "state": "live",
+        "missing_before": null
+      },
+      "note": "Quote text as a spoken beat of a few sentences and cite watch_url with published_at. Results are recency-boosted; state the window from window.after when you passed one."
+    }
+  },
+  "EntityResolveResponse": {
+    "example": {
+      "query": "Synthetic name",
+      "context": null,
+      "confidence": "ambiguous",
+      "best": null,
+      "suggested": null,
+      "ask": null,
+      "candidates": [],
+      "note": "Synthetic ambiguous response."
+    }
+  }
+}

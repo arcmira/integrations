@@ -1,0 +1,70 @@
+{
+  "name": "n8n-nodes-arcmira",
+  "version": "0.1.0",
+  "description": "Arcmira: YouTube Transcript Search. Find timestamped passages, speaker appearances, mentions and sponsored ad reads.",
+  "license": "MIT",
+  "homepage": "https://arcmira.com/docs",
+  "keywords": [
+    "n8n-community-node-package",
+    "arcmira",
+    "youtube",
+    "transcript-search",
+    "sponsors"
+  ],
+  "author": {
+    "name": "zealous1",
+    "email": "zeal@arcmira.com"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "prepublishOnly": "node -e \"throw new Error('Source preview: editor validation and release setup remain')\"",
+    "test": "node --test test/engine.test.cjs",
+    "check:contract": "node scripts/verify-contract.cjs"
+  },
+  "files": [
+    "dist/nodes",
+    "dist/credentials"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/ArcmiraApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Arcmira/Arcmira.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "0.50.2",
+    "eslint": "9.29.0",
+    "n8n-core": "2.41.2",
+    "n8n-workflow": "2.41.0",
+    "nock": "14.0.17",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "private": true,
+  "pnpm": {
+    "overrides": {
+      "axios@1.18.0": "1.20.0",
+      "qs@6.15.2": "6.16.0",
+      "fast-xml-parser@4.4.1": "4.5.5"
+    }
+  },
+  "packageManager": "pnpm@10.4.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arcmira/integrations.git",
+    "directory": "packages/n8n"
+  },
+  "bugs": {
+    "url": "https://github.com/arcmira/integrations/issues"
+  }
+}

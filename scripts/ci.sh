@@ -18,5 +18,13 @@ done
   ARCMIRA_PIECE_PATH=../bundle/index.js node --test test/*.test.cjs
   node scripts/check-packed.cjs
 )
+(
+  cd packages/n8n
+  pnpm install --frozen-lockfile --ignore-scripts
+  pnpm build
+  pnpm lint
+  pnpm test
+  pnpm check:contract
+)
 git diff --check
 git diff --cached --check
