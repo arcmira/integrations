@@ -1,0 +1,35 @@
+{
+  "query": "Sam",
+  "context": null,
+  "confidence": "ambiguous",
+  "best": null,
+  "suggested": {
+    "id": "ent_124463",
+    "name": "Sam Altman",
+    "slug": "sam-altman",
+    "type": "person",
+    "appearance_count": 4399,
+    "youtube_channel_id": null,
+    "description": "CEO of OpenAI and former president of Y Combinator.",
+    "page": "https://arcmira.com/person/sam-altman",
+    "match": "word",
+    "reason": "dominant",
+    "evidence": "it has 4,399 appearances, 11x the next match (Sam Dunning, 397)",
+    "assumed": true
+  },
+  "ask": null,
+  "candidates": [
+    {
+      "id": "ent_123696",
+      "name": "Sam",
+      "slug": "sam",
+      "type": "person",
+      "appearance_count": 265,
+      "youtube_channel_id": null,
+      "description": "Common gender-neutral given name or nickname",
+      "page": "https://arcmira.com/person/sam",
+      "match": "exact"
+    }
+  ],
+  "note": "No row is certain. suggested is Sam Altman (person) because it has 4,399 appearances, 11x the next match (Sam Dunning, 397). Use it and tell the user you assumed it."
+}

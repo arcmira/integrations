@@ -1,6 +1,6 @@
 # Release status
 
-The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The three other JavaScript source packages remain previews at 0.1.0 with `private: true`. None is available on npm. Dify is a source preview at version 0.1.1, installed as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). None has completed its framework catalog review.
+The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.1, installed as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). None has completed its framework catalog review.
 
 ## Verified versions
 
@@ -99,3 +99,9 @@ The [first-party Nix package](nix) builds CLI 0.4.3 from its GitHub release sour
 ## dlt REST example
 
 The [dlt example](examples/dlt) loads bounded search responses or cursor-paginated channel-video metadata into local JSONL files. It uses dlt 1.30.0 with locked dependencies. Eight local tests passed through the real REST transport, extraction, normalization and filesystem destination. They verify complete response retention, empty coverage notes, cursor/filter consistency, request bounds, refusal bodies and headers, no automatic HTTP retries, and no destination load after a later-page failure. Live authenticated Arcmira validation remains incomplete because no suitable established smoke credential was available. This is a fixture-tested first-party example, not a dlt verified-source catalog listing or an exhaustive transcript export.
+
+## Pipedream Connect and MCP preview
+
+The [Pipedream source preview](packages/pipedream) contains three native actions and a proposed managed API-key app definition. It uses `@pipedream/platform` 3.1.1 with a frozen npm lock. Its 22 offline tests exercise native action modules through the platform HTTP wrapper with synthetic responses and a zero-socket-attempt guard. A local validator checks syntax, component shape and parameters against the included public API schema. These are not Pipedream-hosted tests or the official upstream monorepo linter.
+
+The target is Connect/MCP; Workflows and String are being retired. App registration, confirmation of the managed auth fields, actual Connect execution and MCP discovery remain pending under [existing app request #22142](https://github.com/PipedreamHQ/pipedream/issues/22142). Private custom-tool publishing requires a Business plan; a no-upgrade contributor testing route still needs confirmation. No hosted app, registry inclusion, npm publication or live authenticated research is claimed.

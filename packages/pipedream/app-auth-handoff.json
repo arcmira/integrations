@@ -1,0 +1,23 @@
+{
+  "status": "publisher handoff proposal, not an importable Pipedream app definition or registered app",
+  "existing_request": "https://github.com/PipedreamHQ/pipedream/issues/22142",
+  "requested_slug": "arcmira",
+  "slug_confirmed_by_provider": false,
+  "title": "Arcmira: YouTube Transcript Search",
+  "api_docs": "https://arcmira.com/docs",
+  "openapi": "https://api.arcmira.com/v1/openapi.json",
+  "authentication": {
+    "kind": "API key",
+    "managed_field_name": "api_key",
+    "field_secret": true,
+    "request_header": "Authorization: Bearer <managed api_key>",
+    "connection_test": "GET https://api.arcmira.com/v1/me",
+    "connection_requirement": "HTTP 200 with read in scopes; no remaining-credit requirement",
+    "label_field": "email_masked",
+    "scopes": [
+      "read"
+    ]
+  },
+  "next": "Confirm managed app registration under request #22142 and an existing Business entitlement or maintainer-assisted contributor testing route. Do not depend on new Workflows signup or upgrade to Business without explicit approval.",
+  "target": "Connect/MCP registry"
+}
