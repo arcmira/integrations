@@ -8,10 +8,10 @@ class Arcmira < Formula
   depends_on "node@24"
 
   def install
-    ENV.prepend_path "PATH", Formula["node@24"].opt_bin
+    ENV.prepend_path "PATH", formula_opt_bin("node@24")
     system "npm", "install", *std_npm_args
     (bin/"arcmira").write_env_script libexec/"bin/arcmira",
-                                   PATH: "#{Formula["node@24"].opt_bin}:$PATH",
+                                   PATH:                    "#{formula_opt_bin("node@24")}:$PATH",
                                    ARCMIRA_NO_UPDATE_CHECK: "1"
   end
 
