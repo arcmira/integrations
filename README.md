@@ -14,7 +14,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
 | dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Fixture-tested source example; no dlt catalog listing |
-| Meltano / Singer | [Scoped mentions and recommendations](packages/meltano) | Locally tested source preview; authenticated export, target validation and Hub publication pending |
+| Meltano / Singer | [Scoped mentions and recommendations](packages/meltano) | Source preview with native DuckDB fixture checks; authenticated export and Hub publication pending |
 | Airbyte | [Scoped source and validation](packages/airbyte) | Locally tested source preview; host sync, destination and acceptance tests pending |
 | Pipedream Connect / MCP | [Native actions and validation](packages/pipedream) | Locally tested source preview; app registration and hosted validation pending |
 | Dify | [Setup and plugin](packages/dify) | Source preview; hosted research validation and Marketplace review pending |
