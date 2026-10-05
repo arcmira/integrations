@@ -17,6 +17,8 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Pipedream Connect / MCP | [Native actions and validation](packages/pipedream) | Locally tested source preview; app registration and hosted validation pending |
 | Dify | [Setup and plugin](packages/dify) | Source preview; hosted research validation and Marketplace review pending |
 
+For DSH, the [API documentation preset](examples/dsh) searches documentation without an API key. Its native session check passes; it does not provide YouTube research.
+
 For a standard MCP connection, use the authenticated [OpenAI Agents SDK](examples/openai-agents) or [Pydantic AI](examples/pydantic-ai) research example. Both retrieve a timestamped passage without an external model call.
 
 ## Install the Python package

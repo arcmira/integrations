@@ -1,0 +1,19 @@
+# Adds a selectable docs-only preset. Does not replace any existing preset.
+- insert:
+    - id: preset-arcmira-docs
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: arcmira-docs
+        name: Arcmira API documentation
+        description: Search Arcmira API documentation. Does not search YouTube transcripts.
+        order: 90
+        plugins:
+          - id: arcmira-docs
+            name: '@deepseek-ai/dsh-mcp-client'
+            config:
+              serverName: arcmiraDocs
+              transport: streamable-http
+              url: https://arcmira.com/docs/mcp
+              failOnStartupError: true
+              reconnect:
+                enabled: false
