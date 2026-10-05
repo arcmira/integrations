@@ -90,4 +90,4 @@ Never rebuild or replace assets after their checksums are recorded without repea
 
 ## Homebrew CLI
 
-The root `Formula/arcmira.rb` packages CLI 0.4.3 through this repository's first-party tap. See the [Homebrew guide](Formula) for installation and validation limits. Native installation, the actual offline formula test and local-tap `brew audit --new` passed on Apple Silicon macOS with Node 24.19.0. Standard `brew test --force` remains blocked by locally older dependencies relative to Homebrew's current catalog; Linux and Intel macOS remain unverified. No Homebrew core inclusion is claimed.
+The root `Formula/arcmira.rb` packages CLI 0.4.3 through this repository's first-party tap. See the [Homebrew guide](Formula) for installation and validation limits. Native installation and the actual offline formula test passed on Apple Silicon macOS with Node 24.19.0. `brew audit --new` passed against the published remote tap. Standard `brew test --force` remains blocked by locally older dependencies relative to Homebrew's current catalog; Linux and Intel macOS remain unverified. No Homebrew core inclusion is claimed.
