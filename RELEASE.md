@@ -1,6 +1,6 @@
 # Release status
 
-The four JavaScript packages are source previews, version 0.1.0, with `private: true`. They are not available on npm. Dify is a source preview at version 0.1.1, installed as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). None has completed its framework catalog review.
+The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The three other JavaScript source packages remain previews at 0.1.0 with `private: true`. None is available on npm. Dify is a source preview at version 0.1.1, installed as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). None has completed its framework catalog review.
 
 ## Verified versions
 
@@ -15,7 +15,19 @@ The four JavaScript packages are source previews, version 0.1.0, with `private: 
 
 Direct third-party dependencies met a seven-day release-age policy when selected on October 5, 2026. The first-party SDK uses the current released contract. AI SDK 7.0.127 was too new for that policy and needs a separate compatibility check after October 8, 2026 at 19:20 UTC. Recheck releases before publishing.
 
-## Before npm and catalog publication
+## TypeScript LangChain first publication
+
+The `@arcmira/langchain` 0.1.0 source is prepared for a public npm release. It is not published yet. Its package metadata deliberately omits `private` and specifies the public npm registry. Keep release execution separate from preparing the source.
+
+1. Run `scripts/ci.sh` locally on the exact source commit.
+2. From `packages/langchain`, run `npm pack --ignore-scripts --json` and inspect the resulting archive. It must contain compiled JavaScript, declarations, README, Apache-2.0 license, and package metadata.
+3. Verify the archive imports and runs the native LangChain tools against fixture responses. Record the artifact SHA-256 and source commit before publishing.
+4. Confirm the branded npm identity and permission to publish in the `@arcmira` scope. Publish the verified archive only after the release is authorized.
+5. Verify registry metadata, a fresh installation, native tool execution, and provenance when configured. Then update this status and extend [LangChain listing issue #6442](https://github.com/langchain-ai/docs/issues/6442) to include TypeScript.
+
+After publication, install the package with `npm install @arcmira/langchain@0.1.0 @langchain/core zod` and import `createArcmiraTools` from `@arcmira/langchain`. Until then, use the [tested source quick start](packages/langchain).
+
+## Before remaining npm and catalog publication
 
 1. Configure npm first publication and trusted publishing for these new packages, under the Arcmira organization.
 2. Set package publication metadata and remove `private: true` only as part of the reviewed release.

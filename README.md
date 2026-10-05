@@ -6,7 +6,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 
 | Integration | Source | Status |
 | --- | --- | --- |
-| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Source preview; npm and catalog publication pending |
+| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
 | LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/); [catalog review pending](https://github.com/langchain-ai/docs/issues/6442) |
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |

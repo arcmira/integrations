@@ -1,13 +1,23 @@
-# YouTube Transcript Search for LangChain
+# Arcmira: YouTube Transcript Search for LangChain
 
 Native LangChain tools for searching indexed YouTube transcripts and resolving people, organizations, products, topics and channels with Arcmira.
 
-**Source preview: not published to npm or listed by LangChain.**
+Check [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md) for npm and catalog availability. The quick start below runs the source checkout.
 
 [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
-```ts
-import { createArcmiraTools } from "@arcmira/langchain";
+## Quick start
+
+Use Node.js 22 or later.
+
+```sh
+git clone https://github.com/arcmira/integrations.git
+cd integrations/packages/langchain
+npm ci --ignore-scripts
+npm run build
+export ARCMIRA_API_KEY='your-key'
+node --input-type=module <<'JS'
+import { createArcmiraTools } from "./dist/index.js";
 
 const [search, resolve] = createArcmiraTools({
   apiKey: process.env.ARCMIRA_API_KEY ?? "",
@@ -15,7 +25,10 @@ const [search, resolve] = createArcmiraTools({
 
 const result = await search.invoke({ q: "AI agents", limit: 5 });
 console.log(result);
+JS
 ```
+
+The registry package exports the same function as `@arcmira/langchain`. Its peers are `@langchain/core` and `zod`.
 
 Pass both returned tools to a LangChain agent or a LangGraph `ToolNode`. The tool names are `arcmira_search` and `arcmira_resolve`. The API key belongs in server-side configuration, never in tool arguments or a public browser bundle.
 

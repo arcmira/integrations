@@ -1,7 +1,6 @@
 {
   "name": "@arcmira/langchain",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "description": "YouTube transcript search and entity resolution tools for LangChain, powered by Arcmira.",
   "main": "./dist/index.js",
@@ -47,13 +46,19 @@
   },
   "author": "Arcmira",
   "keywords": [
+    "youtube-transcript-search",
     "youtube",
     "transcript-search",
     "arcmira",
     "langchain",
+    "langgraph",
     "tools"
   ],
   "engines": {
     "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
