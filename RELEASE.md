@@ -1,6 +1,6 @@
 # Release status
 
-The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The three other JavaScript source packages remain previews at 0.1.0 with `private: true`. None is available on npm. Dify is a source preview at version 0.1.1, installed as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). None has completed its framework catalog review.
+The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.1, installed as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). None has completed its framework catalog review.
 
 ## Verified versions
 
@@ -107,3 +107,9 @@ The [Airbyte candidate](packages/airbyte) is a Python CDK 7.31.0 source preview 
 Only full refresh is implemented. Scoped pagination preserves filters and opaque cursors. Preview, access and malformed responses stop the sync; a later-page failure can follow already-emitted records, so destination rollback is not promised. Deployed Airbyte sync, dedicated sandbox validation, destination overwrite/failure checks and the connector acceptance suite remain pending under [existing discussion #87666](https://github.com/airbytehq/airbyte/discussions/87666). No host artifact, Python release or Airbyte catalog inclusion is claimed.
 
 `./scripts/ci.sh --offline` runs the same builds and tests using cached dependency artifacts and fails if they are missing. The Airbyte check requires an existing locked environment, selected with `ARCMIRA_AIRBYTE_PYTHON` or `packages/airbyte/.venv/bin/python`; it does not install one.
+
+## Pipedream Connect and MCP preview
+
+The [Pipedream source preview](packages/pipedream) contains three native actions and a proposed managed API-key app definition. It uses `@pipedream/platform` 3.1.1 with a frozen npm lock. Its 22 offline tests exercise native action modules through the platform HTTP wrapper with synthetic responses and a zero-socket-attempt guard. A local validator checks syntax, component shape and parameters against the included public API schema. These are not Pipedream-hosted tests or the official upstream monorepo linter.
+
+The target is Connect/MCP; Workflows and String are being retired. App registration, confirmation of the managed auth fields, actual Connect execution and MCP discovery remain pending under [existing app request #22142](https://github.com/PipedreamHQ/pipedream/issues/22142). Private custom-tool publishing requires a Business plan; a no-upgrade contributor testing route still needs confirmation. No hosted app, registry inclusion, npm publication or live authenticated research is claimed.

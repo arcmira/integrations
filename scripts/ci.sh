@@ -38,6 +38,12 @@ done
   pnpm check:contract
 )
 (
+  cd packages/pipedream
+  npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
+  npm test
+  npm run validate
+)
+(
   cd packages/dify
   uv sync --frozen "${install_args[@]}"
   uv run --frozen python -m unittest discover -s test -v

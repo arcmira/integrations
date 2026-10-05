@@ -15,7 +15,10 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
 | dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Fixture-tested source example; no dlt catalog listing |
 | Airbyte | [Scoped source and validation](packages/airbyte) | Locally tested source preview; host sync, destination and acceptance tests pending |
+| Pipedream Connect / MCP | [Native actions and validation](packages/pipedream) | Locally tested source preview; app registration and hosted validation pending |
 | Dify | [Setup and plugin](packages/dify) | Source preview; hosted research validation and Marketplace review pending |
+
+For DSH, the [API documentation preset](examples/dsh) searches documentation without an API key. Its native session check passes; it does not provide YouTube research.
 
 For a standard MCP connection, use the authenticated [OpenAI Agents SDK](examples/openai-agents) or [Pydantic AI](examples/pydantic-ai) research example. Both retrieve a timestamped passage without an external model call.
 
