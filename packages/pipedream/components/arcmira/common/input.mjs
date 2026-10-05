@@ -1,7 +1,11 @@
-export function text(value, name, { optional = false, max = Infinity } = {}) {
+export function text(value, name, {
+  optional = false, max = Infinity,
+} = {}) {
   if (optional && (value === undefined || value === null || value === "")) return undefined;
   if (typeof value !== "string" || value.trim().length < 2 || value.trim().length > max) {
-    throw new Error(`${name} must contain at least two characters${max === Infinity ? "" : ` and at most ${max}`}.`);
+    throw new Error(`${name} must contain at least two characters${max === Infinity
+      ? ""
+      : ` and at most ${max}`}.`);
   }
   return value.trim();
 }
@@ -23,11 +27,28 @@ export function ids(value, name, pattern) {
   if (!Array.isArray(value) || value.length > 8 || value.some((id) => typeof id !== "string" || !pattern.test(id))) {
     throw new Error(`${name} accepts up to eight canonical IDs. Resolve names separately and confirm the intended match.`);
   }
-  return value.length ? value.join(",") : undefined;
+  return value.length
+    ? value.join(",")
+    : undefined;
 }
 
 export const CHANNEL_ID = /^UC[A-Za-z0-9_-]{22}$/;
 export const ENTITY_ID = /^ent_\d+$/;
-export const SOURCES = ["arcmira_premium", "creator_captions", "third_party_quick"];
-export const ENTITY_TYPES = ["person", "organization", "product", "topic", "channel"];
-export const SPONSOR_STATUSES = ["active", "lapsed", "ended", "uncertain"];
+export const SOURCES = [
+  "arcmira_premium",
+  "creator_captions",
+  "third_party_quick",
+];
+export const ENTITY_TYPES = [
+  "person",
+  "organization",
+  "product",
+  "topic",
+  "channel",
+];
+export const SPONSOR_STATUSES = [
+  "active",
+  "lapsed",
+  "ended",
+  "uncertain",
+];

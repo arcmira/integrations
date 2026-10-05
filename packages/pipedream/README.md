@@ -19,7 +19,9 @@ npm run validate
 
 The 22 fixture tests exercise the real native action modules and Pipedream platform HTTP wrapper with synthetic Axios responses. A socket guard rejects any attempt to access the network. Tests cover complete response envelopes, ambiguous entities, source and filter preservation, bounded requests, structured refusals, malformed responses, redaction, redirects and connection permissions. They do not exercise Pipedream's managed authentication, hosted execution or registry discovery.
 
-The local validator checks component shape, JavaScript syntax and parameter parity with the included public OpenAPI snapshot. It is not Pipedream's official monorepo linter. Run `./scripts/ci.sh` from the repository root to check all integrations.
+The local validator checks component shape, JavaScript syntax and parameter parity with the included public OpenAPI snapshot. Run `./scripts/ci.sh` from the repository root to check all integrations.
+
+Separately, these components pass Pipedream's unchanged [official ESLint configuration](https://github.com/PipedreamHQ/pipedream/blob/3a8a9cfe945ba4d80edf8631ab498732a719e26a/eslint.config.mjs) with zero errors or warnings, plus its key, app-property and duplicate-key checks scoped to this app. The isolated lint environment pins the upstream direct tool versions but resolves some transitive dependencies differently. This is not full upstream catalog CI or hosted validation; the local commands above do not run those upstream checks.
 
 ## Before host testing
 

@@ -1,10 +1,18 @@
 import { axios } from "@pipedream/platform";
 
 const BASE_URL = "https://api.arcmira.com/v1";
-const RESPONSE_HEADERS = ["x-request-id", "x-arcmira-version", "ratelimit-limit", "ratelimit-remaining", "ratelimit-reset", "retry-after"];
+const RESPONSE_HEADERS = [
+  "x-request-id",
+  "x-arcmira-version",
+  "ratelimit-limit",
+  "ratelimit-remaining",
+  "ratelimit-reset",
+  "retry-after",
+];
 
 function redact(value, key) {
-  return JSON.parse(JSON.stringify(value).split(key).join("[REDACTED]"));
+  return JSON.parse(JSON.stringify(value).split(key)
+    .join("[REDACTED]"));
 }
 
 export default {
@@ -14,7 +22,11 @@ export default {
     async _request($, path, params = {}) {
       const key = this.$auth?.api_key;
       if (typeof key !== "string" || !key.trim()) throw new Error("Connect an Arcmira account with read access.");
-      if (!["/me", "/search", "/entities/resolve"].includes(path) && !/^\/channels\/UC[A-Za-z0-9_-]{22}\/sponsors$/.test(path)) {
+      if (![
+        "/me",
+        "/search",
+        "/entities/resolve",
+      ].includes(path) && !/^\/channels\/UC[A-Za-z0-9_-]{22}\/sponsors$/.test(path)) {
         throw new Error("Unsupported Arcmira route.");
       }
       let response;
@@ -22,8 +34,13 @@ export default {
         response = await axios($, {
           method: "GET",
           url: BASE_URL + path,
-          headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
-          params: Object.fromEntries(Object.entries(params).filter(([, value]) => value !== undefined)),
+          headers: {
+            Authorization: `Bearer ${key}`,
+            Accept: "application/json",
+          },
+          params: Object.fromEntries(Object.entries(params).filter(([
+            , value,
+          ]) => value !== undefined)),
           timeout: 20000,
           maxRedirects: 0,
           returnFullResponse: true,
@@ -35,7 +52,12 @@ export default {
       }
       const http = {
         status: response.status,
-        headers: Object.fromEntries(RESPONSE_HEADERS.filter((name) => response.headers[name] !== undefined).map((name) => [name, response.headers[name]])),
+        headers: Object.fromEntries(RESPONSE_HEADERS
+          .filter((name) => response.headers[name] !== undefined)
+          .map((name) => [
+            name,
+            response.headers[name],
+          ])),
       };
       $.export("http", redact(http, key));
       const body = response.data;
@@ -46,7 +68,9 @@ export default {
       if (response.status < 200 || response.status >= 300 || safe.error) {
         $.export("arcmira_error", safe);
         const code = safe.error?.code;
-        throw new Error(`Arcmira request failed (HTTP ${response.status}${typeof code === "string" ? `, ${code}` : ""}). See arcmira_error and http for the structured refusal and retry information.`);
+        throw new Error(`Arcmira request failed (HTTP ${response.status}${typeof code === "string"
+          ? `, ${code}`
+          : ""}). See arcmira_error and http for the structured refusal and retry information.`);
       }
       return safe;
     },
