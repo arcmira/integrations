@@ -1,0 +1,19 @@
+{
+  "api_key": "synthetic-not-a-key",
+  "channel_videos": [
+    {
+      "channel_id": "UCaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "mentions": [
+    {
+      "entity_id": "ent_14"
+    }
+  ],
+  "recommendations": [
+    {
+      "entity_id": "ent_14",
+      "min_confidence": 0.7
+    }
+  ]
+}

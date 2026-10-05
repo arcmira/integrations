@@ -1,0 +1,248 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Public recommendation id in the form \"com_{n}\"."
+    },
+    "class": {
+      "type": "string",
+      "enum": [
+        "sponsored",
+        "organic",
+        "mention"
+      ],
+      "description": "Commercial class. Values: sponsored (an ad-style promotion heard at that moment: a paid sponsor read, promo code, affiliate plug, thanks for supplied goods or venue, or a show promoting its own product as an ad), organic (an unpaid personal recommendation), mention (a neutral commercial mention)."
+    },
+    "entity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Public entity id in the form \"ent_{n}\"."
+        },
+        "name": {
+          "type": "string",
+          "description": "Canonical entity name."
+        },
+        "type": {
+          "type": "string",
+          "description": "Entity type. Values: person (an individual), organization (a company or institution; legacy entities may read company or brand), product (a product or service), topic (a subject or theme), channel (a media source such as a YouTube channel), unknown (type was never classified)."
+        },
+        "slug": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "URL slug, the site's canonical id for every type but channel. Null when never slugged."
+        },
+        "page": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The entity's page on arcmira.com, absolute. Link the name to it when you write the entity into an answer. Null for a type the site has no page for."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type",
+        "slug",
+        "page"
+      ]
+    },
+    "media": {
+      "type": "object",
+      "properties": {
+        "video_id": {
+          "type": "string",
+          "description": "YouTube video id (11 characters)."
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Video title."
+        },
+        "published_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Video publish timestamp."
+        },
+        "channel_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "YouTube channel id of the source channel."
+        },
+        "source_channel": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Public entity id (\"ent_{n}\") of the source channel."
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Source channel name."
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ],
+          "description": "The channel entity that published the video. Null when the video has not been linked to a channel entity."
+        }
+      },
+      "required": [
+        "video_id",
+        "title",
+        "published_at",
+        "channel_id",
+        "source_channel"
+      ]
+    },
+    "start_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Start position in the video in integer seconds. 0 means \"full episode / no specific moment\". Null when the analyzer could not place it in time."
+    },
+    "end_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "End position in the video in integer seconds. 0 means \"full episode / no specific moment\". Null when the analyzer could not place it in time."
+    },
+    "verbatim_quote": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Verbatim quote from the transcript. Null when no quote was extracted."
+    },
+    "promo_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Promo code read out in the mention. Null unless one was detected."
+    },
+    "offer": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Offer text, e.g. \"20% off your first order\". Null unless one was detected."
+    },
+    "sentiment": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "deprecated": true,
+      "description": "DEPRECATED: use sentiment_score, which carries the same number. Removal will be announced in the changelog. Raw NUMERIC sentiment score between -1 and 1. Null when not computed."
+    },
+    "sentiment_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Raw sentiment score between -1 and 1, same semantics as sentiment_score on mentions. Null when not computed."
+    },
+    "confidence": {
+      "type": "number",
+      "description": "Classifier confidence between 0 and 1. Recommendations below the min_confidence filter (default 0.7) are excluded from list responses."
+    },
+    "speaker_role": {
+      "type": "string",
+      "description": "Role of the speaker delivering the mention, e.g. \"host\" or \"guest\"."
+    },
+    "conflict_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Set when community feedback disputes the classification (e.g. \"disputed\"). Null when undisputed. Disputed recommendations are excluded unless include_disputed=true."
+    },
+    "resolution": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "How a disputed classification was resolved. Null until a dispute has been resolved."
+    },
+    "_arcmira": {
+      "type": "object",
+      "properties": {
+        "scope_id": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "object"
+        },
+        "window": {
+          "type": "object"
+        },
+        "indexed_through": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "index_age_days": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "as_of": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope_id",
+        "scope",
+        "window"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "class",
+    "entity",
+    "media",
+    "start_seconds",
+    "end_seconds",
+    "verbatim_quote",
+    "promo_code",
+    "offer",
+    "sentiment",
+    "sentiment_score",
+    "confidence",
+    "speaker_role",
+    "conflict_status",
+    "resolution",
+    "_arcmira"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

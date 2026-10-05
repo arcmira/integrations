@@ -99,3 +99,11 @@ The [first-party Nix package](nix) builds CLI 0.4.3 from its GitHub release sour
 ## dlt REST example
 
 The [dlt example](examples/dlt) loads bounded search responses or cursor-paginated channel-video metadata into local JSONL files. It uses dlt 1.30.0 with locked dependencies. Eight local tests passed through the real REST transport, extraction, normalization and filesystem destination. They verify complete response retention, empty coverage notes, cursor/filter consistency, request bounds, refusal bodies and headers, no automatic HTTP retries, and no destination load after a later-page failure. Live authenticated Arcmira validation remains incomplete because no suitable established smoke credential was available. This is a fixture-tested first-party example, not a dlt verified-source catalog listing or an exhaustive transcript export.
+
+## Airbyte source preview
+
+The [Airbyte candidate](packages/airbyte) is a Python CDK 7.31.0 source preview at 0.1.0 for explicitly scoped channel videos, mentions and recommendations. Its 58 synthetic HTTP tests run through the native CDK transport and source-read protocol. The included public OpenAPI snapshot regenerates the connector specification and six schemas exactly. Credentials are synthetic; no live research is part of the checks.
+
+Only full refresh is implemented. Scoped pagination preserves filters and opaque cursors. Preview, access and malformed responses stop the sync; a later-page failure can follow already-emitted records, so destination rollback is not promised. Deployed Airbyte sync, dedicated sandbox validation, destination overwrite/failure checks and the connector acceptance suite remain pending under [existing discussion #87666](https://github.com/airbytehq/airbyte/discussions/87666). No host artifact, Python release or Airbyte catalog inclusion is claimed.
+
+`./scripts/ci.sh --offline` runs the same builds and tests using cached dependency artifacts and fails if they are missing. The Airbyte check requires an existing locked environment, selected with `ARCMIRA_AIRBYTE_PYTHON` or `packages/airbyte/.venv/bin/python`; it does not install one.

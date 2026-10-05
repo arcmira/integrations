@@ -1,0 +1,338 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Public mention id in the form \"men_{n}\"."
+    },
+    "entity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Public entity id in the form \"ent_{n}\"."
+        },
+        "name": {
+          "type": "string",
+          "description": "Canonical entity name."
+        },
+        "type": {
+          "type": "string",
+          "description": "Entity type. Values: person (an individual), organization (a company or institution; legacy entities may read company or brand), product (a product or service), topic (a subject or theme), channel (a media source such as a YouTube channel), unknown (type was never classified)."
+        },
+        "slug": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "URL slug, the site's canonical id for every type but channel. Null when never slugged."
+        },
+        "page": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The entity's page on arcmira.com, absolute. Link the name to it when you write the entity into an answer. Null for a type the site has no page for."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type",
+        "slug",
+        "page"
+      ]
+    },
+    "media": {
+      "type": "object",
+      "properties": {
+        "video_id": {
+          "type": "string",
+          "description": "YouTube video id (11 characters)."
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Video title. Null when the video was indexed without metadata."
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Video URL. Null when unknown."
+        },
+        "published_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Video publish timestamp. Null when unknown."
+        },
+        "channel_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "YouTube channel id of the source channel. Null when unknown."
+        },
+        "view_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Video view count at index time. Null when never fetched."
+        },
+        "source_channel": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Public entity id (\"ent_{n}\") of the source channel."
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Source channel name."
+            },
+            "url": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Source channel URL. Null when unknown."
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "url"
+          ],
+          "description": "The channel entity that published the video. Null when the video has not been linked to a channel entity."
+        }
+      },
+      "required": [
+        "video_id",
+        "title",
+        "url",
+        "published_at",
+        "channel_id",
+        "view_count",
+        "source_channel"
+      ]
+    },
+    "start_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Start position in the video in integer seconds. 0 means \"full episode / no specific moment\". Null when the analyzer could not place it in time."
+    },
+    "end_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "End position in the video in integer seconds. 0 means \"full episode / no specific moment\". Null when the analyzer could not place it in time."
+    },
+    "is_appearance": {
+      "type": "boolean",
+      "description": "True when the person physically appears/speaks in the media (person entities only). Always false for organization, product, topic, and channel entities. Filtering with is_appearance=true on a non-person entity returns a 400 (appearances_person_only)."
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "One-sentence description of the mention context. Null when not generated."
+    },
+    "confidence": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Analyzer confidence between 0 and 1. Null for legacy mentions analyzed before confidence scoring."
+    },
+    "sentiment_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Raw sentiment score between -1 and 1. Null when sentiment was not computed for this mention."
+    },
+    "sentiment": {
+      "type": "string",
+      "enum": [
+        "positive",
+        "neutral",
+        "negative"
+      ],
+      "description": "Derived sentiment label from sentiment_score. Values: positive (score above 0.2), negative (score below -0.2), neutral (score between -0.2 and 0.2 inclusive, or no score computed)."
+    },
+    "referenced_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "URL referenced in the mention. Null unless one was extracted."
+    },
+    "referenced_platform": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Platform referenced in the mention, e.g. \"twitter\". Null unless one was extracted."
+    },
+    "extracted_content": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Verbatim content extracted for the mention. Null unless extraction ran."
+    },
+    "recommendations": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Public recommendation id in the form \"com_{n}\"."
+              },
+              "class": {
+                "type": "string",
+                "enum": [
+                  "sponsored",
+                  "organic",
+                  "mention"
+                ],
+                "description": "Commercial class. Values: sponsored (an ad-style promotion heard at that moment: a paid sponsor read, promo code, affiliate plug, thanks for supplied goods or venue, or a show promoting its own product as an ad), organic (an unpaid personal recommendation), mention (a neutral commercial mention)."
+              },
+              "verbatim_quote": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Verbatim quote from the transcript. Null when no quote was extracted."
+              },
+              "promo_code": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Promo code read out in the mention. Null unless one was detected."
+              },
+              "offer": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Offer text, e.g. \"20% off\". Null unless one was detected."
+              },
+              "confidence": {
+                "type": "number",
+                "description": "Classifier confidence between 0 and 1."
+              },
+              "start_seconds": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "Start position in the video in integer seconds. 0 means \"full episode / no specific moment\". Null when the analyzer could not place it in time."
+              },
+              "end_seconds": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "End position in the video in integer seconds. 0 means \"full episode / no specific moment\". Null when the analyzer could not place it in time."
+              }
+            },
+            "required": [
+              "id",
+              "class",
+              "verbatim_quote",
+              "promo_code",
+              "offer",
+              "confidence",
+              "start_seconds",
+              "end_seconds"
+            ]
+          },
+          "description": "Commercial mentions (sponsored and organic) for the same entity in the same video."
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "description": "Only present when the request used details=full (requires a Pro+ plan)."
+    },
+    "_arcmira": {
+      "type": "object",
+      "properties": {
+        "scope_id": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "object"
+        },
+        "window": {
+          "type": "object"
+        },
+        "indexed_through": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "index_age_days": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "as_of": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope_id",
+        "scope",
+        "window"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "entity",
+    "media",
+    "start_seconds",
+    "end_seconds",
+    "is_appearance",
+    "description",
+    "confidence",
+    "sentiment_score",
+    "sentiment",
+    "referenced_url",
+    "referenced_platform",
+    "extracted_content",
+    "_arcmira"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

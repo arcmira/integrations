@@ -1,0 +1,109 @@
+{
+  "type": "object",
+  "properties": {
+    "video_id": {
+      "type": "string",
+      "description": "11-character YouTube video id. Pass it to GET /v1/mentions/counts video_ids or GET /v1/transcripts/{video_id}."
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "published_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ISO publish date on YouTube."
+    },
+    "duration_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Video length in seconds. Null when YouTube reported none."
+    },
+    "view_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "channel_id": {
+      "type": "string",
+      "description": "The channel id as supplied."
+    },
+    "channel_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "channel_page": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The channel's page on arcmira.com, absolute. Null when no channel is known."
+    },
+    "watch_url": {
+      "type": "string",
+      "description": "The episode on arcmira.com, absolute."
+    },
+    "_arcmira": {
+      "type": "object",
+      "properties": {
+        "scope_id": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "object"
+        },
+        "window": {
+          "type": "object"
+        },
+        "indexed_through": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "index_age_days": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "as_of": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope_id",
+        "scope",
+        "window"
+      ]
+    }
+  },
+  "required": [
+    "video_id",
+    "title",
+    "published_at",
+    "duration_seconds",
+    "view_count",
+    "channel_id",
+    "channel_name",
+    "channel_page",
+    "watch_url",
+    "_arcmira"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

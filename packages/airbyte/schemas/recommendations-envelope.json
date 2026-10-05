@@ -1,0 +1,389 @@
+{
+  "type": "object",
+  "properties": {
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Public recommendation id in the form \"com_{n}\"."
+          },
+          "class": {
+            "type": "string",
+            "enum": [
+              "sponsored",
+              "organic",
+              "mention"
+            ],
+            "description": "Commercial class. Values: sponsored (an ad-style promotion heard at that moment: a paid sponsor read, promo code, affiliate plug, thanks for supplied goods or venue, or a show promoting its own product as an ad), organic (an unpaid personal recommendation), mention (a neutral commercial mention)."
+          },
+          "entity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Public entity id in the form \"ent_{n}\"."
+              },
+              "name": {
+                "type": "string",
+                "description": "Canonical entity name."
+              },
+              "type": {
+                "type": "string",
+                "description": "Entity type. Values: person (an individual), organization (a company or institution; legacy entities may read company or brand), product (a product or service), topic (a subject or theme), channel (a media source such as a YouTube channel), unknown (type was never classified)."
+              },
+              "slug": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "URL slug, the site's canonical id for every type but channel. Null when never slugged."
+              },
+              "page": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The entity's page on arcmira.com, absolute. Link the name to it when you write the entity into an answer. Null for a type the site has no page for."
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "type",
+              "slug",
+              "page"
+            ]
+          },
+          "media": {
+            "type": "object",
+            "properties": {
+              "video_id": {
+                "type": "string",
+                "description": "YouTube video id (11 characters)."
+              },
+              "title": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Video title."
+              },
+              "published_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Video publish timestamp."
+              },
+              "channel_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "YouTube channel id of the source channel."
+              },
+              "source_channel": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Public entity id (\"ent_{n}\") of the source channel."
+                  },
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Source channel name."
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "description": "The channel entity that published the video. Null when the video has not been linked to a channel entity."
+              }
+            },
+            "required": [
+              "video_id",
+              "title",
+              "published_at",
+              "channel_id",
+              "source_channel"
+            ]
+          },
+          "start_seconds": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Start position in the video in integer seconds. 0 means \"full episode / no specific moment\". Null when the analyzer could not place it in time."
+          },
+          "end_seconds": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "End position in the video in integer seconds. 0 means \"full episode / no specific moment\". Null when the analyzer could not place it in time."
+          },
+          "verbatim_quote": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Verbatim quote from the transcript. Null when no quote was extracted."
+          },
+          "promo_code": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Promo code read out in the mention. Null unless one was detected."
+          },
+          "offer": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Offer text, e.g. \"20% off your first order\". Null unless one was detected."
+          },
+          "sentiment": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "deprecated": true,
+            "description": "DEPRECATED: use sentiment_score, which carries the same number. Removal will be announced in the changelog. Raw NUMERIC sentiment score between -1 and 1. Null when not computed."
+          },
+          "sentiment_score": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Raw sentiment score between -1 and 1, same semantics as sentiment_score on mentions. Null when not computed."
+          },
+          "confidence": {
+            "type": "number",
+            "description": "Classifier confidence between 0 and 1. Recommendations below the min_confidence filter (default 0.7) are excluded from list responses."
+          },
+          "speaker_role": {
+            "type": "string",
+            "description": "Role of the speaker delivering the mention, e.g. \"host\" or \"guest\"."
+          },
+          "conflict_status": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Set when community feedback disputes the classification (e.g. \"disputed\"). Null when undisputed. Disputed recommendations are excluded unless include_disputed=true."
+          },
+          "resolution": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "How a disputed classification was resolved. Null until a dispute has been resolved."
+          }
+        },
+        "required": [
+          "id",
+          "class",
+          "entity",
+          "media",
+          "start_seconds",
+          "end_seconds",
+          "verbatim_quote",
+          "promo_code",
+          "offer",
+          "sentiment",
+          "sentiment_score",
+          "confidence",
+          "speaker_role",
+          "conflict_status",
+          "resolution"
+        ]
+      },
+      "description": "Newest first."
+    },
+    "has_more": {
+      "type": "boolean",
+      "description": "True when more results exist past this page."
+    },
+    "next_cursor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Opaque cursor for the next page. Null on the last page."
+    },
+    "entity": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Public entity id in the form \"ent_{n}\". Always the canonical entity id."
+            },
+            "canonical_id": {
+              "type": "string",
+              "description": "Public id of the canonical entity. Identical to id."
+            },
+            "name": {
+              "type": "string",
+              "description": "Canonical entity name."
+            },
+            "type": {
+              "type": "string",
+              "description": "Entity type. Values: person (an individual), organization (a company or institution; legacy entities may read company or brand), product (a product or service), topic (a subject or theme), channel (a media source such as a YouTube channel), unknown (type was never classified)."
+            },
+            "platform": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Source platform for channel entities, e.g. \"youtube\". Null unless the entity is platform-bound."
+            },
+            "url": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Canonical external URL for the entity. Null when none is known."
+            },
+            "image_url": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Entity image URL. Null until an image has been resolved."
+            },
+            "image_checked_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Timestamp of the last image resolution attempt. Null until the image pipeline has visited this entity."
+            },
+            "appearance_count": {
+              "type": "integer",
+              "default": 0,
+              "description": "Number of indexed appearances and mentions of this entity. 0 when never counted."
+            },
+            "owner_entity_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Public id (\"ent_{n}\") of the owning entity, e.g. the organization behind a product. Null unless an ownership link exists."
+            },
+            "is_canonical": {
+              "type": "boolean",
+              "description": "True when the id you supplied is the canonical entity. False when your id was merged into this canonical record."
+            },
+            "merged_from_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Public id you supplied when it differs from the canonical entity, i.e. your id was merged into this record. Null unless a merge redirect happened."
+            },
+            "slug": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "URL slug, the site's canonical id for every type but channel. Null when never slugged."
+            },
+            "route": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Site-relative route of this entity's page on arcmira.com, e.g. \"/org/ramp\", \"/person/jane-doe\", \"/yt/@TBPNLive\". Null for a type the site has no page for."
+            },
+            "page": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "The entity's page on arcmira.com, absolute. Link the name to it when you write the entity into an answer. Null for a type the site has no page for."
+            },
+            "appearances_page": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "For a person, the list of their appearances on arcmira.com (their page opens on it). Null for every other type."
+            },
+            "mentions_page": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "For a person, the list of mentions of them on arcmira.com, page/mentions. Null for every other type: their page is the mentions list already."
+            }
+          },
+          "required": [
+            "id",
+            "canonical_id",
+            "name",
+            "type",
+            "platform",
+            "url",
+            "image_url",
+            "image_checked_at",
+            "owner_entity_id",
+            "is_canonical",
+            "merged_from_id",
+            "slug",
+            "route",
+            "page",
+            "appearances_page",
+            "mentions_page"
+          ]
+        },
+        {
+          "description": "The resolved entity the recommendations belong to."
+        }
+      ]
+    },
+    "window": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Inclusive start as an ISO instant. Null when the window has no start."
+        },
+        "before": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Exclusive end as an ISO instant. Null when the window has no end. Earlier than the before you sent when your plan's freshness gate cut the window."
+        }
+      },
+      "required": [
+        "after",
+        "before"
+      ],
+      "description": "The publication window the answer covers, [after, before) in UTC, normalized from after and before."
+    }
+  },
+  "required": [
+    "recommendations",
+    "has_more",
+    "next_cursor",
+    "entity",
+    "window"
+  ]
+}

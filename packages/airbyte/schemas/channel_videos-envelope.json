@@ -1,0 +1,217 @@
+{
+  "type": "object",
+  "properties": {
+    "channel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Public entity id (\"ent_{n}\") of the channel. Null when no channel entity is known."
+        },
+        "youtube_channel_id": {
+          "type": "string",
+          "description": "The channel id as supplied."
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "page": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The channel's page on arcmira.com, absolute. Null when no channel is known."
+        }
+      },
+      "required": [
+        "id",
+        "youtube_channel_id",
+        "name",
+        "page"
+      ]
+    },
+    "episodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "video_id": {
+            "type": "string",
+            "description": "11-character YouTube video id. Pass it to GET /v1/mentions/counts video_ids or GET /v1/transcripts/{video_id}."
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ISO publish date on YouTube."
+          },
+          "duration_seconds": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Video length in seconds. Null when YouTube reported none."
+          },
+          "view_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "channel_id": {
+            "type": "string",
+            "description": "The channel id as supplied."
+          },
+          "channel_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "channel_page": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The channel's page on arcmira.com, absolute. Null when no channel is known."
+          },
+          "watch_url": {
+            "type": "string",
+            "description": "The episode on arcmira.com, absolute."
+          }
+        },
+        "required": [
+          "video_id",
+          "title",
+          "published_at",
+          "duration_seconds",
+          "view_count",
+          "channel_id",
+          "channel_name",
+          "channel_page",
+          "watch_url"
+        ]
+      },
+      "description": "Indexed videos of the channel, newest first."
+    },
+    "returned": {
+      "type": "integer"
+    },
+    "has_more": {
+      "type": "boolean",
+      "description": "True when more indexed videos exist past limit in the window."
+    },
+    "next_cursor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Signed continuation for the next page. Null on the last page."
+    },
+    "window": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Inclusive start as an ISO instant. Null when the window has no start."
+        },
+        "before": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Exclusive end as an ISO instant. Null when the window has no end. Earlier than the before you sent when your plan's freshness gate cut the window."
+        }
+      },
+      "required": [
+        "after",
+        "before"
+      ],
+      "description": "The publication window the answer covers, [after, before) in UTC, normalized from after and before."
+    },
+    "indexed_through": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Newest publish date among every indexed video of the channel, whatever window was asked for. Null when nothing is indexed."
+    },
+    "index_age_days": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Whole days between indexed_through and now. Past 30 the note says the index may be behind the channel. Null when nothing is indexed."
+    },
+    "as_of": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Same as indexed_through."
+    },
+    "note": {
+      "type": "string",
+      "description": "One steering sentence for the agent reading this."
+    }
+  },
+  "required": [
+    "channel",
+    "episodes",
+    "returned",
+    "has_more",
+    "next_cursor",
+    "window",
+    "indexed_through",
+    "index_age_days",
+    "as_of",
+    "note"
+  ],
+  "example": {
+    "channel": {
+      "id": "ent_566342",
+      "youtube_channel_id": "UC-DRzaGnL_vtBUpCFH5M0tg",
+      "name": "TBPN",
+      "page": "https://arcmira.com/yt/@TBPNLive"
+    },
+    "episodes": [
+      {
+        "video_id": "dQw4w9WgXcQ",
+        "title": "TBPN | Friday, August 28",
+        "published_at": "2026-08-28T17:00:00.000Z",
+        "duration_seconds": 10812,
+        "view_count": 48210,
+        "channel_id": "UC-DRzaGnL_vtBUpCFH5M0tg",
+        "channel_name": "TBPN",
+        "channel_page": "https://arcmira.com/yt/@TBPNLive",
+        "watch_url": "https://arcmira.com/watch?v=dQw4w9WgXcQ"
+      }
+    ],
+    "returned": 1,
+    "has_more": true,
+    "window": {
+      "after": "2026-08-01T00:00:00Z",
+      "before": null
+    },
+    "indexed_through": "2026-08-28T17:00:00.000Z",
+    "index_age_days": 3,
+    "as_of": "2026-08-28T17:00:00.000Z",
+    "note": "Newest indexed episodes first. Pass a video_id to count_occurrences videoIds to list what one episode mentions, or to get_transcript to read it."
+  }
+}

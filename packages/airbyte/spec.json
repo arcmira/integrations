@@ -1,0 +1,202 @@
+{
+  "documentationUrl": "https://arcmira.com/docs",
+  "supportsIncremental": false,
+  "supported_destination_sync_modes": [
+    "append",
+    "overwrite"
+  ],
+  "connectionSpecification": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "api_key"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "api_key": {
+        "type": "string",
+        "minLength": 1,
+        "airbyte_secret": true,
+        "title": "Arcmira API key"
+      },
+      "page_size": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 100,
+        "description": "Channel videos are capped at 25 per request."
+      },
+      "channel_videos": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "channel_id": {
+              "type": "string",
+              "description": "YouTube channel id, the UC... form.",
+              "pattern": "^UC[A-Za-z0-9_-]{22}$"
+            },
+            "after": {
+              "type": "string",
+              "description": "Only media published at or after this instant. An ISO 8601 date (2026-09-01) or datetime with offset (2026-09-01T00:00:00Z), read in UTC. The window is half-open: after is inclusive, before is exclusive.",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}(T.*)?$"
+            },
+            "before": {
+              "type": "string",
+              "description": "Only media published before this instant, so before=2026-09-02 includes all of 2026-09-01. An ISO 8601 date (2026-09-01) or datetime with offset (2026-09-01T00:00:00Z), read in UTC. The window is half-open: after is inclusive, before is exclusive.",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}(T.*)?$"
+            }
+          },
+          "required": [
+            "channel_id"
+          ],
+          "additionalProperties": false
+        },
+        "title": "Channel Videos",
+        "description": "Explicit full-refresh scopes. Empty or omitted disables this stream."
+      },
+      "mentions": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "entity_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The entity, as an id like ent_14. Required. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve.",
+              "pattern": "^ent_[A-Za-z0-9_-]+$"
+            },
+            "channel_id": {
+              "type": "string",
+              "description": "Only media from this YouTube channel id (UC plus 22 characters). Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve.",
+              "pattern": "^UC[A-Za-z0-9_-]{22}$"
+            },
+            "q": {
+              "type": "string"
+            },
+            "sentiment": {
+              "type": "string",
+              "enum": [
+                "positive",
+                "neutral",
+                "negative"
+              ]
+            },
+            "is_appearance": {
+              "type": "boolean"
+            },
+            "after": {
+              "type": "string",
+              "description": "Only media published at or after this instant. An ISO 8601 date (2026-09-01) or datetime with offset (2026-09-01T00:00:00Z), read in UTC. The window is half-open: after is inclusive, before is exclusive.",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}(T.*)?$"
+            },
+            "before": {
+              "type": "string",
+              "description": "Only media published before this instant, so before=2026-09-02 includes all of 2026-09-01. Needs a paid plan: the free plan refuses it with filter_requires_paid. An ISO 8601 date (2026-09-01) or datetime with offset (2026-09-01T00:00:00Z), read in UTC. The window is half-open: after is inclusive, before is exclusive.",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}(T.*)?$"
+            },
+            "details": {
+              "type": "string",
+              "enum": [
+                "full"
+              ]
+            }
+          },
+          "required": [
+            "entity_id"
+          ],
+          "additionalProperties": false
+        },
+        "title": "Mentions",
+        "description": "Explicit full-refresh scopes. Empty or omitted disables this stream."
+      },
+      "recommendations": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "entity_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The entity, as an id like ent_14. Required. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve.",
+              "pattern": "^ent_[A-Za-z0-9_-]+$"
+            },
+            "channel_id": {
+              "type": "string",
+              "description": "Only media from this YouTube channel id (UC plus 22 characters). Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve.",
+              "pattern": "^UC[A-Za-z0-9_-]{22}$"
+            },
+            "class": {
+              "type": "string",
+              "enum": [
+                "sponsored",
+                "organic",
+                "mention"
+              ],
+              "description": "The commercial class to return. Omit for all three. Values: sponsored (an ad-style promotion heard at that moment: a paid sponsor read, promo code, affiliate plug, thanks for supplied goods or venue, or a show promoting its own product as an ad), organic (an unpaid personal recommendation), mention (a neutral commercial mention)."
+            },
+            "min_confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "after": {
+              "type": "string",
+              "description": "Only media published at or after this instant. An ISO 8601 date (2026-09-01) or datetime with offset (2026-09-01T00:00:00Z), read in UTC. The window is half-open: after is inclusive, before is exclusive.",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}(T.*)?$"
+            },
+            "before": {
+              "type": "string",
+              "description": "Only media published before this instant, so before=2026-09-02 includes all of 2026-09-01. An ISO 8601 date (2026-09-01) or datetime with offset (2026-09-01T00:00:00Z), read in UTC. The window is half-open: after is inclusive, before is exclusive.",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}(T.*)?$"
+            },
+            "include_disputed": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "entity_id"
+          ],
+          "additionalProperties": false
+        },
+        "title": "Recommendations",
+        "description": "Explicit full-refresh scopes. Empty or omitted disables this stream."
+      }
+    },
+    "anyOf": [
+      {
+        "required": [
+          "channel_videos"
+        ],
+        "properties": {
+          "channel_videos": {
+            "minItems": 1
+          }
+        }
+      },
+      {
+        "required": [
+          "mentions"
+        ],
+        "properties": {
+          "mentions": {
+            "minItems": 1
+          }
+        }
+      },
+      {
+        "required": [
+          "recommendations"
+        ],
+        "properties": {
+          "recommendations": {
+            "minItems": 1
+          }
+        }
+      }
+    ]
+  }
+}
