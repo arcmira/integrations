@@ -1,0 +1,59 @@
+{
+  "name": "@arcmira/langchain",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "YouTube transcript search and entity resolution tools for LangChain, powered by Arcmira.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "arcmira": "0.4.3"
+  },
+  "peerDependencies": {
+    "@langchain/core": "^1.2.13",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@langchain/core": "1.2.13",
+    "@langchain/langgraph": "1.4.18",
+    "zod": "4.6.5",
+    "typescript": "5.9.3",
+    "@types/node": "24.10.1"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://arcmira.com/docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arcmira/integrations.git",
+    "directory": "packages/langchain"
+  },
+  "bugs": {
+    "url": "https://github.com/arcmira/integrations/issues"
+  },
+  "author": "Arcmira",
+  "keywords": [
+    "youtube",
+    "transcript-search",
+    "arcmira",
+    "langchain",
+    "tools"
+  ],
+  "engines": {
+    "node": ">=22"
+  }
+}
