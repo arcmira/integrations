@@ -62,7 +62,7 @@ All 58 tests pass using synthetic HTTP fixtures through the actual Airbyte CDK t
 
 A declarative `DefaultErrorHandler` predicate was also tested and can reject an unlock envelope before extraction. This candidate uses a supported Python `HttpStream` so whole-envelope validation, cursor-cycle detection and typed final errors are explicit and tested.
 
-Before publication: review the candidate, validate it in an approved Airbyte host against a dedicated sandbox, run the required connector acceptance tests and verify destination overwrite behavior. The existing [connector proposal](https://github.com/airbytehq/airbyte/discussions/87666) is the coordination point. The official Python contribution route permits a PR after discussion and testing; the Builder route asks for a classic GitHub token with broad scopes, which has not been granted. The source preview is available for review; no duplicate proposal, host package or catalog submission accompanies it. See the [official contribution requirements](https://docs.airbyte.com/platform/connector-development/submit-new-connector).
+Before publication: review the candidate, validate it in an approved Airbyte host against a dedicated sandbox, run the required connector acceptance tests and verify destination overwrite behavior. The existing [connector proposal](https://github.com/airbytehq/airbyte/discussions/87666) is the coordination point. See the [official contribution requirements](https://docs.airbyte.com/platform/connector-development/submit-new-connector).
 
 ## Included contract and repository checks
 
