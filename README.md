@@ -12,6 +12,8 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
 | Dify | [Setup and plugin](packages/dify) | Source preview; hosted research validation and Marketplace review pending |
 
+For a standard MCP connection, use the [authenticated OpenAI Agents SDK research example](examples/openai-agents). It retrieves a timestamped passage without a model call.
+
 ## Try the LangChain source preview
 
 ```sh
