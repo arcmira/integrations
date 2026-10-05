@@ -26,5 +26,10 @@ done
   pnpm test
   pnpm check:contract
 )
+(
+  cd packages/dify
+  uv sync --frozen
+  uv run --frozen python -m unittest discover -s test -v
+)
 git diff --check
 git diff --cached --check

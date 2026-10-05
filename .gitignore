@@ -9,3 +9,7 @@ bundle-evidence.json
 package-verification.json
 isolated-package-check.txt
 *.tsbuildinfo
+.venv/
+__pycache__/
+*.pyc
+*.difypkg

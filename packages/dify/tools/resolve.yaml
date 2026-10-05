@@ -1,0 +1,77 @@
+{
+  "identity": {
+    "author": "arcmira",
+    "name": "resolve",
+    "label": {
+      "en_US": "Resolve an entity"
+    }
+  },
+  "description": {
+    "human": {
+      "en_US": "Resolve one person, organization, product, topic or channel before search. Return candidates and ambiguity; do not assume an uncertain match is confirmed."
+    },
+    "llm": "Resolve one person, organization, product, topic or channel before search. Return candidates and ambiguity; do not assume an uncertain match is confirmed."
+  },
+  "parameters": [
+    {
+      "name": "q",
+      "type": "string",
+      "required": true,
+      "label": {
+        "en_US": "Name or channel"
+      },
+      "human_description": {
+        "en_US": "A name, @handle, YouTube URL or channel id (UC...). One thing per call."
+      },
+      "llm_description": "A name, @handle, YouTube URL or channel id (UC...). One thing per call.",
+      "form": "llm"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "required": false,
+      "label": {
+        "en_US": "Type"
+      },
+      "human_description": {
+        "en_US": "Restrict candidates to one type. Pass channel for a show and read best.youtube_channel_id. Values: person, organization, product, topic, channel."
+      },
+      "llm_description": "Restrict candidates to one type. Pass channel for a show and read best.youtube_channel_id. Values: person, organization, product, topic, channel.",
+      "form": "llm"
+    },
+    {
+      "name": "limit",
+      "type": "number",
+      "required": false,
+      "label": {
+        "en_US": "Limit"
+      },
+      "human_description": {
+        "en_US": "Candidates to return, 1 to 15. Default 8."
+      },
+      "llm_description": "Candidates to return, 1 to 15. Default 8.",
+      "form": "llm",
+      "default": 8,
+      "min": 1,
+      "max": 15
+    },
+    {
+      "name": "context",
+      "type": "string",
+      "required": false,
+      "label": {
+        "en_US": "Context"
+      },
+      "human_description": {
+        "en_US": "What the user said about the name, in their words (\"the startup bank\", \"Canada's prime minister\", \"on My First Million\"). Ranks candidates by their description and by the episodes they share with what the context names; a clear winner comes back as suggested with reason context."
+      },
+      "llm_description": "What the user said about the name, in their words (\"the startup bank\", \"Canada's prime minister\", \"on My First Million\"). Ranks candidates by their description and by the episodes they share with what the context names; a clear winner comes back as suggested with reason context.",
+      "form": "llm"
+    }
+  ],
+  "extra": {
+    "python": {
+      "source": "tools/resolve.py"
+    }
+  }
+}

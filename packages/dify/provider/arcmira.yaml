@@ -1,0 +1,38 @@
+{
+  "identity": {
+    "author": "arcmira",
+    "name": "arcmira",
+    "label": {
+      "en_US": "Arcmira: YouTube Transcript Search"
+    },
+    "description": {
+      "en_US": "Find timestamped passages, speaker appearances, mentions and sponsored ad reads across indexed YouTube videos."
+    },
+    "icon": "icon.svg",
+    "tags": [
+      "search"
+    ]
+  },
+  "credentials_for_provider": {
+    "api_key": {
+      "type": "secret-input",
+      "required": true,
+      "label": {
+        "en_US": "Arcmira API key"
+      },
+      "help": {
+        "en_US": "Use your own Arcmira key. A paid read uses credits from your plan, then your on-demand budget. API docs: https://arcmira.com/docs"
+      },
+      "url": "https://arcmira.com/docs"
+    }
+  },
+  "tools": [
+    "tools/search.yaml",
+    "tools/resolve.yaml"
+  ],
+  "extra": {
+    "python": {
+      "source": "provider/arcmira.py"
+    }
+  }
+}

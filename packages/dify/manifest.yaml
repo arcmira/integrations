@@ -1,0 +1,39 @@
+{
+  "version": "0.1.1",
+  "type": "plugin",
+  "author": "arcmira",
+  "name": "arcmira",
+  "label": {
+    "en_US": "Arcmira: YouTube Transcript Search"
+  },
+  "description": {
+    "en_US": "Find timestamped passages, speaker appearances, mentions and sponsored ad reads across indexed YouTube videos."
+  },
+  "icon": "icon.svg",
+  "created_at": "2026-10-03T00:00:00Z",
+  "privacy": "PRIVACY.md",
+  "resource": {
+    "memory": 67108864,
+    "permission": {}
+  },
+  "plugins": {
+    "tools": [
+      "provider/arcmira.yaml"
+    ]
+  },
+  "meta": {
+    "version": "0.0.1",
+    "arch": [
+      "amd64",
+      "arm64"
+    ],
+    "runner": {
+      "language": "python",
+      "version": "3.12",
+      "entrypoint": "main"
+    }
+  },
+  "tags": [
+    "search"
+  ]
+}
