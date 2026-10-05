@@ -38,13 +38,21 @@ A failed run may already have emitted records. In the tested target-duckdb 0.8.0
 
 When the tap failed on a later page with HTTP 403, the target still committed the records already received and exited successfully. Check both process exits. For a shell pipeline, enable `set -o pipefail` before running it so a failed tap does not appear successful solely because the target exited zero. This propagates failure; it does not roll back destination writes. Use a separate staging destination and promote it only after a successful source run and verified completeness if partial results must not become visible.
 
-These results cover one native target and configuration using synthetic API responses. Other targets, authenticated export and failure propagation through the Meltano orchestrator remain unverified. Do not infer deletions or replace a dataset without a deliberate, tested target policy.
+These results cover one native target and configuration using synthetic API responses. Other targets and authenticated export remain unverified. Meltano 4.3.0 orchestration returned a nonzero exit for the same source refusal, but the destination still retained the partial row. Do not infer deletions or replace a dataset without a deliberate, tested target policy.
 
 ## Local checks
 
 The 23 tests exercise the Singer CLI and source behavior with synthetic HTTP responses. They cover pagination, preserved records, recommendations, preview refusals, errors, page limits and configuration validation. No successful authenticated export is claimed. Meltano installation and discovery passed separately; the prior live checks covered invalid-key and paid-filter refusals only.
 
 A separate native pipeline test connected the actual tap CLI to the unmodified [target-duckdb 0.8.0](https://github.com/jwills/target-duckdb) entrypoint, using DuckDB 1.5.5 and synthetic API responses. The first run stored two mentions and one recommendation, preserving nested entity/media JSON, timestamps and the recommendation quote. A repeat run and a later-page source refusal established the upsert and partial-commit behavior described above. These checks did not use a live Arcmira account.
+
+The exact submitted Git package URL was installed remotely with the locked dependencies and build tools below. Installed metadata confirmed commit `41d8bb40ce8f02d62f2b6dcc15bfd0cf2eda67f2`, subdirectory `packages/meltano`, package version 0.1.0 and both discovery streams. The verified URL is:
+
+```text
+git+https://github.com/arcmira/integrations.git@41d8bb40ce8f02d62f2b6dcc15bfd0cf2eda67f2#subdirectory=packages/meltano
+```
+
+A separate Meltano 4.3.0 project ran the remotely installed tap and native target through custom fixture entrypoints. Only the HTTP responses were synthetic; source and target runtime code were unchanged. `meltano run` returned zero on success and repeat runs, and one on the later-page source refusal. The database still contained the partial row after failure, so checking the orchestrator exit does not replace staging or rollback policy.
 
 ```sh
 uv venv --python 3.12 .venv
@@ -56,4 +64,4 @@ uv pip sync --python .venv/bin/python requirements-test.txt
 
 The checked-in dependency audit records the tested versions and their release dates. `check_schemas.py` compares both record schemas against the included API 1.0.0 snapshot. CI runs these checks locally and never makes live API requests. `config.fixture.json` contains a synthetic key for offline discovery only.
 
-Our remaining validation work is an authorized successful export, end-to-end Meltano orchestration, and any additional destination or staging strategy. The native DuckDB fixture checks do not establish those behaviors. These are our verification gaps, not quoted Hub requirements. For catalog contribution, follow the [Meltano Hub guide](https://github.com/meltano/hub/blob/main/CONTRIBUTING.md). The Hub supports Git-based installation; a PyPI release is not required. The source preview uses Apache-2.0.
+Our remaining validation work is an authorized successful export and any additional destination or staging strategy. The synthetic native and orchestrated checks do not establish those behaviors. These are our verification gaps, not quoted Hub requirements. For catalog contribution, follow the [Meltano Hub guide](https://github.com/meltano/hub/blob/main/CONTRIBUTING.md). The Hub supports Git-based installation; a PyPI release is not required. The source preview uses Apache-2.0.
