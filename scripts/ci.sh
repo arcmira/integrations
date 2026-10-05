@@ -39,6 +39,11 @@ done
   uv build
   uv run --frozen twine check dist/*
 )
+(
+  cd examples/dlt
+  uv sync --frozen
+  RUNTIME__DLTHUB_TELEMETRY=false uv run --frozen python -m unittest discover -s test -v
+)
 python3 scripts/test-python-release.py
 git diff --check
 git diff --cached --check

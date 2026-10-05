@@ -95,3 +95,7 @@ The root `Formula/arcmira.rb` packages CLI 0.4.3 through this repository's first
 ## Nix CLI
 
 The [first-party Nix package](nix) builds CLI 0.4.3 from its GitHub release source with pinned npm dependencies. Nix 2.24.11, Nixpkgs `bfdc17373049aec7e5a4ad159f614c7a7c2e050c` and Node 24.20.0 passed the source build, 68 fixture-based tests and installed CLI checks on aarch64-linux in Docker on Apple Silicon. Nix sandboxing was disabled inside that disposable container; a sandboxed native-host build and other platforms remain unverified. The package adjusts only the setup test's shell and utility paths for Nix. All six skill guides are present. No live API credentials or paid calls were used. This is an Arcmira install route, with no Nixpkgs catalog inclusion claimed.
+
+## dlt REST example
+
+The [dlt example](examples/dlt) loads bounded search responses or cursor-paginated channel-video metadata into local JSONL files. It uses dlt 1.30.0 with locked dependencies. Eight local tests passed through the real REST transport, extraction, normalization and filesystem destination. They verify complete response retention, empty coverage notes, cursor/filter consistency, request bounds, refusal bodies and headers, no automatic HTTP retries, and no destination load after a later-page failure. Live authenticated Arcmira validation remains incomplete because no suitable established smoke credential was available. This is a fixture-tested first-party example, not a dlt verified-source catalog listing or an exhaustive transcript export.

@@ -1,0 +1,31 @@
+{
+  "channel": {
+    "id": "ent_566342",
+    "youtube_channel_id": "UC-DRzaGnL_vtBUpCFH5M0tg",
+    "name": "TBPN",
+    "page": "https://arcmira.com/yt/@TBPNLive"
+  },
+  "episodes": [
+    {
+      "video_id": "dQw4w9WgXcQ",
+      "title": "TBPN | Friday, August 28",
+      "published_at": "2026-08-28T17:00:00.000Z",
+      "duration_seconds": 10812,
+      "view_count": 48210,
+      "channel_id": "UC-DRzaGnL_vtBUpCFH5M0tg",
+      "channel_name": "TBPN",
+      "channel_page": "https://arcmira.com/yt/@TBPNLive",
+      "watch_url": "https://arcmira.com/watch?v=dQw4w9WgXcQ"
+    }
+  ],
+  "returned": 1,
+  "has_more": true,
+  "window": {
+    "after": "2026-08-01T00:00:00Z",
+    "before": null
+  },
+  "indexed_through": "2026-08-28T17:00:00.000Z",
+  "index_age_days": 3,
+  "as_of": "2026-08-28T17:00:00.000Z",
+  "note": "Newest indexed episodes first. Pass a video_id to count_occurrences videoIds to list what one episode mentions, or to get_transcript to read it."
+}
