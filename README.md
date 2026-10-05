@@ -16,6 +16,8 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Fixture-tested source example; no dlt catalog listing |
 | Dify | [Setup and plugin](packages/dify) | Source preview; hosted research validation and Marketplace review pending |
 
+For DSH, the [API documentation preset](examples/dsh) searches documentation without an API key. Its native session check passes; it does not provide YouTube research.
+
 For a standard MCP connection, use the authenticated [OpenAI Agents SDK](examples/openai-agents) or [Pydantic AI](examples/pydantic-ai) research example. Both retrieve a timestamped passage without an external model call.
 
 ## Install the Python package
