@@ -1,0 +1,2934 @@
+{
+    "name": "appmixer.arcmira.core.SearchTranscripts",
+    "description": "Search indexed YouTube videos and livestreams for timestamped passages. Returns one complete response envelope with up to 20 ranked results, not a catalog export. Limited coverage goes to the limited output. A paid read uses credits from your plan, then your on-demand budget. API docs: https://arcmira.com/docs.",
+    "author": "Arcmira <zeal@arcmira.com>",
+    "version": "1.0.3",
+    "auth": {
+        "service": "appmixer:arcmira"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "minLength": 2
+                    },
+                    "channelIds": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "entityIds": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "about": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "by": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "kind": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "after": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "before": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "source": {
+                        "type": "string",
+                        "enum": [
+                            "arcmira_premium",
+                            "creator_captions",
+                            "third_party_quick"
+                        ]
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 20,
+                        "default": 5
+                    }
+                },
+                "required": [
+                    "query"
+                ],
+                "additionalProperties": false
+            },
+            "inspector": {
+                "inputs": {
+                    "query": {
+                        "type": "text",
+                        "label": "Query",
+                        "index": 1,
+                        "tooltip": "One topic or phrase. Do not concatenate unrelated names; make one call per topic."
+                    },
+                    "channelIds": {
+                        "type": "text",
+                        "label": "Channel Ids",
+                        "index": 2,
+                        "tooltip": "Comma-separated YouTube channel ids (UC...), at most 8. Pass every show in scope unless drilling into one. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve."
+                    },
+                    "entityIds": {
+                        "type": "text",
+                        "label": "Entity Ids",
+                        "index": 3,
+                        "tooltip": "Comma-separated entity ids (ent_{n}), at most 8. A person id filters to that person's appearances; a channel id widens channel_ids. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve."
+                    },
+                    "about": {
+                        "type": "text",
+                        "label": "About",
+                        "index": 4,
+                        "tooltip": "Comma-separated entity ids (ent_{n}), at most 8. Only passages about these entities: excerpt pins, exact-name mentions and ad verdicts. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve."
+                    },
+                    "by": {
+                        "type": "text",
+                        "label": "By",
+                        "index": 5,
+                        "tooltip": "Comma-separated person ids (ent_{n}), at most 8. Only passages where one of these people says the query words (each line of a chunk is labeled with its speaker); a non-person id is refused with invalid_query naming its type. Speaker labels cover a minority of shows; an empty result carries a note saying whether the person is labeled anywhere. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve."
+                    },
+                    "kind": {
+                        "type": "text",
+                        "label": "Kind",
+                        "index": 6,
+                        "tooltip": "Comma-separated passage classes: sponsored, organic, mention. Combine with about to read what was said about a brand in ad reads or in organic talk."
+                    },
+                    "after": {
+                        "type": "date-time",
+                        "label": "After",
+                        "index": 7,
+                        "tooltip": "Only media published at or after this instant. An after later than your plan's freshness gate is refused with freshness_requires_paid rather than widened. An ISO 8601 date (2026-09-01) or datetime with offset (2026-09-01T00:00:00Z), read in UTC. The window is half-open: after is inclusive, before is exclusive."
+                    },
+                    "before": {
+                        "type": "date-time",
+                        "label": "Before",
+                        "index": 8,
+                        "tooltip": "Only media published before this instant, so before=2026-09-02 includes all of 2026-09-01. An ISO 8601 date (2026-09-01) or datetime with offset (2026-09-01T00:00:00Z), read in UTC. The window is half-open: after is inclusive, before is exclusive."
+                    },
+                    "source": {
+                        "type": "select",
+                        "label": "Source",
+                        "index": 9,
+                        "tooltip": "Restrict to one transcript source class. arcmira_premium on a plan without Premium transcripts is refused with filter_requires_paid.",
+                        "options": [
+                            {
+                                "content": "arcmira_premium",
+                                "value": "arcmira_premium"
+                            },
+                            {
+                                "content": "creator_captions",
+                                "value": "creator_captions"
+                            },
+                            {
+                                "content": "third_party_quick",
+                                "value": "third_party_quick"
+                            }
+                        ]
+                    },
+                    "limit": {
+                        "type": "number",
+                        "label": "Limit",
+                        "index": 10,
+                        "tooltip": "Chunks to return, 1 to 20. Default 5.",
+                        "defaultValue": 5
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "title": "query"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "title": "limit"
+                    },
+                    "returned": {
+                        "type": "integer",
+                        "title": "returned"
+                    },
+                    "filters": {
+                        "type": "object",
+                        "properties": {
+                            "channel_ids": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "filters.channel_ids"
+                            },
+                            "entity_ids": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "filters.entity_ids"
+                            },
+                            "about": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "type"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type"
+                                    ]
+                                },
+                                "title": "filters.about"
+                            },
+                            "by": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "type"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type"
+                                    ]
+                                },
+                                "title": "filters.by"
+                            },
+                            "kind": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "sponsored",
+                                        "organic",
+                                        "mention"
+                                    ]
+                                },
+                                "title": "filters.kind"
+                            }
+                        },
+                        "required": [
+                            "channel_ids",
+                            "entity_ids",
+                            "about",
+                            "by",
+                            "kind"
+                        ],
+                        "title": "filters"
+                    },
+                    "window": {
+                        "type": "object",
+                        "properties": {
+                            "after": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "window.after"
+                            },
+                            "before": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "window.before"
+                            }
+                        },
+                        "required": [
+                            "after",
+                            "before"
+                        ],
+                        "title": "window"
+                    },
+                    "chunks": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "title": "id"
+                                },
+                                "video_id": {
+                                    "type": "string",
+                                    "title": "video_id"
+                                },
+                                "channel_id": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_id"
+                                },
+                                "channel_name": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_name"
+                                },
+                                "channel_page": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_page"
+                                },
+                                "video_title": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "video_title"
+                                },
+                                "speakers": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "title": "speakers"
+                                },
+                                "source": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "source"
+                                },
+                                "source_label": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "source_label"
+                                },
+                                "published_at": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "published_at"
+                                },
+                                "text": {
+                                    "type": "string",
+                                    "title": "text"
+                                },
+                                "start_seconds": {
+                                    "type": [
+                                        "integer",
+                                        "null"
+                                    ],
+                                    "title": "start_seconds"
+                                },
+                                "watch_url": {
+                                    "type": "string",
+                                    "title": "watch_url"
+                                },
+                                "cite_line": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "cite_line"
+                                },
+                                "score": {
+                                    "type": "number",
+                                    "title": "score"
+                                },
+                                "about": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "title": "id"
+                                            },
+                                            "name": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "name"
+                                            },
+                                            "type": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "type"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "name",
+                                            "type"
+                                        ]
+                                    },
+                                    "title": "about"
+                                },
+                                "speakers_by": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "title": "id"
+                                            },
+                                            "name": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "name"
+                                            },
+                                            "type": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "type"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "name",
+                                            "type"
+                                        ]
+                                    },
+                                    "title": "speakers_by"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "video_id",
+                                "channel_id",
+                                "source",
+                                "published_at",
+                                "text",
+                                "start_seconds",
+                                "watch_url",
+                                "score"
+                            ]
+                        },
+                        "title": "chunks"
+                    },
+                    "partial": {
+                        "type": "boolean",
+                        "title": "partial"
+                    },
+                    "failed_batches": {
+                        "type": "integer",
+                        "title": "failed_batches"
+                    },
+                    "as_of": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "as_of"
+                    },
+                    "search_index": {
+                        "type": "object",
+                        "properties": {
+                            "state": {
+                                "type": "string",
+                                "enum": [
+                                    "live",
+                                    "catching_up",
+                                    "unknown"
+                                ],
+                                "title": "search_index.state"
+                            },
+                            "missing_before": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "search_index.missing_before"
+                            }
+                        },
+                        "required": [
+                            "state",
+                            "missing_before"
+                        ],
+                        "title": "search_index"
+                    },
+                    "access": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "invalid_request_error",
+                                    "authentication_error",
+                                    "permission_error",
+                                    "quota_exceeded",
+                                    "rate_limit_error",
+                                    "not_found",
+                                    "conflict_error",
+                                    "server_error"
+                                ],
+                                "title": "access.type"
+                            },
+                            "code": {
+                                "type": "string",
+                                "title": "access.code"
+                            },
+                            "reason": {
+                                "type": "string",
+                                "enum": [
+                                    "no_credential",
+                                    "invalid",
+                                    "revoked"
+                                ],
+                                "title": "access.reason"
+                            },
+                            "message": {
+                                "type": "string",
+                                "title": "access.message"
+                            },
+                            "param": {
+                                "type": "string",
+                                "title": "access.param"
+                            },
+                            "gate": {
+                                "type": "string",
+                                "enum": [
+                                    "rows",
+                                    "key",
+                                    "plan",
+                                    "freshness",
+                                    "exposure_law",
+                                    "rate",
+                                    "pagination"
+                                ],
+                                "title": "access.gate"
+                            },
+                            "resource": {
+                                "oneOf": [
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "media_rows"
+                                                ]
+                                            },
+                                            "beyond_row": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "beyond_row"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "fresh_media"
+                                                ]
+                                            },
+                                            "window_days": {
+                                                "type": "integer"
+                                            },
+                                            "cutoff": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "window_days",
+                                            "cutoff"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "sidebar_rows"
+                                                ]
+                                            },
+                                            "section": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "topics",
+                                                    "entities"
+                                                ]
+                                            },
+                                            "beyond_row": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "section",
+                                            "beyond_row"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "counts"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "chart"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "pagination"
+                                                ]
+                                            },
+                                            "param": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "enum": [
+                                                    "offset",
+                                                    "cursor",
+                                                    null
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "param"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "premium_transcript"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "filter"
+                                                ]
+                                            },
+                                            "param": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "param"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "commercial"
+                                                ]
+                                            },
+                                            "what": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "sponsors",
+                                                    "recommendations",
+                                                    "mention_details",
+                                                    "community_review",
+                                                    "paid_split"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "what"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "feature"
+                                                ]
+                                            },
+                                            "feature": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "api",
+                                                    "export"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "feature"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "rows"
+                                                ]
+                                            },
+                                            "requested": {
+                                                "type": [
+                                                    "integer",
+                                                    "null"
+                                                ]
+                                            },
+                                            "remaining": {
+                                                "type": [
+                                                    "integer",
+                                                    "null"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "requested",
+                                            "remaining"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "key"
+                                                ]
+                                            },
+                                            "scope": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "enum": [
+                                                    "read",
+                                                    "monitors:write",
+                                                    "trackers:write",
+                                                    "recommendations:read",
+                                                    null
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "scope"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "requests"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    }
+                                ],
+                                "title": "access.resource"
+                            },
+                            "unlock": {
+                                "type": "object",
+                                "properties": {
+                                    "tier": {
+                                        "type": "string",
+                                        "title": "access.unlock.tier"
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "title": "access.unlock.url"
+                                    },
+                                    "offer": {
+                                        "type": "null",
+                                        "title": "access.unlock.offer"
+                                    },
+                                    "action": {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.kind"
+                                            },
+                                            "method": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.method"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.url"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "method",
+                                            "url"
+                                        ],
+                                        "title": "access.unlock.action"
+                                    }
+                                },
+                                "required": [
+                                    "tier",
+                                    "url",
+                                    "offer"
+                                ],
+                                "title": "access.unlock"
+                            },
+                            "retry_after_seconds": {
+                                "type": "integer",
+                                "title": "access.retry_after_seconds"
+                            },
+                            "details": {
+                                "type": "object",
+                                "properties": {
+                                    "quote": {
+                                        "allOf": [
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "quarters": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.quarters"
+                                                    },
+                                                    "rows": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.rows"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "quarters",
+                                                    "rows"
+                                                ]
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "charge": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "unit": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "rows",
+                                                                    "credits"
+                                                                ],
+                                                                "title": "access.details.quote.charge.unit"
+                                                            },
+                                                            "amount": {
+                                                                "type": "number",
+                                                                "title": "access.details.quote.charge.amount"
+                                                            },
+                                                            "from": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "included",
+                                                                    "on_demand",
+                                                                    "mixed"
+                                                                ],
+                                                                "title": "access.details.quote.charge.from"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "unit",
+                                                            "amount",
+                                                            "from"
+                                                        ],
+                                                        "title": "access.details.quote.charge"
+                                                    },
+                                                    "max_on_demand_cents": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.max_on_demand_cents"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "title": "access.details.quote"
+                                    },
+                                    "existing_id": {
+                                        "type": "string",
+                                        "title": "access.details.existing_id"
+                                    },
+                                    "limit": {
+                                        "type": "integer",
+                                        "title": "access.details.limit"
+                                    },
+                                    "count": {
+                                        "type": "integer",
+                                        "title": "access.details.count"
+                                    }
+                                },
+                                "title": "access.details"
+                            },
+                            "doc_url": {
+                                "type": "string",
+                                "title": "access.doc_url"
+                            },
+                            "request_id": {
+                                "type": "string",
+                                "title": "access.request_id"
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "code",
+                            "message",
+                            "doc_url",
+                            "request_id"
+                        ],
+                        "title": "access"
+                    },
+                    "unlock": {
+                        "type": "object",
+                        "properties": {
+                            "tier": {
+                                "type": "string",
+                                "title": "unlock.tier"
+                            },
+                            "url": {
+                                "type": "string",
+                                "title": "unlock.url"
+                            }
+                        },
+                        "required": [
+                            "tier",
+                            "url"
+                        ],
+                        "title": "unlock"
+                    },
+                    "note": {
+                        "type": "string",
+                        "title": "note"
+                    }
+                },
+                "required": [
+                    "query",
+                    "limit",
+                    "returned",
+                    "filters",
+                    "window",
+                    "chunks",
+                    "as_of",
+                    "search_index",
+                    "note"
+                ],
+                "example": {
+                    "query": "climate research",
+                    "limit": 5,
+                    "returned": 1,
+                    "filters": {
+                        "channel_ids": [],
+                        "entity_ids": [],
+                        "about": [],
+                        "by": [],
+                        "kind": []
+                    },
+                    "window": {
+                        "after": null,
+                        "before": null
+                    },
+                    "chunks": [
+                        {
+                            "id": "chunk_fixture_1",
+                            "video_id": "abcdefghijk",
+                            "channel_id": "UCaaaaaaaaaaaaaaaaaaaaaa",
+                            "source": "arcmira_premium",
+                            "published_at": "2026-09-01T00:00:00Z",
+                            "text": "Synthetic transcript passage about climate research.",
+                            "start_seconds": 42,
+                            "watch_url": "/watch?v=abcdefghijk&t=42",
+                            "score": 0.8
+                        }
+                    ],
+                    "as_of": "2026-09-01T00:00:00Z",
+                    "search_index": {
+                        "state": "live",
+                        "missing_before": null
+                    },
+                    "note": "Synthetic example: bounded results from indexed material."
+                }
+            }
+        },
+        {
+            "name": "limited",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "title": "query"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "title": "limit"
+                    },
+                    "returned": {
+                        "type": "integer",
+                        "title": "returned"
+                    },
+                    "filters": {
+                        "type": "object",
+                        "properties": {
+                            "channel_ids": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "filters.channel_ids"
+                            },
+                            "entity_ids": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "filters.entity_ids"
+                            },
+                            "about": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "type"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type"
+                                    ]
+                                },
+                                "title": "filters.about"
+                            },
+                            "by": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "type"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type"
+                                    ]
+                                },
+                                "title": "filters.by"
+                            },
+                            "kind": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "sponsored",
+                                        "organic",
+                                        "mention"
+                                    ]
+                                },
+                                "title": "filters.kind"
+                            }
+                        },
+                        "required": [
+                            "channel_ids",
+                            "entity_ids",
+                            "about",
+                            "by",
+                            "kind"
+                        ],
+                        "title": "filters"
+                    },
+                    "window": {
+                        "type": "object",
+                        "properties": {
+                            "after": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "window.after"
+                            },
+                            "before": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "window.before"
+                            }
+                        },
+                        "required": [
+                            "after",
+                            "before"
+                        ],
+                        "title": "window"
+                    },
+                    "chunks": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "title": "id"
+                                },
+                                "video_id": {
+                                    "type": "string",
+                                    "title": "video_id"
+                                },
+                                "channel_id": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_id"
+                                },
+                                "channel_name": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_name"
+                                },
+                                "channel_page": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_page"
+                                },
+                                "video_title": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "video_title"
+                                },
+                                "speakers": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "title": "speakers"
+                                },
+                                "source": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "source"
+                                },
+                                "source_label": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "source_label"
+                                },
+                                "published_at": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "published_at"
+                                },
+                                "text": {
+                                    "type": "string",
+                                    "title": "text"
+                                },
+                                "start_seconds": {
+                                    "type": [
+                                        "integer",
+                                        "null"
+                                    ],
+                                    "title": "start_seconds"
+                                },
+                                "watch_url": {
+                                    "type": "string",
+                                    "title": "watch_url"
+                                },
+                                "cite_line": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "cite_line"
+                                },
+                                "score": {
+                                    "type": "number",
+                                    "title": "score"
+                                },
+                                "about": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "title": "id"
+                                            },
+                                            "name": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "name"
+                                            },
+                                            "type": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "type"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "name",
+                                            "type"
+                                        ]
+                                    },
+                                    "title": "about"
+                                },
+                                "speakers_by": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "title": "id"
+                                            },
+                                            "name": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "name"
+                                            },
+                                            "type": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "type"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "name",
+                                            "type"
+                                        ]
+                                    },
+                                    "title": "speakers_by"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "video_id",
+                                "channel_id",
+                                "source",
+                                "published_at",
+                                "text",
+                                "start_seconds",
+                                "watch_url",
+                                "score"
+                            ]
+                        },
+                        "title": "chunks"
+                    },
+                    "partial": {
+                        "type": "boolean",
+                        "title": "partial"
+                    },
+                    "failed_batches": {
+                        "type": "integer",
+                        "title": "failed_batches"
+                    },
+                    "as_of": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "as_of"
+                    },
+                    "search_index": {
+                        "type": "object",
+                        "properties": {
+                            "state": {
+                                "type": "string",
+                                "enum": [
+                                    "live",
+                                    "catching_up",
+                                    "unknown"
+                                ],
+                                "title": "search_index.state"
+                            },
+                            "missing_before": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "search_index.missing_before"
+                            }
+                        },
+                        "required": [
+                            "state",
+                            "missing_before"
+                        ],
+                        "title": "search_index"
+                    },
+                    "access": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "invalid_request_error",
+                                    "authentication_error",
+                                    "permission_error",
+                                    "quota_exceeded",
+                                    "rate_limit_error",
+                                    "not_found",
+                                    "conflict_error",
+                                    "server_error"
+                                ],
+                                "title": "access.type"
+                            },
+                            "code": {
+                                "type": "string",
+                                "title": "access.code"
+                            },
+                            "reason": {
+                                "type": "string",
+                                "enum": [
+                                    "no_credential",
+                                    "invalid",
+                                    "revoked"
+                                ],
+                                "title": "access.reason"
+                            },
+                            "message": {
+                                "type": "string",
+                                "title": "access.message"
+                            },
+                            "param": {
+                                "type": "string",
+                                "title": "access.param"
+                            },
+                            "gate": {
+                                "type": "string",
+                                "enum": [
+                                    "rows",
+                                    "key",
+                                    "plan",
+                                    "freshness",
+                                    "exposure_law",
+                                    "rate",
+                                    "pagination"
+                                ],
+                                "title": "access.gate"
+                            },
+                            "resource": {
+                                "oneOf": [
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "media_rows"
+                                                ]
+                                            },
+                                            "beyond_row": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "beyond_row"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "fresh_media"
+                                                ]
+                                            },
+                                            "window_days": {
+                                                "type": "integer"
+                                            },
+                                            "cutoff": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "window_days",
+                                            "cutoff"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "sidebar_rows"
+                                                ]
+                                            },
+                                            "section": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "topics",
+                                                    "entities"
+                                                ]
+                                            },
+                                            "beyond_row": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "section",
+                                            "beyond_row"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "counts"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "chart"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "pagination"
+                                                ]
+                                            },
+                                            "param": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "enum": [
+                                                    "offset",
+                                                    "cursor",
+                                                    null
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "param"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "premium_transcript"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "filter"
+                                                ]
+                                            },
+                                            "param": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "param"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "commercial"
+                                                ]
+                                            },
+                                            "what": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "sponsors",
+                                                    "recommendations",
+                                                    "mention_details",
+                                                    "community_review",
+                                                    "paid_split"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "what"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "feature"
+                                                ]
+                                            },
+                                            "feature": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "api",
+                                                    "export"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "feature"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "rows"
+                                                ]
+                                            },
+                                            "requested": {
+                                                "type": [
+                                                    "integer",
+                                                    "null"
+                                                ]
+                                            },
+                                            "remaining": {
+                                                "type": [
+                                                    "integer",
+                                                    "null"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "requested",
+                                            "remaining"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "key"
+                                                ]
+                                            },
+                                            "scope": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "enum": [
+                                                    "read",
+                                                    "monitors:write",
+                                                    "trackers:write",
+                                                    "recommendations:read",
+                                                    null
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "scope"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "requests"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    }
+                                ],
+                                "title": "access.resource"
+                            },
+                            "unlock": {
+                                "type": "object",
+                                "properties": {
+                                    "tier": {
+                                        "type": "string",
+                                        "title": "access.unlock.tier"
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "title": "access.unlock.url"
+                                    },
+                                    "offer": {
+                                        "type": "null",
+                                        "title": "access.unlock.offer"
+                                    },
+                                    "action": {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.kind"
+                                            },
+                                            "method": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.method"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.url"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "method",
+                                            "url"
+                                        ],
+                                        "title": "access.unlock.action"
+                                    }
+                                },
+                                "required": [
+                                    "tier",
+                                    "url",
+                                    "offer"
+                                ],
+                                "title": "access.unlock"
+                            },
+                            "retry_after_seconds": {
+                                "type": "integer",
+                                "title": "access.retry_after_seconds"
+                            },
+                            "details": {
+                                "type": "object",
+                                "properties": {
+                                    "quote": {
+                                        "allOf": [
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "quarters": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.quarters"
+                                                    },
+                                                    "rows": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.rows"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "quarters",
+                                                    "rows"
+                                                ]
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "charge": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "unit": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "rows",
+                                                                    "credits"
+                                                                ],
+                                                                "title": "access.details.quote.charge.unit"
+                                                            },
+                                                            "amount": {
+                                                                "type": "number",
+                                                                "title": "access.details.quote.charge.amount"
+                                                            },
+                                                            "from": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "included",
+                                                                    "on_demand",
+                                                                    "mixed"
+                                                                ],
+                                                                "title": "access.details.quote.charge.from"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "unit",
+                                                            "amount",
+                                                            "from"
+                                                        ],
+                                                        "title": "access.details.quote.charge"
+                                                    },
+                                                    "max_on_demand_cents": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.max_on_demand_cents"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "title": "access.details.quote"
+                                    },
+                                    "existing_id": {
+                                        "type": "string",
+                                        "title": "access.details.existing_id"
+                                    },
+                                    "limit": {
+                                        "type": "integer",
+                                        "title": "access.details.limit"
+                                    },
+                                    "count": {
+                                        "type": "integer",
+                                        "title": "access.details.count"
+                                    }
+                                },
+                                "title": "access.details"
+                            },
+                            "doc_url": {
+                                "type": "string",
+                                "title": "access.doc_url"
+                            },
+                            "request_id": {
+                                "type": "string",
+                                "title": "access.request_id"
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "code",
+                            "message",
+                            "doc_url",
+                            "request_id"
+                        ],
+                        "title": "access"
+                    },
+                    "unlock": {
+                        "type": "object",
+                        "properties": {
+                            "tier": {
+                                "type": "string",
+                                "title": "unlock.tier"
+                            },
+                            "url": {
+                                "type": "string",
+                                "title": "unlock.url"
+                            }
+                        },
+                        "required": [
+                            "tier",
+                            "url"
+                        ],
+                        "title": "unlock"
+                    },
+                    "note": {
+                        "type": "string",
+                        "title": "note"
+                    }
+                },
+                "required": [
+                    "query",
+                    "limit",
+                    "returned",
+                    "filters",
+                    "window",
+                    "chunks",
+                    "as_of",
+                    "search_index",
+                    "note"
+                ],
+                "example": {
+                    "query": "climate research",
+                    "limit": 5,
+                    "returned": 1,
+                    "filters": {
+                        "channel_ids": [],
+                        "entity_ids": [],
+                        "about": [],
+                        "by": [],
+                        "kind": []
+                    },
+                    "window": {
+                        "after": null,
+                        "before": null
+                    },
+                    "chunks": [
+                        {
+                            "id": "chunk_fixture_1",
+                            "video_id": "abcdefghijk",
+                            "channel_id": "UCaaaaaaaaaaaaaaaaaaaaaa",
+                            "source": "arcmira_premium",
+                            "published_at": "2026-09-01T00:00:00Z",
+                            "text": "Synthetic transcript passage about climate research.",
+                            "start_seconds": 42,
+                            "watch_url": "/watch?v=abcdefghijk&t=42",
+                            "score": 0.8
+                        }
+                    ],
+                    "as_of": "2026-09-01T00:00:00Z",
+                    "search_index": {
+                        "state": "live",
+                        "missing_before": null
+                    },
+                    "note": "Synthetic example: one search batch failed; results are incomplete.",
+                    "partial": true,
+                    "failed_batches": 1
+                }
+            }
+        },
+        {
+            "name": "notFound",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "title": "query"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "title": "limit"
+                    },
+                    "returned": {
+                        "type": "integer",
+                        "title": "returned"
+                    },
+                    "filters": {
+                        "type": "object",
+                        "properties": {
+                            "channel_ids": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "filters.channel_ids"
+                            },
+                            "entity_ids": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "filters.entity_ids"
+                            },
+                            "about": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "type"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type"
+                                    ]
+                                },
+                                "title": "filters.about"
+                            },
+                            "by": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ],
+                                            "title": "type"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type"
+                                    ]
+                                },
+                                "title": "filters.by"
+                            },
+                            "kind": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "sponsored",
+                                        "organic",
+                                        "mention"
+                                    ]
+                                },
+                                "title": "filters.kind"
+                            }
+                        },
+                        "required": [
+                            "channel_ids",
+                            "entity_ids",
+                            "about",
+                            "by",
+                            "kind"
+                        ],
+                        "title": "filters"
+                    },
+                    "window": {
+                        "type": "object",
+                        "properties": {
+                            "after": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "window.after"
+                            },
+                            "before": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "window.before"
+                            }
+                        },
+                        "required": [
+                            "after",
+                            "before"
+                        ],
+                        "title": "window"
+                    },
+                    "chunks": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "title": "id"
+                                },
+                                "video_id": {
+                                    "type": "string",
+                                    "title": "video_id"
+                                },
+                                "channel_id": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_id"
+                                },
+                                "channel_name": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_name"
+                                },
+                                "channel_page": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "channel_page"
+                                },
+                                "video_title": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "video_title"
+                                },
+                                "speakers": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "title": "speakers"
+                                },
+                                "source": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "source"
+                                },
+                                "source_label": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "source_label"
+                                },
+                                "published_at": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "published_at"
+                                },
+                                "text": {
+                                    "type": "string",
+                                    "title": "text"
+                                },
+                                "start_seconds": {
+                                    "type": [
+                                        "integer",
+                                        "null"
+                                    ],
+                                    "title": "start_seconds"
+                                },
+                                "watch_url": {
+                                    "type": "string",
+                                    "title": "watch_url"
+                                },
+                                "cite_line": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "cite_line"
+                                },
+                                "score": {
+                                    "type": "number",
+                                    "title": "score"
+                                },
+                                "about": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "title": "id"
+                                            },
+                                            "name": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "name"
+                                            },
+                                            "type": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "type"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "name",
+                                            "type"
+                                        ]
+                                    },
+                                    "title": "about"
+                                },
+                                "speakers_by": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "title": "id"
+                                            },
+                                            "name": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "name"
+                                            },
+                                            "type": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "title": "type"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "name",
+                                            "type"
+                                        ]
+                                    },
+                                    "title": "speakers_by"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "video_id",
+                                "channel_id",
+                                "source",
+                                "published_at",
+                                "text",
+                                "start_seconds",
+                                "watch_url",
+                                "score"
+                            ]
+                        },
+                        "title": "chunks"
+                    },
+                    "partial": {
+                        "type": "boolean",
+                        "title": "partial"
+                    },
+                    "failed_batches": {
+                        "type": "integer",
+                        "title": "failed_batches"
+                    },
+                    "as_of": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "as_of"
+                    },
+                    "search_index": {
+                        "type": "object",
+                        "properties": {
+                            "state": {
+                                "type": "string",
+                                "enum": [
+                                    "live",
+                                    "catching_up",
+                                    "unknown"
+                                ],
+                                "title": "search_index.state"
+                            },
+                            "missing_before": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "search_index.missing_before"
+                            }
+                        },
+                        "required": [
+                            "state",
+                            "missing_before"
+                        ],
+                        "title": "search_index"
+                    },
+                    "access": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "invalid_request_error",
+                                    "authentication_error",
+                                    "permission_error",
+                                    "quota_exceeded",
+                                    "rate_limit_error",
+                                    "not_found",
+                                    "conflict_error",
+                                    "server_error"
+                                ],
+                                "title": "access.type"
+                            },
+                            "code": {
+                                "type": "string",
+                                "title": "access.code"
+                            },
+                            "reason": {
+                                "type": "string",
+                                "enum": [
+                                    "no_credential",
+                                    "invalid",
+                                    "revoked"
+                                ],
+                                "title": "access.reason"
+                            },
+                            "message": {
+                                "type": "string",
+                                "title": "access.message"
+                            },
+                            "param": {
+                                "type": "string",
+                                "title": "access.param"
+                            },
+                            "gate": {
+                                "type": "string",
+                                "enum": [
+                                    "rows",
+                                    "key",
+                                    "plan",
+                                    "freshness",
+                                    "exposure_law",
+                                    "rate",
+                                    "pagination"
+                                ],
+                                "title": "access.gate"
+                            },
+                            "resource": {
+                                "oneOf": [
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "media_rows"
+                                                ]
+                                            },
+                                            "beyond_row": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "beyond_row"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "fresh_media"
+                                                ]
+                                            },
+                                            "window_days": {
+                                                "type": "integer"
+                                            },
+                                            "cutoff": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "window_days",
+                                            "cutoff"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "sidebar_rows"
+                                                ]
+                                            },
+                                            "section": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "topics",
+                                                    "entities"
+                                                ]
+                                            },
+                                            "beyond_row": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "section",
+                                            "beyond_row"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "counts"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "chart"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "pagination"
+                                                ]
+                                            },
+                                            "param": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "enum": [
+                                                    "offset",
+                                                    "cursor",
+                                                    null
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "param"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "premium_transcript"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "filter"
+                                                ]
+                                            },
+                                            "param": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "param"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "commercial"
+                                                ]
+                                            },
+                                            "what": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "sponsors",
+                                                    "recommendations",
+                                                    "mention_details",
+                                                    "community_review",
+                                                    "paid_split"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "what"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "feature"
+                                                ]
+                                            },
+                                            "feature": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "api",
+                                                    "export"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "feature"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "rows"
+                                                ]
+                                            },
+                                            "requested": {
+                                                "type": [
+                                                    "integer",
+                                                    "null"
+                                                ]
+                                            },
+                                            "remaining": {
+                                                "type": [
+                                                    "integer",
+                                                    "null"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "requested",
+                                            "remaining"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "key"
+                                                ]
+                                            },
+                                            "scope": {
+                                                "type": [
+                                                    "string",
+                                                    "null"
+                                                ],
+                                                "enum": [
+                                                    "read",
+                                                    "monitors:write",
+                                                    "trackers:write",
+                                                    "recommendations:read",
+                                                    null
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "scope"
+                                        ]
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "requests"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    }
+                                ],
+                                "title": "access.resource"
+                            },
+                            "unlock": {
+                                "type": "object",
+                                "properties": {
+                                    "tier": {
+                                        "type": "string",
+                                        "title": "access.unlock.tier"
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "title": "access.unlock.url"
+                                    },
+                                    "offer": {
+                                        "type": "null",
+                                        "title": "access.unlock.offer"
+                                    },
+                                    "action": {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.kind"
+                                            },
+                                            "method": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.method"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "title": "access.unlock.action.url"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "method",
+                                            "url"
+                                        ],
+                                        "title": "access.unlock.action"
+                                    }
+                                },
+                                "required": [
+                                    "tier",
+                                    "url",
+                                    "offer"
+                                ],
+                                "title": "access.unlock"
+                            },
+                            "retry_after_seconds": {
+                                "type": "integer",
+                                "title": "access.retry_after_seconds"
+                            },
+                            "details": {
+                                "type": "object",
+                                "properties": {
+                                    "quote": {
+                                        "allOf": [
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "quarters": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.quarters"
+                                                    },
+                                                    "rows": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.rows"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "quarters",
+                                                    "rows"
+                                                ]
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "charge": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "unit": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "rows",
+                                                                    "credits"
+                                                                ],
+                                                                "title": "access.details.quote.charge.unit"
+                                                            },
+                                                            "amount": {
+                                                                "type": "number",
+                                                                "title": "access.details.quote.charge.amount"
+                                                            },
+                                                            "from": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "included",
+                                                                    "on_demand",
+                                                                    "mixed"
+                                                                ],
+                                                                "title": "access.details.quote.charge.from"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "unit",
+                                                            "amount",
+                                                            "from"
+                                                        ],
+                                                        "title": "access.details.quote.charge"
+                                                    },
+                                                    "max_on_demand_cents": {
+                                                        "type": "integer",
+                                                        "title": "access.details.quote.max_on_demand_cents"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "title": "access.details.quote"
+                                    },
+                                    "existing_id": {
+                                        "type": "string",
+                                        "title": "access.details.existing_id"
+                                    },
+                                    "limit": {
+                                        "type": "integer",
+                                        "title": "access.details.limit"
+                                    },
+                                    "count": {
+                                        "type": "integer",
+                                        "title": "access.details.count"
+                                    }
+                                },
+                                "title": "access.details"
+                            },
+                            "doc_url": {
+                                "type": "string",
+                                "title": "access.doc_url"
+                            },
+                            "request_id": {
+                                "type": "string",
+                                "title": "access.request_id"
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "code",
+                            "message",
+                            "doc_url",
+                            "request_id"
+                        ],
+                        "title": "access"
+                    },
+                    "unlock": {
+                        "type": "object",
+                        "properties": {
+                            "tier": {
+                                "type": "string",
+                                "title": "unlock.tier"
+                            },
+                            "url": {
+                                "type": "string",
+                                "title": "unlock.url"
+                            }
+                        },
+                        "required": [
+                            "tier",
+                            "url"
+                        ],
+                        "title": "unlock"
+                    },
+                    "note": {
+                        "type": "string",
+                        "title": "note"
+                    }
+                },
+                "required": [
+                    "query",
+                    "limit",
+                    "returned",
+                    "filters",
+                    "window",
+                    "chunks",
+                    "as_of",
+                    "search_index",
+                    "note"
+                ],
+                "example": {
+                    "query": "climate research",
+                    "limit": 5,
+                    "returned": 0,
+                    "filters": {
+                        "channel_ids": [],
+                        "entity_ids": [],
+                        "about": [],
+                        "by": [],
+                        "kind": []
+                    },
+                    "window": {
+                        "after": null,
+                        "before": null
+                    },
+                    "chunks": [],
+                    "as_of": null,
+                    "search_index": {
+                        "state": "live",
+                        "missing_before": null
+                    },
+                    "note": "Synthetic example: no matching indexed passages in this scope."
+                }
+            }
+        },
+        {
+            "name": "error",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "httpStatus": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "title": "httpStatus"
+                    },
+                    "requestId": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "requestId"
+                    },
+                    "retryAfterSeconds": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "title": "retryAfterSeconds"
+                    },
+                    "error": {
+                        "type": "object",
+                        "title": "error"
+                    },
+                    "response": {
+                        "type": [
+                            "object",
+                            "array",
+                            "string",
+                            "number",
+                            "boolean",
+                            "null"
+                        ],
+                        "title": "response"
+                    }
+                },
+                "required": [
+                    "httpStatus",
+                    "requestId",
+                    "retryAfterSeconds",
+                    "error",
+                    "response"
+                ],
+                "example": {
+                    "httpStatus": 402,
+                    "requestId": "req_fixture",
+                    "retryAfterSeconds": null,
+                    "error": {
+                        "type": "quota_exceeded",
+                        "code": "quota_exceeded",
+                        "gate": "rows",
+                        "message": "Synthetic example: the configured usage limit has been reached.",
+                        "request_id": "req_fixture"
+                    },
+                    "response": {
+                        "error": {
+                            "type": "quota_exceeded",
+                            "code": "quota_exceeded",
+                            "gate": "rows",
+                            "message": "Synthetic example: the configured usage limit has been reached.",
+                            "request_id": "req_fixture"
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgNTAwIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiPgoJPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iYmxhY2siLz4KCTxwYXRoIGQ9Ik0gMTk1LjY4NiA5OC40NTcgQyAxOTQuODU2IDk5LjI4NywgMTkyLjU5MiAxMDQuODExLCAxOTAuNjU2IDExMC43MzMgQyAxNjguMjgwIDE3OS4xNTYsIDE0OS4zNjUgMjM2LjgzMCwgMTQzLjAxNSAyNTYgQyAxMzUuNDY4IDI3OC43ODQsIDEwNy41MzcgMzY0LjEzNywgMTAwLjkzMiAzODQuNjAxIEMgOTkuMTM5IDM5MC4xNTcsIDk3Ljk1OCAzOTUuNDQ5LCA5OC4zMDggMzk2LjM2MSBDIDk4Ljg5MSAzOTcuODc4LCAxMDIuOTY0IDM5Ny45OTgsIDE0Ni4xNTcgMzk3Ljc2MCBMIDE5My4zNzAgMzk3LjUwMCAyMDQuNzE4IDM1Mi41MDAgQyAyMTAuOTYwIDMyNy43NTAsIDIxNi42ODggMzA0LjgwMCwgMjE3LjQ0OCAzMDEuNTAwIEMgMjE4LjIwOCAyOTguMjAwLCAyMjAuNTE1IDI4OC44NDcsIDIyMi41NzUgMjgwLjcxNSBMIDIyNi4zMjEgMjY1LjkzMSAyMjAuODQ1IDI2MS4wNDkgQyAyMDMuOTQ3IDI0NS45ODksIDIwMy4yMDMgMjIxLjg5MiwgMjE5LjE0NCAyMDUuOTUxIEMgMjI2Ljk2OCAxOTguMTI3LCAyMzYuOTI1IDE5NCwgMjQ3Ljk3NSAxOTQgQyAyNTYuNTYyIDE5NCwgMjYzLjE0NiAxOTYuMDAyLCAyNzAuNzc2IDIwMC45MzQgQyAyOTIuMTg2IDIxNC43NzEsIDI5My43NjAgMjQ1LjM1NCwgMjczLjkzNiAyNjIuMzIzIEwgMjY5LjU5NyAyNjYuMDM3IDI3MC43ODggMjcwLjI2OSBDIDI3MS40NDMgMjcyLjU5NiwgMjc1Ljc4NCAyODkuNTc1LCAyODAuNDM2IDMwOCBDIDI4NS4wODcgMzI2LjQyNSwgMjkyLjA2NyAzNTQuMDU2LCAyOTUuOTQ2IDM2OS40MDMgQyAyOTkuODI2IDM4NC43NTAsIDMwMyAzOTcuNDY3LCAzMDMgMzk3LjY2MyBDIDMwMyAzOTcuODU5LCAzMjQuNDgxIDM5Ny45MDMsIDM1MC43MzYgMzk3Ljc2MCBDIDM5NS40NDcgMzk3LjUxNiwgMzk4LjQ5NCAzOTcuMzg4LCAzOTguODEzIDM5NS43MzQgQyAzOTkgMzk0Ljc2MywgMzg3LjEyMyAzNTcuNjM4LCAzNzIuNDIxIDMxMy4yMzQgQyAzMzAuMjYyIDE4NS45MTEsIDMwOC4yNjQgMTE5LjIwOSwgMzA1LjM1NiAxMDkuODgzIEMgMzAxLjAzNCA5Ni4wMjcsIDMwNy44MzIgOTcuNTQzLCAyNDguNTU1IDk3LjIyNCBDIDIwMy44NDUgOTYuOTg0LCAxOTcgOTcuMTQzLCAxOTUuNjg2IDk4LjQ1NyIgZmlsbD0id2hpdGUiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPgo8L3N2Zz4K"
+}

@@ -21,6 +21,12 @@ for package in langchain ai-sdk; do
   )
 done
 (
+  cd packages/appmixer
+  npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
+  npm test
+  npm run pack:service
+)
+(
   cd packages/activepieces
   npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
   npm test

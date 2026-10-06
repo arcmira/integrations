@@ -1,0 +1,179 @@
+{
+    "name": "appmixer.arcmira.core.MakeApiCall",
+    "label": "Make API Call (Advanced)",
+    "description": "Advanced authenticated call to Arcmira\u2019s indexed YouTube API. GET reads data; POST, PUT, PATCH and DELETE may modify account data according to the selected endpoint and key scopes. A paid read uses credits from your plan, then your on-demand budget. Preserves full HTTP results. No automatic retries or quality fallback. API docs: https://arcmira.com/docs.",
+    "author": "Arcmira <zeal@arcmira.com>",
+    "version": "1.0.3",
+    "auth": {
+        "service": "appmixer:arcmira"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "method": {
+                        "type": "string",
+                        "enum": [
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "PATCH",
+                            "DELETE"
+                        ]
+                    },
+                    "parameters": {
+                        "type": "string"
+                    },
+                    "body": {
+                        "type": "string"
+                    },
+                    "headers": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "url",
+                    "method"
+                ],
+                "additionalProperties": false
+            },
+            "inspector": {
+                "inputs": {
+                    "url": {
+                        "type": "text",
+                        "label": "API Endpoint Path",
+                        "index": 1,
+                        "tooltip": "Path relative to https://api.arcmira.com/v1/, such as search or /v1/monitors. Full URLs and path escapes are refused. Put query parameters in Parameters."
+                    },
+                    "method": {
+                        "type": "select",
+                        "label": "HTTP Method",
+                        "index": 2,
+                        "defaultValue": "GET",
+                        "options": [
+                            {
+                                "content": "GET",
+                                "value": "GET"
+                            },
+                            {
+                                "content": "POST",
+                                "value": "POST"
+                            },
+                            {
+                                "content": "PUT",
+                                "value": "PUT"
+                            },
+                            {
+                                "content": "PATCH",
+                                "value": "PATCH"
+                            },
+                            {
+                                "content": "DELETE",
+                                "value": "DELETE"
+                            }
+                        ],
+                        "tooltip": "Write methods may create, change or delete data. Account key scopes and configured usage limits apply."
+                    },
+                    "parameters": {
+                        "type": "key-value",
+                        "label": "Parameters",
+                        "index": 3,
+                        "tooltip": "Query parameter key-value rows. Values are passed unchanged; no automatic pagination or filter changes."
+                    },
+                    "body": {
+                        "type": "textarea",
+                        "label": "JSON Body",
+                        "index": 4,
+                        "tooltip": "Valid JSON text for non-GET methods. Requests may modify data. No body is allowed for GET."
+                    },
+                    "headers": {
+                        "type": "key-value",
+                        "label": "Headers",
+                        "index": 5,
+                        "tooltip": "Allowed: Accept, Content-Type, If-Match, If-None-Match, Idempotency-Key, X-Request-ID. Authorization comes only from the managed account."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "title": "statusCode"
+                    },
+                    "headers": {
+                        "type": "object",
+                        "title": "headers"
+                    },
+                    "body": {
+                        "title": "body"
+                    }
+                },
+                "required": [
+                    "statusCode",
+                    "headers",
+                    "body"
+                ]
+            }
+        },
+        {
+            "name": "error",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "title": "statusCode"
+                    },
+                    "headers": {
+                        "type": "object",
+                        "title": "headers"
+                    },
+                    "body": {
+                        "title": "body"
+                    },
+                    "error": {
+                        "type": "object",
+                        "title": "error"
+                    },
+                    "requestId": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "requestId"
+                    },
+                    "retryAfterSeconds": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "title": "retryAfterSeconds"
+                    }
+                },
+                "required": [
+                    "statusCode",
+                    "headers",
+                    "body"
+                ]
+            }
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgNTAwIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiPgoJPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iYmxhY2siLz4KCTxwYXRoIGQ9Ik0gMTk1LjY4NiA5OC40NTcgQyAxOTQuODU2IDk5LjI4NywgMTkyLjU5MiAxMDQuODExLCAxOTAuNjU2IDExMC43MzMgQyAxNjguMjgwIDE3OS4xNTYsIDE0OS4zNjUgMjM2LjgzMCwgMTQzLjAxNSAyNTYgQyAxMzUuNDY4IDI3OC43ODQsIDEwNy41MzcgMzY0LjEzNywgMTAwLjkzMiAzODQuNjAxIEMgOTkuMTM5IDM5MC4xNTcsIDk3Ljk1OCAzOTUuNDQ5LCA5OC4zMDggMzk2LjM2MSBDIDk4Ljg5MSAzOTcuODc4LCAxMDIuOTY0IDM5Ny45OTgsIDE0Ni4xNTcgMzk3Ljc2MCBMIDE5My4zNzAgMzk3LjUwMCAyMDQuNzE4IDM1Mi41MDAgQyAyMTAuOTYwIDMyNy43NTAsIDIxNi42ODggMzA0LjgwMCwgMjE3LjQ0OCAzMDEuNTAwIEMgMjE4LjIwOCAyOTguMjAwLCAyMjAuNTE1IDI4OC44NDcsIDIyMi41NzUgMjgwLjcxNSBMIDIyNi4zMjEgMjY1LjkzMSAyMjAuODQ1IDI2MS4wNDkgQyAyMDMuOTQ3IDI0NS45ODksIDIwMy4yMDMgMjIxLjg5MiwgMjE5LjE0NCAyMDUuOTUxIEMgMjI2Ljk2OCAxOTguMTI3LCAyMzYuOTI1IDE5NCwgMjQ3Ljk3NSAxOTQgQyAyNTYuNTYyIDE5NCwgMjYzLjE0NiAxOTYuMDAyLCAyNzAuNzc2IDIwMC45MzQgQyAyOTIuMTg2IDIxNC43NzEsIDI5My43NjAgMjQ1LjM1NCwgMjczLjkzNiAyNjIuMzIzIEwgMjY5LjU5NyAyNjYuMDM3IDI3MC43ODggMjcwLjI2OSBDIDI3MS40NDMgMjcyLjU5NiwgMjc1Ljc4NCAyODkuNTc1LCAyODAuNDM2IDMwOCBDIDI4NS4wODcgMzI2LjQyNSwgMjkyLjA2NyAzNTQuMDU2LCAyOTUuOTQ2IDM2OS40MDMgQyAyOTkuODI2IDM4NC43NTAsIDMwMyAzOTcuNDY3LCAzMDMgMzk3LjY2MyBDIDMwMyAzOTcuODU5LCAzMjQuNDgxIDM5Ny45MDMsIDM1MC43MzYgMzk3Ljc2MCBDIDM5NS40NDcgMzk3LjUxNiwgMzk4LjQ5NCAzOTcuMzg4LCAzOTguODEzIDM5NS43MzQgQyAzOTkgMzk0Ljc2MywgMzg3LjEyMyAzNTcuNjM4LCAzNzIuNDIxIDMxMy4yMzQgQyAzMzAuMjYyIDE4NS45MTEsIDMwOC4yNjQgMTE5LjIwOSwgMzA1LjM1NiAxMDkuODgzIEMgMzAxLjAzNCA5Ni4wMjcsIDMwNy44MzIgOTcuNTQzLCAyNDguNTU1IDk3LjIyNCBDIDIwMy44NDUgOTYuOTg0LCAxOTcgOTcuMTQzLCAxOTUuNjg2IDk4LjQ1NyIgZmlsbD0id2hpdGUiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPgo8L3N2Zz4K"
+}

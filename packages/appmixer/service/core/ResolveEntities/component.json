@@ -1,0 +1,1342 @@
+{
+    "name": "appmixer.arcmira.core.ResolveEntities",
+    "description": "Resolve a name, handle or YouTube URL to entity candidates. Exact best matches go to resolved; suggestions, fuzzy and ambiguous matches go to review without choosing one. Returns every candidate and the API guidance. Uses no credits. API docs: https://arcmira.com/docs.",
+    "author": "Arcmira <zeal@arcmira.com>",
+    "version": "1.0.3",
+    "auth": {
+        "service": "appmixer:arcmira"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "minLength": 2
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "person",
+                            "organization",
+                            "product",
+                            "topic",
+                            "channel"
+                        ]
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 15,
+                        "default": 8
+                    },
+                    "context": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 300
+                    }
+                },
+                "required": [
+                    "query"
+                ],
+                "additionalProperties": false
+            },
+            "inspector": {
+                "inputs": {
+                    "query": {
+                        "type": "text",
+                        "label": "Query",
+                        "index": 1,
+                        "tooltip": "A name, @handle, YouTube URL or channel id (UC...). One thing per call."
+                    },
+                    "type": {
+                        "type": "select",
+                        "label": "Type",
+                        "index": 2,
+                        "tooltip": "Restrict candidates to one type. Pass channel for a show and read best.youtube_channel_id.",
+                        "options": [
+                            {
+                                "content": "person",
+                                "value": "person"
+                            },
+                            {
+                                "content": "organization",
+                                "value": "organization"
+                            },
+                            {
+                                "content": "product",
+                                "value": "product"
+                            },
+                            {
+                                "content": "topic",
+                                "value": "topic"
+                            },
+                            {
+                                "content": "channel",
+                                "value": "channel"
+                            }
+                        ]
+                    },
+                    "limit": {
+                        "type": "number",
+                        "label": "Limit",
+                        "index": 3,
+                        "tooltip": "Candidates to return, 1 to 15. Default 8.",
+                        "defaultValue": 8
+                    },
+                    "context": {
+                        "type": "text",
+                        "label": "Context",
+                        "index": 4,
+                        "tooltip": "What the user said about the name, in their words (\"the startup bank\", \"Canada's prime minister\", \"on My First Million\"). Ranks candidates by their description and by the episodes they share with what the context names; a clear winner comes back as suggested with reason context."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "resolved",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "title": "query"
+                    },
+                    "context": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "context"
+                    },
+                    "confidence": {
+                        "type": "string",
+                        "enum": [
+                            "exact",
+                            "single_fuzzy",
+                            "ambiguous",
+                            "fuzzy",
+                            "none"
+                        ],
+                        "title": "confidence"
+                    },
+                    "best": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "title": "best.id"
+                            },
+                            "name": {
+                                "type": "string",
+                                "title": "best.name"
+                            },
+                            "slug": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.slug"
+                            },
+                            "type": {
+                                "type": "string",
+                                "title": "best.type"
+                            },
+                            "appearance_count": {
+                                "type": "integer",
+                                "default": 0,
+                                "title": "best.appearance_count"
+                            },
+                            "youtube_channel_id": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.youtube_channel_id"
+                            },
+                            "description": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.description"
+                            },
+                            "page": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.page"
+                            },
+                            "match": {
+                                "type": "string",
+                                "enum": [
+                                    "exact",
+                                    "word",
+                                    "substring",
+                                    "acronym",
+                                    "spelling"
+                                ],
+                                "title": "best.match"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "name",
+                            "slug",
+                            "type",
+                            "youtube_channel_id",
+                            "description",
+                            "page",
+                            "match"
+                        ],
+                        "title": "best"
+                    },
+                    "suggested": {
+                        "allOf": [
+                            {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "title": "suggested.id"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "title": "suggested.name"
+                                    },
+                                    "slug": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.slug"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "title": "suggested.type"
+                                    },
+                                    "appearance_count": {
+                                        "type": "integer",
+                                        "default": 0,
+                                        "title": "suggested.appearance_count"
+                                    },
+                                    "youtube_channel_id": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.youtube_channel_id"
+                                    },
+                                    "description": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.description"
+                                    },
+                                    "page": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.page"
+                                    },
+                                    "match": {
+                                        "type": "string",
+                                        "enum": [
+                                            "exact",
+                                            "word",
+                                            "substring",
+                                            "acronym",
+                                            "spelling"
+                                        ],
+                                        "title": "suggested.match"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "name",
+                                    "slug",
+                                    "type",
+                                    "youtube_channel_id",
+                                    "description",
+                                    "page",
+                                    "match"
+                                ]
+                            },
+                            {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "reason": {
+                                        "type": "string",
+                                        "enum": [
+                                            "dominant",
+                                            "only_word_match",
+                                            "context",
+                                            "acronym",
+                                            "spelling"
+                                        ],
+                                        "title": "suggested.reason"
+                                    },
+                                    "evidence": {
+                                        "type": "string",
+                                        "title": "suggested.evidence"
+                                    },
+                                    "assumed": {
+                                        "type": "boolean",
+                                        "enum": [
+                                            true
+                                        ],
+                                        "title": "suggested.assumed"
+                                    }
+                                },
+                                "required": [
+                                    "reason",
+                                    "evidence",
+                                    "assumed"
+                                ]
+                            }
+                        ],
+                        "title": "suggested"
+                    },
+                    "ask": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "question": {
+                                "type": "string",
+                                "title": "ask.question"
+                            },
+                            "options": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "title": "type"
+                                        },
+                                        "label": {
+                                            "type": "string",
+                                            "title": "label"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type",
+                                        "label"
+                                    ]
+                                },
+                                "title": "ask.options"
+                            }
+                        },
+                        "required": [
+                            "question",
+                            "options"
+                        ],
+                        "title": "ask"
+                    },
+                    "candidates": {
+                        "type": "array",
+                        "items": {
+                            "type": [
+                                "object",
+                                "null"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "title": "id"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "title": "name"
+                                },
+                                "slug": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "slug"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "title": "type"
+                                },
+                                "appearance_count": {
+                                    "type": "integer",
+                                    "default": 0,
+                                    "title": "appearance_count"
+                                },
+                                "youtube_channel_id": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "youtube_channel_id"
+                                },
+                                "description": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "description"
+                                },
+                                "page": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "page"
+                                },
+                                "match": {
+                                    "type": "string",
+                                    "enum": [
+                                        "exact",
+                                        "word",
+                                        "substring",
+                                        "acronym",
+                                        "spelling"
+                                    ],
+                                    "title": "match"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "slug",
+                                "type",
+                                "youtube_channel_id",
+                                "description",
+                                "page",
+                                "match"
+                            ]
+                        },
+                        "title": "candidates"
+                    },
+                    "note": {
+                        "type": "string",
+                        "title": "note"
+                    }
+                },
+                "required": [
+                    "query",
+                    "context",
+                    "confidence",
+                    "best",
+                    "suggested",
+                    "ask",
+                    "candidates",
+                    "note"
+                ],
+                "example": {
+                    "query": "Example Research",
+                    "context": null,
+                    "confidence": "exact",
+                    "best": {
+                        "id": "ent_14",
+                        "name": "Example Research",
+                        "slug": null,
+                        "type": "organization",
+                        "youtube_channel_id": null,
+                        "description": "Synthetic demonstration organization",
+                        "page": null,
+                        "match": "exact",
+                        "appearance_count": 3
+                    },
+                    "suggested": null,
+                    "ask": null,
+                    "candidates": [
+                        {
+                            "id": "ent_14",
+                            "name": "Example Research",
+                            "slug": null,
+                            "type": "organization",
+                            "youtube_channel_id": null,
+                            "description": "Synthetic demonstration organization",
+                            "page": null,
+                            "match": "exact",
+                            "appearance_count": 3
+                        }
+                    ],
+                    "note": "Synthetic example: exact entity match."
+                }
+            }
+        },
+        {
+            "name": "review",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "title": "query"
+                    },
+                    "context": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "context"
+                    },
+                    "confidence": {
+                        "type": "string",
+                        "enum": [
+                            "exact",
+                            "single_fuzzy",
+                            "ambiguous",
+                            "fuzzy",
+                            "none"
+                        ],
+                        "title": "confidence"
+                    },
+                    "best": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "title": "best.id"
+                            },
+                            "name": {
+                                "type": "string",
+                                "title": "best.name"
+                            },
+                            "slug": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.slug"
+                            },
+                            "type": {
+                                "type": "string",
+                                "title": "best.type"
+                            },
+                            "appearance_count": {
+                                "type": "integer",
+                                "default": 0,
+                                "title": "best.appearance_count"
+                            },
+                            "youtube_channel_id": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.youtube_channel_id"
+                            },
+                            "description": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.description"
+                            },
+                            "page": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.page"
+                            },
+                            "match": {
+                                "type": "string",
+                                "enum": [
+                                    "exact",
+                                    "word",
+                                    "substring",
+                                    "acronym",
+                                    "spelling"
+                                ],
+                                "title": "best.match"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "name",
+                            "slug",
+                            "type",
+                            "youtube_channel_id",
+                            "description",
+                            "page",
+                            "match"
+                        ],
+                        "title": "best"
+                    },
+                    "suggested": {
+                        "allOf": [
+                            {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "title": "suggested.id"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "title": "suggested.name"
+                                    },
+                                    "slug": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.slug"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "title": "suggested.type"
+                                    },
+                                    "appearance_count": {
+                                        "type": "integer",
+                                        "default": 0,
+                                        "title": "suggested.appearance_count"
+                                    },
+                                    "youtube_channel_id": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.youtube_channel_id"
+                                    },
+                                    "description": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.description"
+                                    },
+                                    "page": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.page"
+                                    },
+                                    "match": {
+                                        "type": "string",
+                                        "enum": [
+                                            "exact",
+                                            "word",
+                                            "substring",
+                                            "acronym",
+                                            "spelling"
+                                        ],
+                                        "title": "suggested.match"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "name",
+                                    "slug",
+                                    "type",
+                                    "youtube_channel_id",
+                                    "description",
+                                    "page",
+                                    "match"
+                                ]
+                            },
+                            {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "reason": {
+                                        "type": "string",
+                                        "enum": [
+                                            "dominant",
+                                            "only_word_match",
+                                            "context",
+                                            "acronym",
+                                            "spelling"
+                                        ],
+                                        "title": "suggested.reason"
+                                    },
+                                    "evidence": {
+                                        "type": "string",
+                                        "title": "suggested.evidence"
+                                    },
+                                    "assumed": {
+                                        "type": "boolean",
+                                        "enum": [
+                                            true
+                                        ],
+                                        "title": "suggested.assumed"
+                                    }
+                                },
+                                "required": [
+                                    "reason",
+                                    "evidence",
+                                    "assumed"
+                                ]
+                            }
+                        ],
+                        "title": "suggested"
+                    },
+                    "ask": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "question": {
+                                "type": "string",
+                                "title": "ask.question"
+                            },
+                            "options": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "title": "type"
+                                        },
+                                        "label": {
+                                            "type": "string",
+                                            "title": "label"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type",
+                                        "label"
+                                    ]
+                                },
+                                "title": "ask.options"
+                            }
+                        },
+                        "required": [
+                            "question",
+                            "options"
+                        ],
+                        "title": "ask"
+                    },
+                    "candidates": {
+                        "type": "array",
+                        "items": {
+                            "type": [
+                                "object",
+                                "null"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "title": "id"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "title": "name"
+                                },
+                                "slug": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "slug"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "title": "type"
+                                },
+                                "appearance_count": {
+                                    "type": "integer",
+                                    "default": 0,
+                                    "title": "appearance_count"
+                                },
+                                "youtube_channel_id": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "youtube_channel_id"
+                                },
+                                "description": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "description"
+                                },
+                                "page": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "page"
+                                },
+                                "match": {
+                                    "type": "string",
+                                    "enum": [
+                                        "exact",
+                                        "word",
+                                        "substring",
+                                        "acronym",
+                                        "spelling"
+                                    ],
+                                    "title": "match"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "slug",
+                                "type",
+                                "youtube_channel_id",
+                                "description",
+                                "page",
+                                "match"
+                            ]
+                        },
+                        "title": "candidates"
+                    },
+                    "note": {
+                        "type": "string",
+                        "title": "note"
+                    }
+                },
+                "required": [
+                    "query",
+                    "context",
+                    "confidence",
+                    "best",
+                    "suggested",
+                    "ask",
+                    "candidates",
+                    "note"
+                ],
+                "example": {
+                    "query": "Example Research",
+                    "context": null,
+                    "confidence": "ambiguous",
+                    "best": null,
+                    "suggested": null,
+                    "ask": {
+                        "question": "Which organization do you mean?",
+                        "options": [
+                            {
+                                "id": "ent_14",
+                                "name": "Example Research",
+                                "type": "organization",
+                                "label": "Research organization"
+                            },
+                            {
+                                "id": "ent_15",
+                                "name": "Example Products",
+                                "type": "organization",
+                                "label": "Product organization"
+                            }
+                        ]
+                    },
+                    "candidates": [
+                        {
+                            "id": "ent_14",
+                            "name": "Example Research",
+                            "slug": null,
+                            "type": "organization",
+                            "youtube_channel_id": null,
+                            "description": "Synthetic demonstration organization",
+                            "page": null,
+                            "match": "exact",
+                            "appearance_count": 3
+                        },
+                        {
+                            "id": "ent_15",
+                            "name": "Example Products",
+                            "slug": null,
+                            "type": "organization",
+                            "youtube_channel_id": null,
+                            "description": "Synthetic demonstration organization",
+                            "page": null,
+                            "match": "exact",
+                            "appearance_count": 3
+                        }
+                    ],
+                    "note": "Synthetic example: ask which entity the user means."
+                }
+            }
+        },
+        {
+            "name": "notFound",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "title": "query"
+                    },
+                    "context": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "context"
+                    },
+                    "confidence": {
+                        "type": "string",
+                        "enum": [
+                            "exact",
+                            "single_fuzzy",
+                            "ambiguous",
+                            "fuzzy",
+                            "none"
+                        ],
+                        "title": "confidence"
+                    },
+                    "best": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "title": "best.id"
+                            },
+                            "name": {
+                                "type": "string",
+                                "title": "best.name"
+                            },
+                            "slug": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.slug"
+                            },
+                            "type": {
+                                "type": "string",
+                                "title": "best.type"
+                            },
+                            "appearance_count": {
+                                "type": "integer",
+                                "default": 0,
+                                "title": "best.appearance_count"
+                            },
+                            "youtube_channel_id": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.youtube_channel_id"
+                            },
+                            "description": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.description"
+                            },
+                            "page": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "title": "best.page"
+                            },
+                            "match": {
+                                "type": "string",
+                                "enum": [
+                                    "exact",
+                                    "word",
+                                    "substring",
+                                    "acronym",
+                                    "spelling"
+                                ],
+                                "title": "best.match"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "name",
+                            "slug",
+                            "type",
+                            "youtube_channel_id",
+                            "description",
+                            "page",
+                            "match"
+                        ],
+                        "title": "best"
+                    },
+                    "suggested": {
+                        "allOf": [
+                            {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "title": "suggested.id"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "title": "suggested.name"
+                                    },
+                                    "slug": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.slug"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "title": "suggested.type"
+                                    },
+                                    "appearance_count": {
+                                        "type": "integer",
+                                        "default": 0,
+                                        "title": "suggested.appearance_count"
+                                    },
+                                    "youtube_channel_id": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.youtube_channel_id"
+                                    },
+                                    "description": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.description"
+                                    },
+                                    "page": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "title": "suggested.page"
+                                    },
+                                    "match": {
+                                        "type": "string",
+                                        "enum": [
+                                            "exact",
+                                            "word",
+                                            "substring",
+                                            "acronym",
+                                            "spelling"
+                                        ],
+                                        "title": "suggested.match"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "name",
+                                    "slug",
+                                    "type",
+                                    "youtube_channel_id",
+                                    "description",
+                                    "page",
+                                    "match"
+                                ]
+                            },
+                            {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "reason": {
+                                        "type": "string",
+                                        "enum": [
+                                            "dominant",
+                                            "only_word_match",
+                                            "context",
+                                            "acronym",
+                                            "spelling"
+                                        ],
+                                        "title": "suggested.reason"
+                                    },
+                                    "evidence": {
+                                        "type": "string",
+                                        "title": "suggested.evidence"
+                                    },
+                                    "assumed": {
+                                        "type": "boolean",
+                                        "enum": [
+                                            true
+                                        ],
+                                        "title": "suggested.assumed"
+                                    }
+                                },
+                                "required": [
+                                    "reason",
+                                    "evidence",
+                                    "assumed"
+                                ]
+                            }
+                        ],
+                        "title": "suggested"
+                    },
+                    "ask": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "question": {
+                                "type": "string",
+                                "title": "ask.question"
+                            },
+                            "options": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "title": "id"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "title": "name"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "title": "type"
+                                        },
+                                        "label": {
+                                            "type": "string",
+                                            "title": "label"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "name",
+                                        "type",
+                                        "label"
+                                    ]
+                                },
+                                "title": "ask.options"
+                            }
+                        },
+                        "required": [
+                            "question",
+                            "options"
+                        ],
+                        "title": "ask"
+                    },
+                    "candidates": {
+                        "type": "array",
+                        "items": {
+                            "type": [
+                                "object",
+                                "null"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "title": "id"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "title": "name"
+                                },
+                                "slug": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "slug"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "title": "type"
+                                },
+                                "appearance_count": {
+                                    "type": "integer",
+                                    "default": 0,
+                                    "title": "appearance_count"
+                                },
+                                "youtube_channel_id": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "youtube_channel_id"
+                                },
+                                "description": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "description"
+                                },
+                                "page": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "title": "page"
+                                },
+                                "match": {
+                                    "type": "string",
+                                    "enum": [
+                                        "exact",
+                                        "word",
+                                        "substring",
+                                        "acronym",
+                                        "spelling"
+                                    ],
+                                    "title": "match"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "slug",
+                                "type",
+                                "youtube_channel_id",
+                                "description",
+                                "page",
+                                "match"
+                            ]
+                        },
+                        "title": "candidates"
+                    },
+                    "note": {
+                        "type": "string",
+                        "title": "note"
+                    }
+                },
+                "required": [
+                    "query",
+                    "context",
+                    "confidence",
+                    "best",
+                    "suggested",
+                    "ask",
+                    "candidates",
+                    "note"
+                ],
+                "example": {
+                    "query": "Example Research",
+                    "context": null,
+                    "confidence": "none",
+                    "best": null,
+                    "suggested": null,
+                    "ask": null,
+                    "candidates": [],
+                    "note": "Synthetic example: no entity matched."
+                }
+            }
+        },
+        {
+            "name": "error",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "httpStatus": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "title": "httpStatus"
+                    },
+                    "requestId": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "title": "requestId"
+                    },
+                    "retryAfterSeconds": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "title": "retryAfterSeconds"
+                    },
+                    "error": {
+                        "type": "object",
+                        "title": "error"
+                    },
+                    "response": {
+                        "type": [
+                            "object",
+                            "array",
+                            "string",
+                            "number",
+                            "boolean",
+                            "null"
+                        ],
+                        "title": "response"
+                    }
+                },
+                "required": [
+                    "httpStatus",
+                    "requestId",
+                    "retryAfterSeconds",
+                    "error",
+                    "response"
+                ],
+                "example": {
+                    "httpStatus": 402,
+                    "requestId": "req_fixture",
+                    "retryAfterSeconds": null,
+                    "error": {
+                        "type": "quota_exceeded",
+                        "code": "quota_exceeded",
+                        "gate": "rows",
+                        "message": "Synthetic example: the configured usage limit has been reached.",
+                        "request_id": "req_fixture"
+                    },
+                    "response": {
+                        "error": {
+                            "type": "quota_exceeded",
+                            "code": "quota_exceeded",
+                            "gate": "rows",
+                            "message": "Synthetic example: the configured usage limit has been reached.",
+                            "request_id": "req_fixture"
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgNTAwIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiPgoJPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iYmxhY2siLz4KCTxwYXRoIGQ9Ik0gMTk1LjY4NiA5OC40NTcgQyAxOTQuODU2IDk5LjI4NywgMTkyLjU5MiAxMDQuODExLCAxOTAuNjU2IDExMC43MzMgQyAxNjguMjgwIDE3OS4xNTYsIDE0OS4zNjUgMjM2LjgzMCwgMTQzLjAxNSAyNTYgQyAxMzUuNDY4IDI3OC43ODQsIDEwNy41MzcgMzY0LjEzNywgMTAwLjkzMiAzODQuNjAxIEMgOTkuMTM5IDM5MC4xNTcsIDk3Ljk1OCAzOTUuNDQ5LCA5OC4zMDggMzk2LjM2MSBDIDk4Ljg5MSAzOTcuODc4LCAxMDIuOTY0IDM5Ny45OTgsIDE0Ni4xNTcgMzk3Ljc2MCBMIDE5My4zNzAgMzk3LjUwMCAyMDQuNzE4IDM1Mi41MDAgQyAyMTAuOTYwIDMyNy43NTAsIDIxNi42ODggMzA0LjgwMCwgMjE3LjQ0OCAzMDEuNTAwIEMgMjE4LjIwOCAyOTguMjAwLCAyMjAuNTE1IDI4OC44NDcsIDIyMi41NzUgMjgwLjcxNSBMIDIyNi4zMjEgMjY1LjkzMSAyMjAuODQ1IDI2MS4wNDkgQyAyMDMuOTQ3IDI0NS45ODksIDIwMy4yMDMgMjIxLjg5MiwgMjE5LjE0NCAyMDUuOTUxIEMgMjI2Ljk2OCAxOTguMTI3LCAyMzYuOTI1IDE5NCwgMjQ3Ljk3NSAxOTQgQyAyNTYuNTYyIDE5NCwgMjYzLjE0NiAxOTYuMDAyLCAyNzAuNzc2IDIwMC45MzQgQyAyOTIuMTg2IDIxNC43NzEsIDI5My43NjAgMjQ1LjM1NCwgMjczLjkzNiAyNjIuMzIzIEwgMjY5LjU5NyAyNjYuMDM3IDI3MC43ODggMjcwLjI2OSBDIDI3MS40NDMgMjcyLjU5NiwgMjc1Ljc4NCAyODkuNTc1LCAyODAuNDM2IDMwOCBDIDI4NS4wODcgMzI2LjQyNSwgMjkyLjA2NyAzNTQuMDU2LCAyOTUuOTQ2IDM2OS40MDMgQyAyOTkuODI2IDM4NC43NTAsIDMwMyAzOTcuNDY3LCAzMDMgMzk3LjY2MyBDIDMwMyAzOTcuODU5LCAzMjQuNDgxIDM5Ny45MDMsIDM1MC43MzYgMzk3Ljc2MCBDIDM5NS40NDcgMzk3LjUxNiwgMzk4LjQ5NCAzOTcuMzg4LCAzOTguODEzIDM5NS43MzQgQyAzOTkgMzk0Ljc2MywgMzg3LjEyMyAzNTcuNjM4LCAzNzIuNDIxIDMxMy4yMzQgQyAzMzAuMjYyIDE4NS45MTEsIDMwOC4yNjQgMTE5LjIwOSwgMzA1LjM1NiAxMDkuODgzIEMgMzAxLjAzNCA5Ni4wMjcsIDMwNy44MzIgOTcuNTQzLCAyNDguNTU1IDk3LjIyNCBDIDIwMy44NDUgOTYuOTg0LCAxOTcgOTcuMTQzLCAxOTUuNjg2IDk4LjQ1NyIgZmlsbD0id2hpdGUiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPgo8L3N2Zz4K"
+}

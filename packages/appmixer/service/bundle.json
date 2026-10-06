@@ -1,0 +1,19 @@
+{
+    "name": "appmixer.arcmira",
+    "version": "1.0.3",
+    "changelog": {
+        "1.0.0": [
+            "Initial native API candidate with managed API-key authentication, entity resolution and bounded transcript search. Full envelopes and coverage preserved; no automatic entity selection or quality fallback.",
+            "Advanced MakeApiCall supports explicit GET, POST, PUT, PATCH and DELETE requests within Arcmira v1, with managed credentials and unchanged HTTP envelopes. Write methods may modify data."
+        ],
+        "1.0.1": [
+            "Fix hosted component loading by validating responses against the complete schema already embedded in each component manifest."
+        ],
+        "1.0.2": [
+            "Parse the documented key-value editor JSON-object text for Parameters and Headers while retaining input and managed-authentication checks."
+        ],
+        "1.0.3": [
+            "Show the paying personal or team account in managed connection labels, with caller and key context and support for older profiles."
+        ]
+    }
+}

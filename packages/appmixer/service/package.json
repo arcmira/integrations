@@ -1,0 +1,9 @@
+{
+    "name": "appmixer-arcmira",
+    "version": "1.0.3",
+    "private": true,
+    "dependencies": {
+        "ajv": "8.20.0",
+        "ajv-formats": "3.0.1"
+    }
+}
