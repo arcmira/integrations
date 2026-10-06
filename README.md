@@ -9,15 +9,15 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.4.3 |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.4.3 |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/); [catalog review pending](https://github.com/langchain-ai/docs/issues/6442) |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/); [catalog review pending](https://github.com/langchain-ai/docs/pull/6457) |
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
 | dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Fixture-tested source example; no dlt catalog listing |
 | Meltano / Singer | [Scoped mentions and recommendations](packages/meltano) | Source preview with native DuckDB fixture checks; authenticated export and Hub publication pending |
-| Airbyte | [Scoped source and validation](packages/airbyte) | Buildable custom image and DuckDB protocol checks; platform sync and acceptance tests pending |
+| Airbyte | [Scoped source and validation](packages/airbyte) | Local Airbyte 2.3.0 platform sync passed with synthetic data; live export and catalog acceptance pending |
 | Pipedream Connect / MCP | [Native actions and validation](packages/pipedream) | Locally tested source preview; app registration and hosted validation pending |
-| Dify | [Setup and plugin](packages/dify) | Source preview; hosted research validation and Marketplace review pending |
+| Dify | [Setup and plugin](packages/dify) | Plugin 0.1.2 passed native Community Edition research; Cloud workflow validation and Marketplace review pending |
 
 For DSH, the [API documentation preset](examples/dsh) searches documentation without an API key. Its native session check passes; it does not provide YouTube research.
 
@@ -73,7 +73,7 @@ The Python LangChain package passes 41 local checks and 11 live integration chec
 
 The TypeScript LangChain package and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
 
-Activepieces has 13 tests, a bundled-package check, and a successful authenticated search through its native host. n8n has seven routing-engine tests, a parameter-contract check, and successful authenticated search and entity resolution through its native host. Dify has 18 SDK tests and successful local SDK calls to the live API; hosted workflow research remains unverified. The Activepieces and n8n adapters retain their MIT licenses; LangChain, AI SDK and Dify use Apache-2.0.
+Activepieces has 13 tests, a bundled-package check, and a successful authenticated search through its native host. n8n has seven routing-engine tests, a parameter-contract check, and successful authenticated search and entity resolution through its native host. Dify has 18 SDK tests and successful local SDK calls to the live API. Plugin 0.1.2 also completed native entity resolution and a bounded transcript search in Community Edition 1.17.1, preserving source labels, citations and coverage notes with no model tokens or observed credit use. Dify Cloud workflow execution remains unverified. The Activepieces and n8n adapters retain their MIT licenses; LangChain, AI SDK and Dify use Apache-2.0.
 
 Run `./scripts/ci.sh` to install locked dependencies and check all packages locally. The JavaScript checks need Node.js 22 or later and pnpm 10.4.1. Dify and the Python LangChain checks need Python 3.12 and uv. Airbyte checks need an existing Python 3.12 environment with its locked dependencies; see the [Airbyte guide](packages/airbyte). Use `./scripts/ci.sh --offline` to prohibit dependency downloads and fail on missing cached artifacts. Meltano checks need its locked Python environment, described in the [Meltano guide](packages/meltano). See [release status](RELEASE.md) for tested versions and remaining publication steps.
 

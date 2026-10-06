@@ -4,7 +4,7 @@
 
 Export explicitly scoped YouTube channel videos, entity mentions and commercial recommendations from Arcmira's indexed API.
 
-This is a locally tested Python CDK source preview, version 0.1.0. A local custom connector image is available to build. It is not a published registry image, accepted catalog connector or published Python package. It has not run in a deployed Airbyte host.
+This is a locally tested Python CDK source preview, version 0.1.0. A local custom connector image is available to build. It is not a published registry image, accepted catalog connector or published Python package. It passed a local Airbyte 2.3.0 platform sync with synthetic data. Live authenticated export remains unverified.
 
 ## Run locally
 
@@ -69,7 +69,7 @@ API row fields remain intact. `_arcmira` adds the exact scope, a stable scope ID
 
 Preview, unlock, partial and unfamiliar access/coverage envelopes fail the affected stream and mark the sync unsuccessful. The CDK can continue reading other configured streams. Mentions/recommendations with preview notes stop before page records are emitted. Channel notes are informational, are retained and do not imply a preview. The connector validates each response and all rows against the captured released schema before emitting the page. Missing required fields, inconsistent pagination, count mismatches and repeated cursors fail visibly.
 
-HTTP 402 and 403 stop without retry or a scope fallback. HTTP 429, server failures and transport errors share one limit of three retries per page. A successful page resets that limit. Error diagnostics reset for every response or transport failure and every new read, so a prior rate-limit error cannot replace a later network error. The framework retry window is 120 seconds; individual requests have a 10-second connection timeout and a 60-second read timeout, so this is not a strict total sync deadline. `Retry-After` is honored up to 60 seconds. Longer or malformed waits fail instead of retrying early. Error traces retain HTTP status, API type, code, gate and request ID when provided. URLs in an error are not followed.
+Within one source attempt, HTTP 402 and 403 stop without retry or a scope fallback. Airbyte can independently retry the entire sync according to its platform policy. HTTP 429, server failures and transport errors share one limit of three retries per page. A successful page resets that limit. Error diagnostics reset for every response or transport failure and every new read, so a prior rate-limit error cannot replace a later network error. The framework retry window is 120 seconds; individual requests have a 10-second connection timeout and a 60-second read timeout, so this is not a strict total sync deadline. `Retry-After` is honored up to 60 seconds. Longer or malformed waits fail instead of retrying early. Error traces retain HTTP status, API type, code, gate and request ID when provided. URLs in an error are not followed.
 
 Airbyte streams records as it reads them. A later page can fail after earlier records were emitted. Treat that run as incomplete; the connector does not promise an atomic destination rollback.
 
@@ -86,7 +86,9 @@ Every stored JSON payload matched its source record, including `_arcmira` scope/
 
 The DuckDB checks above exercised the CLI protocol. A separate local ARM64 Airbyte 2.3.0 platform sync used the unchanged source runtime with synthetic HTTP responses and the official built-in Postgres 3.0.22 destination. The platform completed source/destination checks, discovery and replication. Direct database queries verified two channel videos, two mentions and two recommendations, with every expected source field preserved, including timestamps, citations and `_arcmira` context. The run used no real Arcmira credentials or credits.
 
-That single successful platform sync does not establish repeated-run or later-source-failure behavior, atomic replacement, or staging/commit guarantees. Other platform/destination combinations and a live authenticated export remain unverified.
+A second platform check sent a synthetic HTTP 403 on a later mentions page into a separate, initially empty Postgres schema. Airbyte marked the job failed after five automatic whole-sync attempts. The source exited 1 while the destination and orchestrator exited 0. Direct database queries found zero records in all three destination tables, and the connection had no saved state. The separate successful test schema retained its two records per stream. This test used no real Arcmira credentials or credits.
+
+This small, initially empty-destination failure test does not establish atomic overwrite of existing data, rollback after larger committed batches or general staging/commit guarantees. Other platform/destination combinations and a live authenticated export remain unverified. Check the platform job outcome as well as individual process exits. Whole-sync retries may repeat metered reads.
 
 ## Validation and release work
 
@@ -107,4 +109,4 @@ Before a production connector release: validate it in an approved Airbyte host a
 
 From the repository root, `ARCMIRA_AIRBYTE_PYTHON=/absolute/path/to/existing/python ./scripts/ci.sh --offline` runs all local integration checks with cached dependencies and this existing Airbyte environment. Without the override, Airbyte checks use `packages/airbyte/.venv/bin/python`. The script does not create the Airbyte environment. Offline mode forbids dependency downloads and fails on a cache miss; it does not skip builds or tests.
 
-The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. The custom source image has the separate ARM64 checks described above. The local ARM64 platform sync above used synthetic responses. Live authenticated Arcmira export, AMD64 execution, platform failure/commit behavior and the connector acceptance suite remain unverified. This source preview is not an Airbyte catalog release.
+The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. The custom source image has the separate ARM64 checks described above. The local ARM64 platform sync above used synthetic responses. Live authenticated Arcmira export, AMD64 execution, overwrite/commit guarantees beyond the cases above and the connector acceptance suite remain unverified. This source preview is not an Airbyte catalog release.
