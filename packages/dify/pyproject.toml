@@ -1,8 +1,8 @@
 [project]
 name = "arcmira-dify"
-version = "0.1.1"
+version = "0.1.2"
 requires-python = ">=3.12,<3.13"
 dependencies = ["dify-plugin==0.10.2", "httpx>=0.28.1,<0.29"]
 
 [tool.uv]
-exclude-newer = "2026-09-26T00:00:00Z"
+exclude-newer = "2026-09-28T00:00:00Z"

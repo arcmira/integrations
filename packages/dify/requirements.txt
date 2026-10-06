@@ -34,7 +34,7 @@ tiktoken==0.14.0
 typing-extensions==4.16.0
 typing-inspection==0.4.4
 urllib3==2.8.0
-werkzeug==3.1.8
+werkzeug==3.1.9
 yarl==1.25.1
 zope-event==6.2
 zope-interface==8.6

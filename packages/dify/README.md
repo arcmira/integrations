@@ -4,7 +4,7 @@ Search indexed YouTube transcripts for timestamped passages, speaker appearances
 
 [API documentation](https://arcmira.com/docs) · [Source](https://github.com/arcmira/integrations/tree/master/packages/dify)
 
-Plugin version 0.1.1 was installed as a local plugin in the branded Dify Cloud workspace on October 4, 2026. Marketplace publication is pending. Authenticated Cloud workflow execution and Community Edition testing remain incomplete.
+Plugin version 0.1.1 was installed as a local plugin in the branded Dify Cloud workspace on October 4, 2026. Marketplace publication is pending. Version 0.1.1 completed authenticated entity resolution in Community Edition on October 6, 2026. Version 0.1.2 adds publication metadata and updates Werkzeug to 3.1.9 for its Windows path-handling security fix. Version 0.1.2 passed the same native Community Edition entity-resolution check. Authenticated Dify Cloud workflow execution remains unverified.
 
 ## Setup
 
@@ -41,8 +41,8 @@ uv sync --frozen
 uv run --frozen python -m unittest discover -s test -v
 ```
 
-With the official Dify plugin CLI installed, build a local package with `dify plugin package . -o arcmira-0.1.1.difypkg`. The included `.difyignore` excludes tests, environments and local credentials.
+With the official Dify plugin CLI installed, build a local package with `dify plugin package . -o arcmira-0.1.2.difypkg`. The included `.difyignore` excludes tests, environments and local credentials.
 
-The committed lock was resolved with a September 26, 2026 dependency cutoff. Local adapter tests use Dify's real plugin SDK and a mock HTTP transport, so they make no research calls and spend no account allowance. The local SDK also completed live account validation, bounded search and entity resolution on October 5, 2026. Timestamped evidence, coverage notes and entity identity were preserved. The free test account had on-demand disabled and no observed credit decrease. No key was shared with Dify Cloud for this check. Authenticated hosted workflows and Community Edition verification remain separate release checks.
+The committed lock was resolved with a September 28, 2026 dependency cutoff. Local adapter tests use Dify's real plugin SDK and a mock HTTP transport, so they make no research calls and spend no account allowance. The local SDK also completed live account validation, bounded search and entity resolution on October 5, 2026. Timestamped evidence, coverage notes and entity identity were preserved. The free test account had on-demand disabled and no observed credit decrease. No key was shared with Dify Cloud for this check. The installed Community Edition plugin also completed a native Resolve an entity node on October 6, 2026 for OpenAI with type organization and limit 1. It returned the exact organization match and preserved the full JSON response without a model node. Native Community Edition transcript search and authenticated Dify Cloud workflows remain unverified.
 
 The Apache-2.0 license covers this adapter source. Arcmira's hosted service and data retain their own terms.

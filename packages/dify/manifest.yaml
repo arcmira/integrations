@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "plugin",
   "author": "arcmira",
   "name": "arcmira",
@@ -35,5 +35,7 @@
   },
   "tags": [
     "search"
-  ]
+  ],
+  "repo": "https://github.com/arcmira/integrations",
+  "contact": "zeal@arcmira.com"
 }
