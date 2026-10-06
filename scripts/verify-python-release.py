@@ -18,6 +18,7 @@ def verify(
     *,
     repo: Path = REPO,
     manifest_path: Path = MANIFEST,
+    package: str = PACKAGE,
 ) -> None:
     manifest = json.loads(manifest_path.read_text())
     expected = manifest["files"]
@@ -40,12 +41,12 @@ def verify(
             raise ValueError("Release tag does not match the manifest.")
     for ref in ("HEAD", tag) if tag else ("HEAD",):
         tree = subprocess.check_output(
-            ["git", "rev-parse", f"{ref}:{PACKAGE}"], cwd=repo, text=True
+            ["git", "rev-parse", f"{ref}:{package}"], cwd=repo, text=True
         ).strip()
         if tree != manifest["package_tree"]:
             raise ValueError(f"Package source differs from the verified release: {ref}")
     if subprocess.check_output(
-        ["git", "status", "--porcelain", "--untracked-files=all", "--", PACKAGE],
+        ["git", "status", "--porcelain", "--untracked-files=all", "--", package],
         cwd=repo,
         text=True,
     ).strip():
@@ -60,5 +61,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
     parser.add_argument("--tag")
+    parser.add_argument("--package", choices=("langchain-python", "langflow"), default="langchain-python")
     args = parser.parse_args()
-    verify(args.directory, args.tag)
+    verify(
+        args.directory, args.tag,
+        manifest_path=REPO / "release-artifacts" / args.package / "current.json",
+        package="packages/" + args.package,
+    )

@@ -19,6 +19,11 @@ spec.loader.exec_module(verifier)
 
 
 class ReleaseVerificationTests(unittest.TestCase):
+    package_path = verifier.PACKAGE
+    package_name = "langchain-arcmira"
+    artifact_name = "langchain_arcmira"
+    tag = "langchain-python-v0.1.0"
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -26,25 +31,25 @@ class ReleaseVerificationTests(unittest.TestCase):
         self.git("init", "-q")
         self.git("config", "user.name", "Release test")
         self.git("config", "user.email", "release-test@example.invalid")
-        self.source = self.repo / verifier.PACKAGE / "source.py"
+        self.source = self.repo / self.package_path / "source.py"
         self.source.parent.mkdir(parents=True)
         self.source.write_text("original source\n")
         self.commit()
-        self.git("tag", "langchain-python-v0.1.0")
+        self.git("tag", self.tag)
         self.dist = self.repo / "dist"
         self.dist.mkdir()
-        self.wheel = self.dist / "langchain_arcmira-0.1.0-py3-none-any.whl"
+        self.wheel = self.dist / f"{self.artifact_name}-0.1.0-py3-none-any.whl"
         self.wheel.write_bytes(b"verified wheel")
-        self.sdist = self.dist / "langchain_arcmira-0.1.0.tar.gz"
+        self.sdist = self.dist / f"{self.artifact_name}-0.1.0.tar.gz"
         self.sdist.write_bytes(b"verified sdist")
         self.manifest = self.repo / "manifest.json"
         self.manifest.write_text(
             json.dumps(
                 {
-                    "package": "langchain-arcmira",
+                    "package": self.package_name,
                     "version": "0.1.0",
-                    "tag": "langchain-python-v0.1.0",
-                    "package_tree": self.git("rev-parse", f"HEAD:{verifier.PACKAGE}"),
+                    "tag": self.tag,
+                    "package_tree": self.git("rev-parse", f"HEAD:{self.package_path}"),
                     "files": {
                         p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                         for p in (self.wheel, self.sdist)
@@ -59,15 +64,15 @@ class ReleaseVerificationTests(unittest.TestCase):
         ).strip()
 
     def commit(self):
-        self.git("add", verifier.PACKAGE)
+        self.git("add", self.package_path)
         self.git("-c", "commit.gpgsign=false", "commit", "-qm", "Test source")
 
     def verify(self, tag=None):
         with contextlib.redirect_stdout(io.StringIO()):
-            verifier.verify(self.dist, tag, repo=self.repo, manifest_path=self.manifest)
+            verifier.verify(self.dist, tag, repo=self.repo, manifest_path=self.manifest, package=self.package_path)
 
     def test_exact_release_passes_with_tag(self):
-        self.verify("langchain-python-v0.1.0")
+        self.verify(self.tag)
 
     def test_uv_metadata_passes_locally(self):
         (self.dist / ".gitignore").write_bytes(b"*")
@@ -126,10 +131,17 @@ class ReleaseVerificationTests(unittest.TestCase):
     def test_tag_source_mismatch_fails(self):
         self.source.write_text("changed source\n")
         self.commit()
-        self.git("tag", "-f", "langchain-python-v0.1.0")
+        self.git("tag", "-f", self.tag)
         self.git("reset", "--hard", "HEAD~1")
-        with self.assertRaisesRegex(ValueError, "source differs.*langchain-python"):
-            self.verify("langchain-python-v0.1.0")
+        with self.assertRaisesRegex(ValueError, "source differs.*" + self.tag):
+            self.verify(self.tag)
+
+
+class LangflowReleaseVerificationTests(ReleaseVerificationTests):
+    package_path = "packages/langflow"
+    package_name = "lfx-arcmira"
+    artifact_name = "lfx_arcmira"
+    tag = "langflow-v0.1.0"
 
 
 if __name__ == "__main__":

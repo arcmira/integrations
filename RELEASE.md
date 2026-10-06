@@ -141,3 +141,11 @@ Portable local tests exercise the component modules against synthetic responses.
 The [Langflow extension](packages/langflow) provides native YouTube transcript search and entity resolution components. The unpublished `lfx-arcmira` 0.1.0 package passes installed LFX 1.12.3 extension discovery and executed-import validation, four native component/tool checks and eleven HTTP transport tests. Agent tool output retains the complete response as a structured artifact, including coverage and access metadata. All tests use synthetic responses with socket connections blocked. No real account, model inference or paid read is included.
 
 The source and wheel metadata link to Arcmira and the API docs. Visual editor presentation, live-account execution, PyPI trusted publishing and catalog inclusion remain pending. [Upstream proposal #15539](https://github.com/langflow-ai/langflow/issues/15539) is not maintainer approval. LFX's `@official` loader slot is not a catalog endorsement.
+
+### Langflow publisher setup
+
+The manual `publish-langflow.yml` workflow uploads prebuilt, checksum-verified wheel and source artifacts from a signed release tag. It runs only on `master`, uses the `pypi` environment and does not build or test in GitHub Actions. The verifier checks the Langflow package tree at both HEAD and the release tag, refuses a dirty package directory, and requires exactly the recorded artifacts.
+
+Before its first dispatch, configure a PyPI pending publisher for project `lfx-arcmira`, owner `arcmira`, repository `integrations`, workflow `publish-langflow.yml`, environment `pypi`. This configuration grants only the new project's publishing access. No publishing token belongs in this repository.
+
+Then finish the package's release copy, run local CI, commit `release-artifacts/langflow/current.json` with the verified package tree and artifact SHA-256 hashes, create its signed release tag and upload those exact files. Run `python3 scripts/verify-python-release.py --package langflow --tag <release-tag> packages/langflow/dist` before dispatch. Do not claim a PyPI release until the public registry files and provenance have been verified. No release manifest or tag has been created yet.
