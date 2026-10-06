@@ -4,7 +4,7 @@
 
 Give your agent timestamped evidence from YouTube videos and livestreams. Find who said what, search mentions of people and products, and filter passages classified as sponsored or organic.
 
-Install the published PyPI package below. See [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md) for verification details and catalog availability.
+Install the published PyPI package below. Arcmira is listed in the [LangChain provider directory](https://docs.langchain.com/oss/python/integrations/providers/all_providers) and [tools catalog](https://docs.langchain.com/oss/python/integrations/tools). See [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md) for verification details.
 
 ## Quick start
 

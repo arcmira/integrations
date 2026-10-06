@@ -9,7 +9,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.4.3 |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.4.3 |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/); [catalog review pending](https://github.com/langchain-ai/docs/pull/6457) |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |

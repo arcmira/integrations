@@ -1,6 +1,6 @@
 # Release status
 
-The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). None has completed its framework catalog review.
+The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
 
 ## Verified versions
 
@@ -55,9 +55,11 @@ Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `
 - [PyPI package](https://pypi.org/project/langchain-arcmira/0.1.0/)
 - [Signed source and artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.0)
 - [Successful publication run](https://github.com/arcmira/integrations/actions/runs/37342305530)
-- [LangChain catalog review pending](https://github.com/langchain-ai/docs/pull/6457)
+- [LangChain provider directory](https://docs.langchain.com/oss/python/integrations/providers/all_providers)
+- [LangChain tools catalog](https://docs.langchain.com/oss/python/integrations/tools)
+- [Merged catalog contribution](https://github.com/langchain-ai/docs/pull/6457)
 
-The package README is the dedicated guide. Catalog inclusion remains pending maintainer review.
+The package README is the dedicated guide. LangChain merged the catalog contribution on October 6, 2026. Both production catalog pages include Arcmira and link to this guide.
 
 The guide on `master` now leads with the published pip install. PyPI 0.1.0 retains its original source-checkout guide inside the immutable release artifacts. That registry copy will refresh with the next package release; this documentation update does not change version 0.1.0 or replace its artifacts. A future publication must record the new package source tree and artifact checksums.
 
