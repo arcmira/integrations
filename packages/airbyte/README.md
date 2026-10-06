@@ -43,7 +43,7 @@ The build uses Airbyte's Python connector base 4.1.1, pinned by its multi-platfo
 
 The ARM64 image was tested with Python 3.13.14 and CDK 7.31.0. Its actual entrypoint passed `spec`, three-stream `discover`, successful and refused `check`, and paginated `read` through synthetic HTTP responses with networking disabled. A successful read emitted six records. A later-page HTTP 403 emitted five records and returned exit 1 with the API error intact. A refused connection check returned protocol status `FAILED` with exit 0, as the CDK check command specifies. Inspect the protocol status as well as process exits.
 
-This follows Airbyte's [custom Dockerfile build option](https://docs.airbyte.com/platform/connector-development/testing-connectors/connector-acceptance-tests-reference). That option is not supported for certified connectors. Airbyte's preferred catalog build requires its generated template and `metadata.yaml`; migrating to that packaging remains pending. AMD64 execution, registry publication, deployed platform sync and official acceptance tests are unverified. The synthetic tests did not authenticate to Arcmira or consume usage.
+This follows Airbyte's [custom Dockerfile build option](https://docs.airbyte.com/platform/connector-development/testing-connectors/connector-acceptance-tests-reference). That option is not supported for certified connectors. Airbyte's preferred catalog build requires its generated template and `metadata.yaml`; migrating to that packaging remains pending. AMD64 execution, registry publication and official acceptance tests are unverified. The synthetic tests did not authenticate to Arcmira or consume usage.
 
 ## Choose the scope
 
@@ -84,7 +84,9 @@ A native source CLI-to-destination protocol test used the official `airbyte/dest
 
 Every stored JSON payload matched its source record, including `_arcmira` scope/window metadata and research fields. A successful destination exit did not establish source success, and overwrite was not atomic. Check the source outcome and use an independently verified staging/promotion policy when incomplete replacement data must not become visible.
 
-This was a source CLI-to-official-destination protocol test, not an Airbyte platform sync. The platform's orchestration, staging and commit behavior remain unverified, as do other destinations and a live authenticated sync.
+The DuckDB checks above exercised the CLI protocol. A separate local ARM64 Airbyte 2.3.0 platform sync used the unchanged source runtime with synthetic HTTP responses and the official built-in Postgres 3.0.22 destination. The platform completed source/destination checks, discovery and replication. Direct database queries verified two channel videos, two mentions and two recommendations, with every expected source field preserved, including timestamps, citations and `_arcmira` context. The run used no real Arcmira credentials or credits.
+
+That single successful platform sync does not establish repeated-run or later-source-failure behavior, atomic replacement, or staging/commit guarantees. Other platform/destination combinations and a live authenticated export remain unverified.
 
 ## Validation and release work
 
@@ -105,4 +107,4 @@ Before a production connector release: validate it in an approved Airbyte host a
 
 From the repository root, `ARCMIRA_AIRBYTE_PYTHON=/absolute/path/to/existing/python ./scripts/ci.sh --offline` runs all local integration checks with cached dependencies and this existing Airbyte environment. Without the override, Airbyte checks use `packages/airbyte/.venv/bin/python`. The script does not create the Airbyte environment. Offline mode forbids dependency downloads and fails on a cache miss; it does not skip builds or tests.
 
-The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. The custom source image has the separate ARM64 checks described above. Deployed Airbyte platform sync, live authenticated Arcmira sync and the connector acceptance suite remain unverified before any production-connector claim.
+The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. The custom source image has the separate ARM64 checks described above. The local ARM64 platform sync above used synthetic responses. Live authenticated Arcmira export, AMD64 execution, platform failure/commit behavior and the connector acceptance suite remain unverified. This source preview is not an Airbyte catalog release.
