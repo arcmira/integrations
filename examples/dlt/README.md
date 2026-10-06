@@ -71,6 +71,10 @@ RUNTIME__DLTHUB_TELEMETRY=false uv run --frozen python -m unittest discover -s t
 
 Eight local tests run the real dlt REST transport, extraction, normalization and filesystem loader against a fixture HTTP server. They cover full and empty search responses, opaque cursors, page bounds, preserved filters, refused reads, unexpected responses and a later-page failure. Fixtures follow the deployed OpenAPI contract checked on October 5, 2026. Tests use no live credentials or paid requests.
 
-The lockfile uses dlt 1.30.0 and Python 3.12 with dependencies released before September 28, 2026. Production-account validation is tracked separately; fixture success does not prove account access or current coverage.
+The lockfile uses dlt 1.30.0 and Python 3.12 with dependencies released before September 28, 2026.
+
+On October 5, 2026, this unchanged example also completed one authenticated production search on a Free account with `--limit 1`. The real dlt pipeline loaded one response into local JSONL and preserved its timestamped passage, source label, watch URL and coverage information. Account usage and available credits stayed unchanged; on-demand usage was disabled.
+
+That live check covers one search and the filesystem destination. Channel pagination, paid source filters and Premium reads were not exercised against a live account. Results depend on current index coverage and account access.
 
 [dlt REST source configuration](https://dlthub.com/docs/dlt-ecosystem/verified-sources/rest_api/basic) · [dlt filesystem destination](https://dlthub.com/docs/dlt-ecosystem/destinations/filesystem)
