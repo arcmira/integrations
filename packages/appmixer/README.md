@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search for Appmixer
 
-[API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
 Search indexed YouTube videos and livestreams for timestamped passages. Resolve people, organizations, products, topics and channels before filtering your research.
 

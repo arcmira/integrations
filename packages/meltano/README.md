@@ -1,6 +1,6 @@
 # Arcmira for Meltano
 
-[API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
 Export YouTube mentions and optional recommendation classifications for selected entities and a publication window. Records retain their source video, timestamps and analysis fields.
 

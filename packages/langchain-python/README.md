@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search for LangChain
 
-[API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
 Give your agent timestamped evidence from YouTube videos and livestreams. Find who said what, search mentions of people and products, and filter passages classified as sponsored or organic.
 

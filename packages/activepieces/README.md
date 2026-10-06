@@ -2,7 +2,7 @@
 
 Search indexed YouTube transcripts from Activepieces workflows. Get timestamped passages, source links, and coverage metadata.
 
-[API documentation](https://arcmira.com/docs) · [OpenAPI specification](https://api.arcmira.com/v1/openapi.json) · [Authentication](https://arcmira.com/docs/authentication)
+[Arcmira](https://arcmira.com) · [API documentation](https://arcmira.com/docs) · [OpenAPI specification](https://api.arcmira.com/v1/openapi.json) · [Authentication](https://arcmira.com/docs/authentication)
 
 ## Add transcript search to a workflow
 

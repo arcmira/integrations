@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search for n8n
 
-[API documentation](https://arcmira.com/docs) · [OpenAPI](https://api.arcmira.com/v1/openapi.json)
+[Arcmira](https://arcmira.com) · [API documentation](https://arcmira.com/docs) · [OpenAPI](https://api.arcmira.com/v1/openapi.json)
 
 Source preview 0.1.0. Native search and entity resolution have passed in official n8n 2.41.3. npm publication and n8n Cloud verification are pending.
 

@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search for Pipedream
 
-[API docs](https://arcmira.com/docs) · [Action guide](components/arcmira) · [Existing app request](https://github.com/PipedreamHQ/pipedream/issues/22142)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Action guide](components/arcmira) · [Existing app request](https://github.com/PipedreamHQ/pipedream/issues/22142)
 
 **Locally tested source preview.** These three native actions search timestamped YouTube transcript passages, resolve entities and list channel sponsors. They are not a hosted Pipedream app, published Connect custom tools or an installable registry listing.
 

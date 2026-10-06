@@ -2,7 +2,7 @@
 
 Search indexed YouTube transcripts for timestamped passages, speaker appearances, mentions and sponsored ad reads from Dify workflows and agents.
 
-[API documentation](https://arcmira.com/docs) · [Source](https://github.com/arcmira/integrations/tree/master/packages/dify)
+[Arcmira](https://arcmira.com) · [API documentation](https://arcmira.com/docs) · [Source](https://github.com/arcmira/integrations/tree/master/packages/dify)
 
 Plugin version 0.1.1 was installed as a local plugin in the branded Dify Cloud workspace on October 4, 2026. Marketplace publication is pending. Version 0.1.1 completed authenticated entity resolution in Community Edition on October 6, 2026. Version 0.1.2 adds publication metadata and updates Werkzeug to 3.1.9 for its Windows path-handling security fix. Version 0.1.2 passed native Community Edition entity-resolution and bounded transcript-search checks. Authenticated Dify Cloud workflow execution remains unverified.
 

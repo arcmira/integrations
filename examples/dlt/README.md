@@ -1,6 +1,6 @@
 # YouTube transcript search snapshots with dlt
 
-[API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
 Load a bounded Arcmira REST response into local JSONL files with dlt. Keep timestamped passages and the coverage notes that explain them. This is a first-party example using dlt's generic REST source, not a dlt verified-source catalog listing.
 

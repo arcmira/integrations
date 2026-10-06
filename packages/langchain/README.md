@@ -4,7 +4,7 @@ Native LangChain tools for searching indexed YouTube transcripts and resolving p
 
 Check [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md) for npm and catalog availability. The quick start below runs the source checkout.
 
-[API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
 ## Quick start
 

@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search Integrations
 
-[API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing) · [MCP and agent skills](https://github.com/arcmira/mcp)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing) · [MCP and agent skills](https://github.com/arcmira/mcp)
 
 Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n8n and Dify also resolve people, organizations, products, topics and channels. Results retain timestamped source links and coverage notes.
 

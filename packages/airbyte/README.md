@@ -1,6 +1,6 @@
 # Arcmira source for Airbyte
 
-[API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing) · [Existing connector proposal](https://github.com/airbytehq/airbyte/discussions/87666)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing) · [Existing connector proposal](https://github.com/airbytehq/airbyte/discussions/87666)
 
 Export explicitly scoped YouTube channel videos, entity mentions and commercial recommendations from Arcmira's indexed API.
 

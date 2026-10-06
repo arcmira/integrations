@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search for Nix
 
-[API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [CLI and SDK guide](https://github.com/arcmira/arcmira)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [CLI and SDK guide](https://github.com/arcmira/arcmira)
 
 Build the Arcmira CLI from its published 0.4.3 source release with Nix. This is Arcmira's own package definition. It is not listed in Nixpkgs.
 

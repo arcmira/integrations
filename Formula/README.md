@@ -1,5 +1,7 @@
 # Install the Arcmira CLI with Homebrew
 
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs)
+
 This repository is a first-party Homebrew tap for the [Arcmira CLI](https://arcmira.com/docs/libraries). It is separate from Homebrew core.
 
 ```sh

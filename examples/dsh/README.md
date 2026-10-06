@@ -1,6 +1,6 @@
 # Arcmira API documentation for DSH
 
-[API docs](https://arcmira.com/docs) · [DSH](https://github.com/deepseek-ai/deepseek-harness) · [Arcmira research MCP](https://arcmira.com/docs/mcp-server)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [DSH](https://github.com/deepseek-ai/deepseek-harness) · [Arcmira research MCP](https://arcmira.com/docs/mcp-server)
 
 Search Arcmira API documentation from a selectable DSH preset. This uses the public documentation endpoint and needs no API key. **It does not search YouTube transcripts or access your Arcmira account.**
 

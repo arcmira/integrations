@@ -1,6 +1,6 @@
 # YouTube transcript search with Pydantic AI
 
-[API docs](https://arcmira.com/docs) · [MCP reference](https://arcmira.com/docs/mcp-server)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [MCP reference](https://arcmira.com/docs/mcp-server)
 
 Connect a Pydantic AI agent to Arcmira and retrieve a timestamped YouTube passage. This example uses a real MCP connection and agent tool loop. A deterministic `FunctionModel` selects one search in Python, so you need an Arcmira API key but no model provider key.
 

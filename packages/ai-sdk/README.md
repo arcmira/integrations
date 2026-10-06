@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search
 
-[API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
 Source preview for the Vercel AI SDK. This package is not published to npm yet.
 

@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search
 
-[API documentation and quickstart](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage](https://arcmira.com/docs/usage-and-billing)
+[Arcmira](https://arcmira.com) · [API documentation and quickstart](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage](https://arcmira.com/docs/usage-and-billing)
 
 Local native component candidate for the Pipedream Connect/MCP tool registry. These components have not been published or tested on Pipedream. Managed authentication requires Pipedream to register the Arcmira app and its API-key field. Existing request: [PipedreamHQ/pipedream#22142](https://github.com/PipedreamHQ/pipedream/issues/22142).
 

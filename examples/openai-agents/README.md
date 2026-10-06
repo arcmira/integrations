@@ -1,6 +1,6 @@
 # YouTube transcript search with the OpenAI Agents SDK
 
-[API docs](https://arcmira.com/docs) · [MCP reference](https://arcmira.com/docs/mcp-server)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [MCP reference](https://arcmira.com/docs/mcp-server)
 
 Connect an agent to Arcmira's research MCP and retrieve a timestamped YouTube passage. This example uses an Arcmira API key, discovers the agent's tools and runs one bounded search. It does not call an OpenAI model or export traces.
 
