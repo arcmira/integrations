@@ -88,6 +88,14 @@ fi
   "$meltano_python" -m pytest tests -q
   "$meltano_python" -m hatchling build
 )
+(
+  cd packages/langflow
+  uv sync --frozen "${install_args[@]}"
+  uv run --frozen python -m unittest discover -s tests -v
+  uv run --frozen lfx extension validate . --execute-imports
+  uv run --frozen lfx extension list --format json
+  uv build
+)
 python3 scripts/test-python-release.py
 git diff --check
 git diff --cached --check

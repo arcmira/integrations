@@ -135,3 +135,9 @@ The [Appmixer connector](packages/appmixer) provides transcript search, entity r
 On October 6, native 1.0.3 tests resolved OpenAI, returned one timestamped transcript passage with its Free-account window and index notes, and preserved a complete HTTP 200 response from the advanced action. A separate invalid-query test routed HTTP 400 to `error` with the explanation, docs link and request ID unchanged. These checks used an isolated Free managed account; the flow remained inactive. No before/after usage ledger was captured for this version. Premium reads, writes, timeout and rate-limit behavior, fresh native account labels and team-account selection remain unverified.
 
 Portable local tests exercise the component modules against synthetic responses. The package excludes upstream E2E templates, their result/email actions, the copied manifest schema and the upstream test utility. No public marketplace approval or complete upstream E2E conformance is claimed.
+
+## Langflow extension preview
+
+The [Langflow extension](packages/langflow) provides native YouTube transcript search and entity resolution components. The unpublished `lfx-arcmira` 0.1.0 package passes installed LFX 1.12.3 extension discovery and executed-import validation, four native component/tool checks and eleven HTTP transport tests. Agent tool output retains the complete response as a structured artifact, including coverage and access metadata. All tests use synthetic responses with socket connections blocked. No real account, model inference or paid read is included.
+
+The source and wheel metadata link to Arcmira and the API docs. Visual editor presentation, live-account execution, PyPI trusted publishing and catalog inclusion remain pending. [Upstream proposal #15539](https://github.com/langflow-ai/langflow/issues/15539) is not maintainer approval. LFX's `@official` loader slot is not a catalog endorsement.

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.langflow.org/extension/v1.json",
+  "id": "lfx-arcmira",
+  "version": "0.1.0",
+  "name": "Arcmira: YouTube Transcript Search",
+  "description": "Search indexed YouTube speech with timestamps and resolve entities while preserving coverage and ambiguity. https://arcmira.com/docs",
+  "lfx": {
+    "compat": [
+      "1"
+    ]
+  },
+  "bundles": [
+    {
+      "name": "arcmira",
+      "path": "src/lfx_arcmira/components/arcmira"
+    }
+  ],
+  "capabilities": {
+    "requiresCredentials": true
+  }
+}
