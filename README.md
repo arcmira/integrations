@@ -13,9 +13,9 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
-| dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Fixture-tested source example; no dlt catalog listing |
+| dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Local fixture tests and one live Free-account search export passed; no dlt catalog listing |
 | Meltano / Singer | [Scoped mentions and recommendations](packages/meltano) | Source preview with native DuckDB fixture checks; authenticated export and Hub publication pending |
-| Airbyte | [Scoped source and validation](packages/airbyte) | Local Airbyte 2.3.0 platform sync passed with synthetic data; live export and catalog acceptance pending |
+| Airbyte | [Scoped source and validation](packages/airbyte) | Local Airbyte 2.3.0 fixture checks and one live channel-video export passed; broader live validation and catalog acceptance pending |
 | Pipedream Connect / MCP | [Native actions and validation](packages/pipedream) | Locally tested source preview; app registration and hosted validation pending |
 | Dify | [Setup and plugin](packages/dify) | Plugin 0.1.2 passed native Community Edition research; Cloud workflow validation and Marketplace review pending |
 
@@ -63,7 +63,7 @@ Use an [Arcmira API key](https://arcmira.com/docs/authentication) in server-side
 - **Search transcript passages:** filter indexed videos by channel, entity, speaker, date, source, and sponsored or organic mentions.
 - **Resolve names:** find the right IDs before filtering. Preserve ambiguity when a name has multiple matches.
 
-LangChain, AI SDK, n8n and Dify expose search and entity resolution. The Activepieces action exposes transcript search. Pipedream adds channel sponsor reads. Airbyte exports scoped channel videos, mentions and recommendations. Meltano reads scoped mentions and optional recommendations. These adapters are source previews with separate host and publication limits. Full transcripts, sponsor research and monitors are available through the [Arcmira SDKs](https://arcmira.com/docs/libraries) and [MCP server](https://arcmira.com/docs/mcp-server).
+LangChain, AI SDK, n8n and Dify expose search and entity resolution. The Activepieces action exposes transcript search. Pipedream adds channel sponsor reads. Airbyte exports scoped channel videos, mentions and recommendations. Meltano reads scoped mentions and optional recommendations. Host validation and publication status vary by adapter; see the table above. Full transcripts, sponsor research and monitors are available through the [Arcmira SDKs](https://arcmira.com/docs/libraries) and [MCP server](https://arcmira.com/docs/mcp-server).
 
 A paid read uses credits from your plan, then your on-demand budget. Coverage and account access vary. An empty result does not mean a topic was never discussed. Preserve returned source labels, notes and links when presenting evidence.
 

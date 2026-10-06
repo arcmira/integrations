@@ -4,7 +4,7 @@
 
 Export explicitly scoped YouTube channel videos, entity mentions and commercial recommendations from Arcmira's indexed API.
 
-This is a locally tested Python CDK source preview, version 0.1.0. A local custom connector image is available to build. It is not a published registry image, accepted catalog connector or published Python package. It passed a local Airbyte 2.3.0 platform sync with synthetic data. Live authenticated export remains unverified.
+This is a locally tested Python CDK source preview, version 0.1.0. A local custom connector image is available to build. It is not a published registry image, accepted catalog connector or published Python package. It passed local Airbyte 2.3.0 platform checks with synthetic data and one bounded live channel-video metadata export. Broader live validation remains pending.
 
 ## Run locally
 
@@ -88,7 +88,9 @@ The DuckDB checks above exercised the CLI protocol. A separate local ARM64 Airby
 
 A second platform check sent a synthetic HTTP 403 on a later mentions page into a separate, initially empty Postgres schema. Airbyte marked the job failed after five automatic whole-sync attempts. The source exited 1 while the destination and orchestrator exited 0. Direct database queries found zero records in all three destination tables, and the connection had no saved state. The separate successful test schema retained its two records per stream. This test used no real Arcmira credentials or credits.
 
-This small, initially empty-destination failure test does not establish atomic overwrite of existing data, rollback after larger committed batches or general staging/commit guarantees. Other platform/destination combinations and a live authenticated export remain unverified. Check the platform job outcome as well as individual process exits. Whole-sync retries may repeat metered reads.
+This small, initially empty-destination failure test does not establish atomic overwrite of existing data, rollback after larger committed batches or general staging/commit guarantees. Other platform/destination combinations remain unverified. Check the platform job outcome as well as individual process exits. Whole-sync retries may repeat metered reads.
+
+On October 6, 2026, the unchanged source also completed one authenticated live channel-video metadata export through the same local Airbyte 2.3.0 and Postgres 3.0.22 host. A one-second publication window and page size 1 selected one known video with no next page. Direct database comparison verified every source field and the scope, window, index freshness and coverage note. The isolated Free account had read-only access and on-demand disabled; its usage was unchanged before and after the check. This validates that one channel-video export, not live pagination, mentions, recommendations or Premium reads.
 
 ## Validation and release work
 
@@ -109,4 +111,4 @@ Before a production connector release: validate it in an approved Airbyte host a
 
 From the repository root, `ARCMIRA_AIRBYTE_PYTHON=/absolute/path/to/existing/python ./scripts/ci.sh --offline` runs all local integration checks with cached dependencies and this existing Airbyte environment. Without the override, Airbyte checks use `packages/airbyte/.venv/bin/python`. The script does not create the Airbyte environment. Offline mode forbids dependency downloads and fails on a cache miss; it does not skip builds or tests.
 
-The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. The custom source image has the separate ARM64 checks described above. The local ARM64 platform sync above used synthetic responses. Live authenticated Arcmira export, AMD64 execution, overwrite/commit guarantees beyond the cases above and the connector acceptance suite remain unverified. This source preview is not an Airbyte catalog release.
+The unit tests mock HTTP responses through the native CDK transport and read protocol. The separate destination checks above exercise an official destination container. The custom source image has the separate ARM64 checks described above. The local ARM64 platform checks above used synthetic responses, followed by one bounded live channel-video export. Live multi-page exports, mentions and recommendations, AMD64 execution, overwrite/commit guarantees beyond the cases above and the connector acceptance suite remain unverified. This source preview is not an Airbyte catalog release.
