@@ -61,7 +61,7 @@ A full refresh exports the currently indexed data visible to this account within
 
 Each new sync starts from page one. No continuation token is persisted as incremental state. A later refresh can include backfills and edits and reflect deletions. Prefer full-refresh overwrite for a current scoped snapshot. Append creates repeated records across refreshes and does not represent deletions. Overlapping scopes are intentionally separate and have separate scope IDs.
 
-A paid read uses credits from your plan, then your on-demand budget. The configured budget is approval. A full refresh or retry may consume additional usage. The connector does not lift gates, change filters, request transcripts, invoke backfill, change account settings or substitute lower-quality results.
+A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. The configured budget is approval. A full refresh or retry may consume additional usage. The connector does not lift gates, change filters, request transcripts, invoke backfill, change account settings or substitute lower-quality results.
 
 API row fields remain intact. `_arcmira` adds the exact scope, a stable scope ID and response window. Channel rows also retain `indexed_through`, `index_age_days`, `as_of` and the API note. Empty channel responses are valid and do not trigger backfill; index context is logged even when there are no records.
 

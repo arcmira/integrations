@@ -69,7 +69,7 @@ Use an [Arcmira API key](https://arcmira.com/docs/authentication) in server-side
 
 LangChain, AI SDK, n8n, Dify and Appmixer expose search and entity resolution. The Activepieces action exposes transcript search. Pipedream adds channel sponsor reads. Appmixer also provides an advanced authenticated API action. Airbyte exports scoped channel videos, mentions and recommendations. Meltano reads scoped mentions and optional recommendations. Host validation and publication status vary by adapter; see the table above. Full transcripts, sponsor research and monitors are available through the [Arcmira SDKs](https://arcmira.com/docs/libraries) and [MCP server](https://arcmira.com/docs/mcp-server).
 
-A paid read uses credits from your plan, then your on-demand budget. Coverage and account access vary. An empty result does not mean a topic was never discussed. Preserve returned source labels, notes and links when presenting evidence.
+A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Coverage and account access vary. An empty result does not mean a topic was never discussed. Preserve returned source labels, notes and links when presenting evidence.
 
 ## Verification
 

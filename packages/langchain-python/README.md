@@ -60,7 +60,7 @@ Results preserve the API envelope, including coverage notes, partial-result indi
 
 ## Usage and failures
 
-A paid read uses credits from your plan, then your on-demand budget. Search uses four credits per returned passage beyond the first five. Entity resolution uses no credits. Account access and freshness limits still apply.
+A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Search uses four credits per returned passage beyond the first five. Entity resolution uses no credits. Account access and freshness limits still apply.
 
 A refused Premium filter remains an error. The tools do not substitute captions, widen date filters or turn failures into empty results. They raise LangChain `ToolException` for API and connection errors. Requests are not automatically retried. Malformed API responses produce a sanitized error.
 

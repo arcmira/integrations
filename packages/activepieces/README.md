@@ -21,7 +21,7 @@ The minimum supported host version is Activepieces 0.92.0. The framework library
 
 ## Results and usage
 
-Search uses your account's search allowance. This action searches indexed passages. Full-transcript reads and monitor changes are outside this action's scope. Paid reads use credits from your plan, then your on-demand budget. Review [usage, limits, and billing](https://arcmira.com/docs/usage-and-billing).
+Search uses your account's search allowance. This action searches indexed passages. Full-transcript reads and monitor changes are outside this action's scope. Paid reads use credits from your plan, then any top-up credits, then your on-demand budget. Review [usage, limits, and billing](https://arcmira.com/docs/usage-and-billing).
 
 Premium source access depends on your account. If that access is refused, the action fails and preserves the API error. It never changes the source filter or silently retries with captions. Configure workflow retries deliberately because a host-level retry is another request.
 

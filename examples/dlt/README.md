@@ -17,7 +17,7 @@ uv run --frozen python arcmira_pipeline.py --query 'AI agents' --limit 5 --outpu
 
 The default is one request with at most five search chunks. Search has no cursor and is not an exhaustive transcript export. To keep an explicit quality or date filter, add `--source arcmira_premium`, `--after 2026-08-01`, or `--before 2026-09-01`. A refused filter stops the run; the example never removes it or substitutes another transcript source.
 
-A paid read uses credits from your plan, then your on-demand budget. The API currently meters search chunks and channel videos past the first five returned at four credits each. Increasing `--limit` or running more pages can use credits. The request and page limits bound extraction size; they are not an account budget control. See the [usage guide](https://arcmira.com/docs/usage-and-billing) for the current rules.
+A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. The API currently meters search chunks and channel videos past the first five returned at four credits each. Increasing `--limit` or running more pages can use credits. The request and page limits bound extraction size; they are not an account budget control. See the [usage guide](https://arcmira.com/docs/usage-and-billing) for the current rules.
 
 ## Read the local result
 

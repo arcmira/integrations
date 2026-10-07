@@ -1,9 +1,9 @@
 {
     "name": "appmixer.arcmira.core.MakeApiCall",
     "label": "Make API Call (Advanced)",
-    "description": "Advanced authenticated call to Arcmira\u2019s indexed YouTube API. GET reads data; POST, PUT, PATCH and DELETE may modify account data according to the selected endpoint and key scopes. A paid read uses credits from your plan, then your on-demand budget. Preserves full HTTP results. No automatic retries or quality fallback. API docs: https://arcmira.com/docs.",
+    "description": "Advanced authenticated call to Arcmira\u2019s indexed YouTube API. GET reads data; POST, PUT, PATCH and DELETE may modify account data according to the selected endpoint and key scopes. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Preserves full HTTP results. No automatic retries or quality fallback. API docs: https://arcmira.com/docs.",
     "author": "Arcmira <zeal@arcmira.com>",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "auth": {
         "service": "appmixer:arcmira"
     },

@@ -24,7 +24,7 @@ Before exporting, replace `entity_ids`, `after` and `before` in `meltano.yml` wi
 meltano invoke tap-arcmira > records.jsonl
 ```
 
-The command makes live API reads. A paid read uses credits from your plan, then your on-demand budget. Channel/date filters and recommendation access can require a paid plan. Review the [account usage controls](https://arcmira.com/docs/usage-and-billing) before running. Do not treat a failed run's output as a complete dataset.
+The command makes live API reads. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Channel/date filters and recommendation access can require a paid plan. Review the [account usage controls](https://arcmira.com/docs/usage-and-billing) before running. Do not treat a failed run's output as a complete dataset.
 
 ## Export contract
 

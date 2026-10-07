@@ -23,7 +23,7 @@ export function createArcmiraTools(options: ArcmiraToolsOptions): ArcmiraTools {
   return {
     arcmiraSearch: tool({
       description:
-        "Search indexed YouTube transcripts for timestamped passages. Use one topic per call. Resolve names with arcmiraResolve before using ID filters. Source coverage and publication-date access vary by account. Speaker labels cover a minority of shows. Preserve returned coverage notes and source links. A paid read uses credits from your plan, then your on-demand budget. Do not silently widen refused filters or substitute another transcript source.",
+        "Search indexed YouTube transcripts for timestamped passages. Use one topic per call. Resolve names with arcmiraResolve before using ID filters. Source coverage and publication-date access vary by account. Speaker labels cover a minority of shows. Preserve returned coverage notes and source links. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Do not silently widen refused filters or substitute another transcript source.",
       inputSchema: searchInput,
       execute: (input, { abortSignal }) =>
         client.transcripts.search(input, { abortSignal }),

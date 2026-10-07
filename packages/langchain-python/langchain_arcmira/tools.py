@@ -159,7 +159,8 @@ class ArcmiraSearch(_ArcmiraTool):
         "Preserve timestamps, source labels, coverage notes and access errors. "
         "Resolve relative watch_url links against https://arcmira.com. "
         "An empty result is not proof something was never discussed. "
-        "A paid read uses credits from your plan, then your on-demand budget."
+        "A paid read uses credits from your plan, then any top-up credits, "
+        "then your on-demand budget."
     )
     args_schema: type[BaseModel] = SearchInput
     _operation: ClassVar[Literal["search", "resolve"]] = "search"

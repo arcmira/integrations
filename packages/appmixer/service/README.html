@@ -3,14 +3,15 @@
 <meta charset="utf-8">
 <title>Arcmira: YouTube Transcript Search for Appmixer</title>
 <h1>Arcmira: YouTube Transcript Search</h1>
-<p><a href="https://arcmira.com/docs">API documentation</a> · <a href="https://github.com/arcmira/integrations/tree/master/packages/appmixer">Source and setup</a></p>
+<p><a href="https://arcmira.com">Arcmira</a> · <a href="https://arcmira.com/docs">API documentation</a> · <a href="https://github.com/arcmira/integrations/tree/master/packages/appmixer">Source and setup</a></p>
 <p>Search indexed YouTube videos and livestreams for timestamped passages. Resolve people, organizations, products, topics and channels before filtering. Connect an Arcmira API key through the managed account form.</p>
 <h2>Start a flow</h2>
 <p>Add Search Transcripts, set Query to <code>AI agents</code> and Limit to <code>1</code>, then run Test Flow. Inspect the passage, timestamped watch URL, source, window and index notes. Limited coverage is a separate output, not a failed request.</p>
 <p>Resolve Entities sends uncertain matches to its review output. Inspect the candidates before selecting an entity ID.</p>
 <p>Make API Call supports explicit GET, POST, PUT, PATCH and DELETE inside Arcmira v1, preserving HTTP status, headers and body. For a read example, use path <code>entities/resolve</code>, method <code>GET</code>, and Parameters <code>q=OpenAI</code> and <code>limit=1</code>. Use the Parameters and Headers key-value editors. Authentication comes from the managed account.</p>
-<p>Write methods may modify account data according to key scopes. A paid read uses credits from your plan, then your on-demand budget. Full URLs, path escapes and automatic retries are refused. If a write loses its response, check the outcome before retrying. Preserve the API's error explanation and docs link instead of changing requested filters or transcript quality.</p>
+<p>Write methods may modify account data according to key scopes. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Full URLs, path escapes and automatic retries are refused. If a write loses its response, check the outcome before retrying. Preserve the API's error explanation and docs link instead of changing requested filters or transcript quality.</p>
 <h2>Verification and status</h2>
+<p>This is the unreleased 1.0.4 copy update. Usage descriptions, version metadata and this guide changed; request behavior did not. Hosted verification and publication remain pending.</p>
 <p>Connector 1.0.3 passed private hosted entity resolution, a one-result transcript search and an advanced GET on October 6, 2026. The search retained its Free-account window and index notes. A separate invalid-query test sent HTTP 400 to the error output with its explanation, docs link and request ID intact.</p>
 <p>The checks used an isolated Free managed account and an inactive test flow. Premium reads, writes, timeout and rate-limit handling, fresh account-picker labels and team-account selection remain unverified. No before/after usage ledger was captured for these 1.0.3 checks.</p>
 <p>The first-party source includes 160 portable local behavior tests using synthetic responses. This package does not include upstream E2E templates or claim marketplace acceptance. Catalog review remains separate under <a href="https://github.com/Appmixer-ai/appmixer-connectors/issues/1369">the existing Appmixer proposal</a>.</p>

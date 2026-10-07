@@ -21,7 +21,7 @@ export function createArcmiraTools(options: ArcmiraToolsOptions): ArcmiraTools {
       (input, config) => client.transcripts.search(input, { abortSignal: config.signal }),
       {
         name: "arcmira_search",
-        description: "Search indexed YouTube transcripts for timestamped passages. Use one topic per call. Resolve names with arcmira_resolve before using ID filters. Preserve returned coverage notes and source links. Account access and speaker coverage vary. A paid read uses credits from your plan, then your on-demand budget. Do not silently widen refused filters or substitute another transcript source.",
+        description: "Search indexed YouTube transcripts for timestamped passages. Use one topic per call. Resolve names with arcmira_resolve before using ID filters. Preserve returned coverage notes and source links. Account access and speaker coverage vary. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Do not silently widen refused filters or substitute another transcript source.",
         schema: searchInput,
       },
     ),

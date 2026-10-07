@@ -23,7 +23,7 @@ export ARCMIRA_API_KEY='your-key'
 arcmira search 'AI agents'
 ```
 
-Search results retain timestamps and source links. A paid read uses credits from your plan, then your on-demand budget. See [usage and billing](https://arcmira.com/docs/usage-and-billing).
+Search results retain timestamps and source links. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. See [usage and billing](https://arcmira.com/docs/usage-and-billing).
 
 ## Package contents
 

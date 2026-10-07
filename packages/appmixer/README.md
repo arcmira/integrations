@@ -4,7 +4,7 @@
 
 Search indexed YouTube videos and livestreams for timestamped passages. Resolve people, organizations, products, topics and channels before filtering your research.
 
-This is Arcmira's first-party source for Appmixer connector 1.0.3. The connector has passed private hosted read tests. Public Appmixer catalog acceptance is pending.
+This is Arcmira's first-party source for Appmixer connector 1.0.4, an unreleased copy update. Version 1.0.3 passed private hosted read tests. Version 1.0.4 still needs hosted verification and publication; public Appmixer catalog acceptance is pending.
 
 ## Build and install
 
@@ -34,7 +34,7 @@ For the advanced action, supply a relative path such as `entities/resolve`, sele
 
 Explicit `POST`, `PUT`, `PATCH` and `DELETE` requests can modify account data under the key's scopes. There are no automatic retries or transcript-quality fallbacks. If a write loses its response, check its outcome before retrying.
 
-A paid read uses credits from your plan, then your on-demand budget. Account access and indexed coverage vary. Preserve the API's error explanation and documentation link instead of silently changing the requested source or filters.
+A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Account access and indexed coverage vary. Preserve the API's error explanation and documentation link instead of silently changing the requested source or filters.
 
 ## What has been verified
 
@@ -49,7 +49,7 @@ These checks used an isolated Free account. The test flow remained inactive. The
 
 Local tests exercise the actual component modules with synthetic HTTP responses. They cover filters, output routing, ambiguity, managed authentication, account-label fallbacks, request restrictions and error retention. They do not certify Appmixer marketplace acceptance.
 
-The service runtime matches the privately tested 1.0.3 source; the bundled README is updated. Upstream E2E templates and the copied publisher manifest schema are not included in this first-party package. The existing [Appmixer proposal](https://github.com/Appmixer-ai/appmixer-connectors/issues/1369) tracks the separate catalog process.
+Request behavior is unchanged from the privately tested 1.0.3 source. Version 1.0.4 changes usage descriptions, version metadata and the bundled guide; it has not been verified in the host. Upstream E2E templates and the copied publisher manifest schema are not included in this first-party package. The existing [Appmixer proposal](https://github.com/Appmixer-ai/appmixer-connectors/issues/1369) tracks the separate catalog process.
 
 ## Feedback
 

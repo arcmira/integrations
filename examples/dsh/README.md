@@ -77,4 +77,4 @@ Native checks passed on October 5, 2026. They do not establish browser UI behavi
 
 The authenticated research endpoint is `https://mcp.arcmira.com/mcp`. Follow the [research MCP documentation](https://arcmira.com/docs/mcp-server) for its setup. This preset and its verification do not connect to that endpoint.
 
-A paid read uses credits from your plan, then your on-demand budget. That describes authenticated research usage, not this public documentation test.
+A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. That describes authenticated research usage, not this public documentation test.

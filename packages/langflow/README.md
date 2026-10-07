@@ -7,7 +7,7 @@ An opt-in Python extension preview with two native Langflow components:
 - **YouTube Transcript Search:** find timestamped passages, retaining source links, coverage and access metadata.
 - **Entity Resolve:** resolve names and handles without silently choosing among ambiguous candidates.
 
-A paid read uses credits from your plan, then your on-demand budget. The configured budget is the approval. API plan limits and refusals remain visible. Selecting Premium never triggers a caption fallback. This extension makes one API request per component execution; it does not retry automatically.
+A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. The configured budget is the approval. API plan limits and refusals remain visible. Selecting Premium never triggers a caption fallback. This extension makes one API request per component execution; it does not retry automatically.
 
 ## Local installation
 

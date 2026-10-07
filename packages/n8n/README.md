@@ -34,7 +34,7 @@ The complete response envelope is preserved so coverage notes, source links, tim
 
 ## Premium and errors
 
-Selecting Arcmira Premium requires the corresponding entitlement. Premium and freshness refusals remain errors; this node never retries with captions, changes source, removes filters or upgrades the account. A paid read uses credits from your plan, then your on-demand budget. Account limits apply. See [usage and billing](https://arcmira.com/docs/usage-and-billing). This node provides search and entity resolution; full transcript reads and monitor actions are available through the [SDKs](https://arcmira.com/docs/libraries) and [MCP server](https://arcmira.com/docs/mcp-server).
+Selecting Arcmira Premium requires the corresponding entitlement. Premium and freshness refusals remain errors; this node never retries with captions, changes source, removes filters or upgrades the account. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Account limits apply. See [usage and billing](https://arcmira.com/docs/usage-and-billing). This node provides search and entity resolution; full transcript reads and monitor actions are available through the [SDKs](https://arcmira.com/docs/libraries) and [MCP server](https://arcmira.com/docs/mcp-server).
 
 ## Development
 

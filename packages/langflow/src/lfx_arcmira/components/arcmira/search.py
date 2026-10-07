@@ -8,7 +8,7 @@ from lfx_arcmira.client import read
 class ArcmiraTranscriptSearch(Component):
     display_name = "Arcmira YouTube Transcript Search"
     description = ("Search timestamped passages with source and coverage evidence. "
-                   "A paid read uses credits from your plan, then your on-demand budget.")
+                   "A paid read uses credits from your plan, then any top-up credits, then your on-demand budget.")
     documentation = "https://arcmira.com/docs/search"
     icon = "Search"
     name = "ArcmiraTranscriptSearch"

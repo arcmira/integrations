@@ -1,6 +1,6 @@
 {
     "name": "appmixer.arcmira",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "changelog": {
         "1.0.0": [
             "Initial native API candidate with managed API-key authentication, entity resolution and bounded transcript search. Full envelopes and coverage preserved; no automatic entity selection or quality fallback.",
@@ -14,6 +14,9 @@
         ],
         "1.0.3": [
             "Show the paying personal or team account in managed connection labels, with caller and key context and support for older profiles."
+        ],
+        "1.0.4": [
+            "Include top-up credits in usage descriptions and add the Arcmira homepage to the bundled guide. Request behavior is unchanged."
         ]
     }
 }
