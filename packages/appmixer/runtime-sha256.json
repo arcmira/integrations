@@ -1,6 +1,6 @@
 {
   "version": "1.0.4",
-  "scope": "Reviewed 1.0.4 source candidate. Changes from hosted-tested 1.0.3 are usage descriptions, version metadata and documentation; 1.0.4 has not been host-tested or published.",
+  "scope": "Reviewed 1.0.4 service files. Changes from hosted-tested 1.0.3 are usage descriptions and version metadata; request handlers and shared request logic are unchanged. See RELEASE.md for current hosted verification and publication status.",
   "files": {
     "auth.js": "576532c92cb1349befc8a73292ad4a7752ce0386b177bd63c5a0dd9f1b06460c",
     "bundle.json": "8bde4947d2b47e30e8ee4c745aacbe412ce0056203b7beed729e13b91b436bb8",
