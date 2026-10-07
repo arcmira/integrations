@@ -107,7 +107,7 @@ Before a production connector release: validate it in an approved Airbyte host a
 
 ## Included contract and repository checks
 
-`openapi.json` is the public API schema 1.0.0 captured October 5, 2026. Its SHA-256 is `b244f4940f265fe4ab5ebad910020a5447865cf380db1e774bbdf73a8a008af5`. The spec version is separate from SDK, MCP and connector versions. `generate_schemas.py --check` verifies the connector specification and six response/record schemas against this included snapshot without changing files.
+`openapi.json` is the public API schema 1.0.0 captured October 7, 2026. Its SHA-256 is `ba22f271d1514b1ae8e96a37ff57c42d23ec5e1d79550c3f4688901126dfa356`. The spec version is separate from SDK, MCP and connector versions. `generate_schemas.py --check` verifies the connector specification and six response/record schemas against this included snapshot without changing files.
 
 From the repository root, `ARCMIRA_AIRBYTE_PYTHON=/absolute/path/to/existing/python ./scripts/ci.sh --offline` runs all local integration checks with cached dependencies and this existing Airbyte environment. Without the override, Airbyte checks use `packages/airbyte/.venv/bin/python`. The script does not create the Airbyte environment. Offline mode forbids dependency downloads and fails on a cache miss; it does not skip builds or tests.
 
