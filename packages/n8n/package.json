@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Arcmira: YouTube Transcript Search. Find timestamped passages, speaker appearances, mentions and sponsored ad reads.",
   "license": "MIT",
-  "homepage": "https://arcmira.com/docs",
+  "homepage": "https://arcmira.com",
   "keywords": [
     "n8n-community-node-package",
     "arcmira",

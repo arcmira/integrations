@@ -35,7 +35,7 @@
     "@types/node": "24.10.1"
   },
   "license": "Apache-2.0",
-  "homepage": "https://arcmira.com/docs",
+  "homepage": "https://arcmira.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arcmira/integrations.git",
