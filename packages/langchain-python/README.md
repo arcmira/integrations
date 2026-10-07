@@ -9,7 +9,7 @@ Install the published PyPI package below. Arcmira is listed in the [LangChain pr
 ## Quick start
 
 ```sh
-pip install langchain-arcmira==0.1.0
+pip install langchain-arcmira
 export ARCMIRA_API_KEY='your-key'
 python - <<'PY'
 from langchain_arcmira import ArcmiraSearch

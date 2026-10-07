@@ -61,7 +61,7 @@ Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `
 
 The package README is the dedicated guide. LangChain merged the catalog contribution on October 6, 2026. Both production catalog pages include Arcmira and link to this guide.
 
-The guide on `master` now leads with the published pip install. PyPI 0.1.0 retains its original source-checkout guide inside the immutable release artifacts. That registry copy will refresh with the next package release; this documentation update does not change version 0.1.0 or replace its artifacts. A future publication must record the new package source tree and artifact checksums.
+Version 0.1.1 is a release candidate, not published yet. It includes the root Arcmira homepage metadata, the current pip quick start and the usage description with top-up credits. Dependencies and request behavior are unchanged. The release manifest records the candidate package tree and locally verified artifacts. PyPI 0.1.0 and its original artifacts remain unchanged. Publish and verify 0.1.1 separately.
 
 
 ### Configure PyPI trusted publishing
@@ -84,7 +84,7 @@ The manual workflow runs on `master` and uploads prebuilt GitHub release assets.
 2. Record their SHA-256 checksums and the committed package tree in `release-artifacts/langchain-python/current.json`.
 3. Commit the manifest and run `python3 scripts/verify-python-release.py packages/langchain-python/dist`.
 4. Merge the reviewed release commit to `master`. Create the manifest's signed tag at that commit and attach the verified wheel and source archive to its GitHub release.
-5. Run `python3 scripts/verify-python-release.py --tag langchain-python-v0.1.0 packages/langchain-python/dist` on the release checkout.
+5. Run `python3 scripts/verify-python-release.py --tag langchain-python-v0.1.1 packages/langchain-python/dist` on the release checkout.
 6. Confirm that the PyPI publisher configuration matches the table above. Dispatch **Publish Python LangChain package** from `master`.
 7. Verify the PyPI files, provenance, clean installation, and import before marking the package published or submitting the LangChain catalog issue.
 
