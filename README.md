@@ -14,6 +14,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
+| n8n built-in workflow | [Transcript source shortlist](examples/n8n-source-shortlist) | One bounded Free-account execution verified; importable example, not a catalog listing |
 | dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Local fixture tests and one live Free-account search export passed; no dlt catalog listing |
 | Meltano / Singer | [Scoped mentions and recommendations](packages/meltano) | Source preview with native DuckDB fixture checks; authenticated export and Hub publication pending |
 | Airbyte | [Scoped source and validation](packages/airbyte) | Local Airbyte 2.3.0 fixture checks and one live channel-video export passed; broader live validation and catalog acceptance pending |
