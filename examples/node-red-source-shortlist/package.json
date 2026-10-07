@@ -1,0 +1,14 @@
+{
+  "name": "@arcmira/node-red-source-shortlist-example",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Native Node-RED checks for a bounded Arcmira source shortlist flow",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "node native-test.mjs"
+  },
+  "devDependencies": {
+    "node-red": "5.0.7"
+  }
+}

@@ -6,7 +6,7 @@ Find up to three spoken passages about a topic in indexed YouTube videos. Keep e
 
 ## Run it
 
-1. Import `arcmira-source-shortlist.n8n.json` into n8n using **Import from File**. The workflow is inactive and starts manually. It was executed with n8n 2.41.3; the browser-editor import has not been tested.
+1. Import [arcmira-source-shortlist.n8n.json](arcmira-source-shortlist.n8n.json) into n8n using **Import from File**. The workflow is inactive and starts manually. It was executed with n8n 2.41.3; the browser-editor import has not been tested.
 2. Create an **HTTP Bearer Auth** credential using your own [Arcmira API key](https://arcmira.com/docs/authentication). Enter the key as the token, without an extra `Bearer ` prefix. Select this credential in **Search Arcmira**. Keep it out of workflow fields, code and exports.
 3. In **Search input**, set `topic`, `after` and `before`. The example searches `creativity` between August 1 and September 1, 2026. `after` is inclusive; `before` is exclusive. Dates are UTC. Choose dates available under your plan.
 4. Execute once and inspect **Build source shortlist**. Keep `requested_window`, `applied_window`, `partial`, `search_index` and `note` with the candidates. Errors stop the workflow. Resolve a refused request explicitly; it does not retry or change the query for you.

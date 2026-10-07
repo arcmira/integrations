@@ -1,0 +1,66 @@
+{
+  "node_red": "5.0.7",
+  "node": "v22.22.3",
+  "flow_sha256": "d8e7ff65fe78b8054e64118ed606fe61daca48077e2f3dbfefd61a3c0ce0eaa0",
+  "transport": "Exact flow; native onReceive hook replaces only the destination URL for synthetic cases. Live case has no URL replacement.",
+  "cases": [
+    {
+      "name": "success",
+      "status": "passed",
+      "candidates": 2,
+      "csv_formula_escaping": true,
+      "coverage_preserved": true
+    },
+    {
+      "name": "empty",
+      "status": "passed",
+      "stale_candidates_removed": true
+    },
+    {
+      "name": "error",
+      "status": "passed",
+      "requests": 1
+    },
+    {
+      "name": "redirect",
+      "status": "passed",
+      "requests": 1
+    },
+    {
+      "name": "malformed",
+      "status": "passed",
+      "requests": 1
+    },
+    {
+      "name": "transport",
+      "status": "passed",
+      "requests": 1
+    },
+    {
+      "name": "missing-key",
+      "status": "passed",
+      "requests": 0
+    }
+  ],
+  "live": {
+    "status": "passed",
+    "at": "2026-10-07T14:16:01.942Z",
+    "tier": "free",
+    "on_demand_enabled": false,
+    "search_requests": 1,
+    "account_requests": 2,
+    "returned": 3,
+    "credits_delta": 0,
+    "on_demand_delta": 0,
+    "requested_window": {
+      "after": "2026-08-01",
+      "before": "2026-09-01"
+    },
+    "partial": null,
+    "search_index": {
+      "state": "catching_up",
+      "missing_before": "2015-06-23"
+    }
+  },
+  "result": "passed"
+}

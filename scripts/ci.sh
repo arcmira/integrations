@@ -96,6 +96,11 @@ fi
   uv run --frozen lfx extension list --format json
   uv build
 )
+(
+  cd examples/node-red-source-shortlist
+  npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
+  npm test
+)
 python3 scripts/test-python-release.py
 git diff --check
 git diff --cached --check
