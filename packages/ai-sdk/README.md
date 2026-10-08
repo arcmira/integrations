@@ -47,6 +47,6 @@ The tools accept the AI SDK cancellation signal. This candidate exposes search a
 
 ## Candidate verification
 
-Built with Arcmira SDK 0.5.0, AI SDK 7.0.118 and Zod 4.6.5. `npm run build` checks types. `npm test` runs the AI SDK tool-execution loop with simulated model and API responses. An earlier live check with SDK 0.4.3 ran search and entity resolution against Arcmira with existing smoke-test access. Both return real results through the AI SDK execution loop, using simulated model decisions. Timestamped evidence reaches the next model step. No paid model inference is included.
+Built with Arcmira SDK 0.5.0, AI SDK 7.0.127 and Zod 4.6.5. AI SDK 7.0.127 and its changed dependencies passed the repository's seven-day package hold on October 8, 2026. `npm run build` checks types. `npm test` runs the AI SDK tool-execution loop with simulated model and API responses. An earlier live check with SDK 0.4.3 ran search and entity resolution against Arcmira with existing smoke-test access. Both return real results through the AI SDK execution loop, using simulated model decisions. Timestamped evidence reaches the next model step. No paid model inference is included.
 
-Before release: test the current AI SDK after the repository's seven-day package hold, publish a dedicated integration guide and release the package from a public Arcmira repository. Then submit the tools-registry pull request.
+Before release: publish a dedicated AI SDK integration guide and release the package from a public Arcmira repository. Recheck the registry's current-SDK compatibility requirement before submitting the tools-registry pull request; the newest npm release can be newer than this repository's eligible test version.
