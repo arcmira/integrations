@@ -78,7 +78,7 @@ function render(seconds) {
   // This deterministic reveal belongs to the card sequence, never the source audio.
   const reveal = motion.matches
     ? 1
-    : Math.min(1, 0.7 + (position % cardDuration) / 0.4);
+    : Math.min(1, 0.7 + (position - index * cardDuration) / 0.4);
   $("quote-card").style.opacity = String(reveal);
   $("quote-card").style.transform = motion.matches
     ? "none"

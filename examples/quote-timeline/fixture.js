@@ -9,7 +9,7 @@ window.QUOTE_FIXTURE = {
   quotes: [
     {
       quote:
-        "business leaders are are building\nsoftware without writing code.",
+        "building\nsoftware without writing code.",
       videoId: "zdVkL23jqiw",
       title:
         "Faculty Talk: Vibe Coding: How Business Leaders Are Building Software Without Writing Code",
@@ -21,7 +21,7 @@ window.QUOTE_FIXTURE = {
     },
     {
       quote:
-        "Vibe coding is is essentially using an\nAI chatbot to bring your ideas to life.",
+        "using an\nAI chatbot to bring your ideas to life.",
       videoId: "mD1F-yy_D8E",
       title: "What AI will do to work, according to 5 people building it",
       channel: "Masters of Scale",
