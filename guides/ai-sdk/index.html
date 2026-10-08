@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>YouTube Transcript Search with the AI SDK | Arcmira</title><meta name="description" content="Add Arcmira YouTube transcript search and entity lookup to AI SDK agents. Source-preview setup, timestamped citations, tool examples and usage details."><link rel="canonical" href="https://arcmira.github.io/integrations/ai-sdk/"><meta property="og:title" content="YouTube Transcript Search with the AI SDK | Arcmira"><meta property="og:description" content="Give your AI SDK agent transcript passages with source timestamps and entity lookup."><meta property="og:type" content="article"><link rel="stylesheet" href="style.css"><script defer src="guide.js"></script></head>
+<body><a class="skip" href="#main">Skip to guide</a><header><a class="brand" href="https://arcmira.com?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=ai_sdk_guide">Arcmira</a><nav aria-label="Resources"><a href="https://arcmira.com/docs?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=ai_sdk_guide">API docs</a><a href="https://github.com/arcmira/integrations/tree/master/packages/ai-sdk">Source</a></nav></header>
+<main id="main"><section class="hero"><p class="eyebrow">AI SDK integration <span>Source preview</span></p><h1>YouTube transcript search<br><span>for your AI SDK agent.</span></h1><p class="lead">Add YouTube transcript search and entity lookup to your AI SDK agent. Return source passages your readers can check.</p><p class="preview">The package is not on npm yet. Run the source preview below with Node.js 22 or later.</p><div class="prompt"><h2>Give your coding agent this prompt</h2><div class="code-box"><button type="button" class="copy" data-copy="prompt" aria-label="Copy setup prompt">Copy</button><pre><code id="prompt" tabindex="0">Read https://arcmira.github.io/integrations/ai-sdk/.
+Add Arcmira transcript search to my AI SDK agent.
+Keep source timestamps and coverage notes in every answer.</code></pre></div></div></section>
+<section class="step" id="setup"><div class="number">01</div><div><h2>Build the source preview</h2><p>Get an <a href="https://arcmira.com/docs/authentication">Arcmira API key</a>, then run these commands. Keep the key in server-side configuration.</p><div class="code-box"><button type="button" class="copy" data-copy="setup-code" aria-label="Copy installation commands">Copy</button><pre><code id="setup-code" tabindex="0">git clone https://github.com/arcmira/integrations.git
+cd integrations/packages/ai-sdk
+npm ci --ignore-scripts
+npm run build
+export ARCMIRA_API_KEY=&#x27;your-key&#x27;</code></pre></div></div></section>
+<section class="step" id="search"><div class="number">02</div><div><h2>Find a timestamped passage</h2><p>Save this as <code>search.mjs</code> in <code>packages/ai-sdk</code>, then run <code>node search.mjs</code>. This calls Arcmira directly through the tool, without model inference.</p><div class="code-box"><button type="button" class="copy" data-copy="search-code" aria-label="Copy search example">Copy</button><pre><code id="search-code" tabindex="0">import { createArcmiraTools } from &#x27;./dist/index.js&#x27;;
+
+const apiKey = process.env.ARCMIRA_API_KEY;
+if (!apiKey) throw new Error(&#x27;Set ARCMIRA_API_KEY&#x27;);
+
+const tools = createArcmiraTools({ apiKey });
+const result = await tools.arcmiraSearch.execute(
+  { q: &#x27;AI agents&#x27;, limit: 5 },
+  { toolCallId: &#x27;quickstart&#x27;, messages: [] },
+);
+
+for (const chunk of result.chunks) {
+  console.log(chunk.text, chunk.watch_url);
+}
+console.log(result.note);</code></pre></div><p>Results include transcript passages, source links and coverage notes. Your account's access and freshness limits apply. An empty result does not establish that a topic was never discussed.</p></div></section>
+<section class="step" id="agent"><div class="number">03</div><div><h2>Let your agent choose the tool</h2><p>Set <code>AI_GATEWAY_API_KEY</code> for the <a href="https://ai-sdk.dev/providers/ai-sdk-providers/ai-gateway">AI SDK Gateway</a>. Save this as <code>agent.mjs</code> in the same directory and run <code>node agent.mjs</code>. Model inference is billed separately.</p><div class="code-box"><button type="button" class="copy" data-copy="agent-code" aria-label="Copy agent example">Copy</button><pre><code id="agent-code" tabindex="0">import { generateText, isStepCount } from &#x27;ai&#x27;;
+import { createArcmiraTools } from &#x27;./dist/index.js&#x27;;
+
+const apiKey = process.env.ARCMIRA_API_KEY;
+if (!apiKey) throw new Error(&#x27;Set ARCMIRA_API_KEY&#x27;);
+
+const { text } = await generateText({
+  model: &#x27;openai/gpt-5-mini&#x27;,
+  tools: createArcmiraTools({ apiKey }),
+  prompt: &#x27;Find passages discussing AI agents. Return timestamped source links and preserve coverage notes.&#x27;,
+  stopWhen: isStepCount(3),
+});
+
+console.log(text);</code></pre></div><p><code>arcmiraSearch</code> finds transcript passages. <code>arcmiraResolve</code> resolves people, organizations, products, topics and channels to IDs before filtering. Keep ambiguous candidates visible until the intended entity is clear.</p></div></section>
+<section class="notes"><h2>Keep the evidence attached</h2><p>Preserve the returned source labels, timestamps and coverage notes when presenting an answer. Check the surrounding recording before using a quote. Speaker attribution and indexed coverage can be incomplete.</p><p>A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. API refusals preserve their typed error body. The adapter does not retry refused requests or substitute a different transcript source.</p><p>This adapter provides search and entity resolution. Use the <a href="https://arcmira.com/docs/libraries">full SDK</a> or <a href="https://arcmira.com/docs/mcp-server">MCP server</a> for full transcripts, recommendations and monitors.</p></section>
+<footer><p>Verified October 8, 2026 with Arcmira SDK 0.5.0, AI SDK 7.0.127 and Zod 4.6.5. Source and packed-package checks use simulated model and API responses; no live model call is claimed.</p><p><a href="https://arcmira.com/docs/search">Search reference</a> · <a href="https://arcmira.com/docs/usage-and-billing">Usage and billing</a> · <a href="https://github.com/arcmira/integrations/issues">Report an issue</a></p></footer></main><p class="sr-only" id="copy-status" role="status" aria-live="polite"></p></body></html>

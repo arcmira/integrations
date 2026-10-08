@@ -4,6 +4,8 @@
 
 Source preview for the Vercel AI SDK. This package is not published to npm yet.
 
+[Open the AI SDK setup guide](https://arcmira.github.io/integrations/ai-sdk/) for a copyable setup prompt and source-preview examples.
+
 Search indexed YouTube transcripts for timestamped passages. Resolve names to IDs, then filter by channel, speaker, topic, transcript source, or sponsored and organic passages.
 
 ## Quick start
