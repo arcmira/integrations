@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A small, source-linked quote timeline made from three saved Arcmira transcript search results."
+    />
+    <title>YouTube Transcript Search to Quote Timeline | Arcmira</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="fixture.js"></script>
+    <script defer src="timeline.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#demo">Skip to timeline</a>
+    <header class="masthead">
+      <a class="wordmark" href="https://arcmira.com/"
+        >arcmira<span aria-hidden="true">↗</span></a
+      >
+      <nav aria-label="Resources">
+        <a href="https://arcmira.com/docs">API docs ↗</a
+        ><a href="https://arcmira.com/agent-setup">Connect your AI ↗</a>
+      </nav>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="title">
+        <p class="eyebrow">A saved search, made visible</p>
+        <h1 id="title">A phrase.<br />Three sources.</h1>
+        <p class="lede">
+          Find a spoken moment. Keep the words, the timestamp and the way back.
+        </p>
+      </section>
+      <section class="prompt-panel" aria-label="Try this research prompt">
+        <div>
+          <p class="eyebrow">Try it with your AI</p>
+          <p id="prompt">
+            Use Arcmira to find three transcript passages about “vibe coding” in
+            YouTube videos published in August 2026. Return short verbatim
+            excerpts, channel names and source timestamp links. State the search
+            window and coverage limits.
+          </p>
+        </div>
+        <button id="copy-prompt" class="button bright" type="button">
+          Copy prompt <span aria-hidden="true">↗</span>
+        </button>
+      </section>
+      <section
+        id="demo"
+        class="demo"
+        aria-label="Saved transcript quote timeline"
+      >
+        <div class="query-row">
+          <span class="query">“vibe coding”</span
+          ><span class="query-meta"
+            >Global search · Aug 1–31, 2026 · 3 saved results</span
+          >
+        </div>
+        <div class="workspace">
+          <div class="stage-wrap">
+            <div class="stage" id="stage">
+              <div class="stage-top">
+                <span class="eyebrow">Transcript excerpt</span
+                ><span id="card-count" class="mono">01 / 03</span>
+              </div>
+              <figure id="quote-card">
+                <span class="quote-mark" aria-hidden="true">“</span>
+                <blockquote id="quote"></blockquote>
+                <figcaption>
+                  <span class="eyebrow">Channel</span
+                  ><strong id="channel"></strong
+                  ><span id="published" class="muted"></span>
+                </figcaption>
+              </figure>
+              <div class="stage-bottom">
+                <span>Saved words. Original source.</span
+                ><span class="source-dot" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="transport">
+              <button
+                id="play"
+                class="button play"
+                type="button"
+                aria-label="Play card sequence"
+              >
+                Play sequence
+              </button>
+              <label for="scrub" class="sr-only"
+                >Card sequence position, in seconds</label
+              >
+              <input
+                id="scrub"
+                type="range"
+                min="0"
+                max="18"
+                value="0"
+                step="0.01"
+                aria-valuetext="0 seconds, card 1 of 3"
+              />
+              <output id="position" for="scrub" class="mono"
+                >00:00 / 00:18</output
+              >
+            </div>
+            <p class="sequence-note">
+              Six seconds per card. This is a visual sequence, not audio
+              playback or word-level timing.
+            </p>
+          </div>
+          <aside class="sources" aria-label="Choose a saved source">
+            <p class="eyebrow source-heading">Source index <span>03</span></p>
+            <div id="source-list"></div>
+            <div class="source-detail">
+              <p class="eyebrow">Selected passage</p>
+              <a
+                id="source-title"
+                href="https://arcmira.com/"
+                target="_blank"
+                rel="noreferrer"
+              ></a>
+              <dl>
+                <div>
+                  <dt>Passage starts</dt>
+                  <dd id="source-time" class="mono"></dd>
+                </div>
+                <div>
+                  <dt>Video ID</dt>
+                  <dd id="video-id" class="mono"></dd>
+                </div>
+              </dl>
+              <div class="source-actions">
+                <a
+                  id="youtube"
+                  href="https://youtube.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  >YouTube ↗</a
+                ><button id="copy-source" type="button">
+                  Copy timestamp link
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <p id="status" role="status" class="status" aria-live="polite"></p>
+      <div id="copy-fallback" hidden>
+        <label for="copy-text">Copy this text manually</label
+        ><textarea id="copy-text" readonly rows="3"></textarea>
+      </div>
+      <details class="provenance">
+        <summary>What you are looking at</summary>
+        <p>
+          These are short, exact transcript excerpts from a saved Arcmira
+          search, captured October 8, 2026. The query was global, not limited to
+          one channel. It used August 1 inclusive through September 1 exclusive,
+          in UTC, and returned three results. The response’s as-of value was
+          August 25, 2026 at 22:17:26 UTC.
+        </p>
+        <p>
+          Coverage is partial and results are recency-boosted. This fixture
+          shows these three results only. It is not a ranking, a complete survey
+          or a performance benchmark. A live search may return different
+          results.
+        </p>
+        <p>
+          Transcript wording is preserved, including repetitions. Channel names
+          are not speaker attribution. Speaker identities and original playback
+          were not independently checked. Each source link starts at the
+          returned passage timestamp; the short excerpt may begin later inside
+          that passage.
+        </p>
+        <p>
+          The animation has no audio or video assets and makes no API calls. Its
+          six-second card intervals are presentation timing. Source timestamps
+          remain unchanged.
+          <a href="fixture.js">Inspect the public fixture</a> ·
+          <a href="https://arcmira.com/docs">Read the API docs</a>
+        </p>
+      </details>
+      <noscript
+        ><p>
+          This interactive demo needs JavaScript. Its saved sources are
+          <a href="https://arcmira.com/watch?v=zdVkL23jqiw&amp;t=5"
+            >Columbia Business School at 0:05</a
+          >,
+          <a href="https://arcmira.com/watch?v=mD1F-yy_D8E&amp;t=823"
+            >Masters of Scale at 13:43</a
+          >, and
+          <a href="https://arcmira.com/watch?v=3JWaCAkx5cQ&amp;t=743"
+            >Monitor The Situation at 12:23</a
+          >.
+        </p></noscript
+      >
+    </main>
+    <footer>
+      <a href="https://arcmira.com/">Arcmira: YouTube Transcript Search</a
+      ><span>Source discovery → a small visual story.</span
+      ><a href="https://arcmira.com/docs">Build with the API ↗</a>
+    </footer>
+  </body>
+</html>
