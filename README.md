@@ -29,6 +29,8 @@ For Mastra, the [API documentation guide](https://arcmira.com/docs/documentation
 
 For a standard MCP connection, use the authenticated [OpenAI Agents SDK](examples/openai-agents) or [Pydantic AI](examples/pydantic-ai) research example. Both retrieve a timestamped passage without an external model call.
 
+For creators, the [reel workflow note](examples/reel-workflow) follows source discovery, human selection and a local JavaScript Canvas/ffmpeg edit.
+
 ## Install the Python package
 
 ```sh
