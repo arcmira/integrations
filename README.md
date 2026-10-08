@@ -77,7 +77,7 @@ A paid read uses credits from your plan, then any top-up credits, then your on-d
 
 ## Verification
 
-The Python LangChain 0.1.2 package passes 58 local tests and the same 58 tests from a fresh installation of the public PyPI wheel. Its compiled LangGraph test preserves tool-call IDs and source evidence. Eleven earlier live integration checks, including LangChain standard tests, used no credits or model inference.
+The Python LangChain 0.1.4 package uses Arcmira SDK 0.5.1 and passes 58 local tests and the same 58 tests from a fresh installation of the public PyPI wheel. Its compiled LangGraph test preserves tool-call IDs and source evidence. Eleven earlier live integration checks, including LangChain standard tests, used no credits or model inference.
 
 The TypeScript LangChain package and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
 
