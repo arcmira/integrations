@@ -6,9 +6,9 @@ The TypeScript LangChain package is a verified release candidate at 0.1.0 with p
 
 | Package | Framework | Arcmira SDK | Checks |
 | --- | --- | --- | --- |
-| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.5.0 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
-| langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.5.0 | 58 source tests and 58 public-wheel tests; no new live API test for this dependency update |
-| @arcmira/ai-sdk | ai 7.0.127 | 0.5.0 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
+| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.5.1 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
+| langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.5.1 | 58 source tests and 58 built-wheel tests; no new live API test for this dependency update |
+| @arcmira/ai-sdk | ai 7.0.127 | 0.5.1 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
 | @arcmira/piece-arcmira | Activepieces host 0.92.0; pieces-framework 0.32.0 | Direct HTTP | TypeScript, 13 action tests, isolated bundle check, live native-host search |
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
 | Arcmira for Dify | dify-plugin 0.10.2; plugin 0.1.2; Community Edition 1.17.1 | Direct HTTP | 18 SDK tests, local SDK research, native Community Edition resolution and bounded search; Cloud installation at 0.1.1 |
@@ -49,6 +49,12 @@ n8n has no runtime dependencies beyond its host peer. Its frozen pnpm lock inclu
 Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `uv.lock`. Its requirements export is pinned. The Marketplace artifact must exclude tests, local environments and credentials. Native Community Edition entity resolution and bounded transcript search passed with plugin 0.1.2. Authenticated Cloud workflow testing, publisher agreement and Marketplace review remain. See [Dify submission requirements](https://github.com/langgenius/dify-plugins/blob/main/docs/plugin-submission-requirements.md).
 
 ## Python LangChain publication
+
+### Prepared 0.1.4
+
+Version 0.1.4 pins released Arcmira SDK 0.5.1. Full local `scripts/ci.sh --offline` passed. The built wheel passed all 58 adapter tests in a fresh environment with external network connections blocked. Third-party versions and artifact hashes are unchanged. No new live API test was performed. Publication remains pending.
+
+The TypeScript LangChain and AI SDK candidates also pin SDK 0.5.1. Each passed 14 source tests and 14 packed-artifact tests. They remain unpublished on npm.
 
 ### Published 0.1.3
 
