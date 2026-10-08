@@ -2,7 +2,7 @@
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Watch the reel](https://x.com/zealcaiden/status/2105705296597524558)
 
-Source discovery → selected moments → a local JavaScript Canvas and ffmpeg edit. Finding the spoken passages gives an editor a shortlist to watch before arranging footage, captions and motion.
+Use transcript search to shortlist source moments. Carry the selected quotes into a local JavaScript Canvas edit rendered with ffmpeg.
 
 Start with this research prompt:
 
@@ -13,7 +13,7 @@ available speaker attribution. Flag uncertain attribution and incomplete
 coverage. Explain why each moment fits, then let me choose what to watch.
 ```
 
-The original production combined public MCP discovery, internal transcript access and human selection. This is a high-level account of that process, not a public-only reproduction recipe.
+The original production combined public MCP discovery, internal transcript access and human selection. These notes describe that production; a complete run using only public APIs remains to be verified.
 
 1. **Discover candidate speech.** Search for the topic and relevant people, then retain source links with the passages. A transcript match gives you a place to investigate; watch the surrounding recording before using it in an edit.
 
