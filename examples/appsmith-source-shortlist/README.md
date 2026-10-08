@@ -6,7 +6,7 @@ An Appsmith source-shortlist demo for reviewing passages and timestamps before c
 
 ## Try the demo
 
-1. Import [arcmira-source-shortlist.appsmith.json](arcmira-source-shortlist.appsmith.json) as a new Appsmith application. **Native import and layout are not yet verified.**
+1. Import [arcmira-source-shortlist.appsmith.json](arcmira-source-shortlist.appsmith.json) as a new Appsmith application. Native import was verified in Appsmith on October 8, 2026. Button behavior, downloads and the private live connection are still being checked.
 2. Select a row to inspect its synthetic passage. Use **Empty demo** and **Reset demo** to switch between zero and three rows.
 3. Download CSV or JSON. CSV retains requested dates and coverage fields on each row. JSON also preserves metadata when there are no rows; an empty CSV has only the header.
 
@@ -56,9 +56,9 @@ This is a setup recipe, not an installed live integration. The fixture packet is
 
 7. Click **Search** once. The companion clears previous rows before the request, then maps the returned passages and coverage or shows a safe error. It makes no automatic retries. Check a refusal in the private query editor before trying again. CSV and JSON use filenames without the synthetic label; JSON includes the original response and retains coverage when no passages match.
 
-The public import and this private companion have local fixture tests only. Appsmith import, widget rendering, browser downloads and the private live connection still need native verification.
+The public import loads in Appsmith and renders three synthetic rows, the source links and export controls. Browser downloads, button behavior and the private live connection still need native verification.
 
-`after` is inclusive and `before` is exclusive, in UTC. Choose a window permitted by your plan. This recipe makes one search request with a fixed limit of three; it does not retrieve Premium transcripts or write monitors. A paid read uses credits from your plan, then your on-demand budget. See current plan limits in the usage documentation above.
+`after` is inclusive and `before` is exclusive, in UTC. Choose a window permitted by your plan. This recipe makes one search request with a fixed limit of three; it does not retrieve Premium transcripts or write monitors. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. See current plan limits in the usage documentation above.
 
 The companion maps the released API's `chunks`: `video_title` becomes title, `source` becomes transcript type, and `start_seconds` stays the source offset. It preserves source IDs, channel details, publication dates, watch URLs and available speaker labels. The requested dates remain separate from the API's applied `window`. Missing `partial` remains null. `search_index`, `note`, any `access` gate, and the entire original response remain available in JSON. The raw `watch_url` remains unchanged. The companion also supplies an absolute `arcmira_url` only for a watch URL on the fixed Arcmira origin, and an `original_source_url` only for a valid 11-character YouTube ID. Unknown timestamps omit the YouTube time parameter; invalid negative or non-integer offsets fail the response check.
 Search covers indexed YouTube material. A timestamp helps navigate to a passage; it is not a verified edit boundary. Watch the source, check context and attribution, select cut boundaries and establish any required reuse rights before publishing clips. Empty results do not establish that a topic was never discussed.
