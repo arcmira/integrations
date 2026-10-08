@@ -50,6 +50,14 @@ Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `
 
 ## Python LangChain publication
 
+### 0.1.2 release candidate
+
+Version 0.1.2 aligns `ArcmiraResolve` with the deployed API: `q` requires at least two characters and optional `context` accepts 2–300 characters. Invalid input is rejected before an HTTP request. Seventeen new sync/async boundary and schema cases extend the local suite to 58 tests. The Arcmira SDK remains pinned to 0.4.3; third-party dependencies and valid request behavior are unchanged.
+
+The release candidate is prepared for the existing trusted-publisher workflow. PyPI remains at 0.1.1 until publication and registry verification complete. Local artifacts and their package tree are recorded in `release-artifacts/langchain-python/current.json`.
+
+### Published 0.1.1
+
 `langchain-arcmira==0.1.1` is published with PyPI trusted-publisher attestations. Both downloaded PyPI artifact hashes match the signed GitHub release and recorded manifest. Registry metadata points to the Arcmira homepage, and the package guide includes the current pip quick start and top-up credit wording. Dependencies and request behavior are unchanged.
 
 - [PyPI package](https://pypi.org/project/langchain-arcmira/0.1.1/)
@@ -84,7 +92,7 @@ The manual workflow runs on `master` and uploads prebuilt GitHub release assets.
 2. Record their SHA-256 checksums and the committed package tree in `release-artifacts/langchain-python/current.json`.
 3. Commit the manifest and run `python3 scripts/verify-python-release.py packages/langchain-python/dist`.
 4. Merge the reviewed release commit to `master`. Create the manifest's signed tag at that commit and attach the verified wheel and source archive to its GitHub release.
-5. Run `python3 scripts/verify-python-release.py --tag langchain-python-v0.1.1 packages/langchain-python/dist` on the release checkout.
+5. Run `python3 scripts/verify-python-release.py --tag langchain-python-v0.1.2 packages/langchain-python/dist` on the release checkout.
 6. Confirm that the PyPI publisher configuration matches the table above. Dispatch **Publish Python LangChain package** from `master`.
 7. Verify the PyPI files, provenance, clean installation, and import before marking the package published or submitting the LangChain catalog issue.
 

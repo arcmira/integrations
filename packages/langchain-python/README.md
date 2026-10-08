@@ -45,7 +45,7 @@ Async callers use `await tool.ainvoke({...})`. Requests use an async HTTP client
 
 ## Search precisely
 
-Resolve one name at a time with `ArcmiraResolve().invoke({"q": "Google", "type": "organization"})`. Preserve the result's distinction between `best`, `suggested` and `ask`. A suggested match is an assumption to disclose. An ambiguous result needs clarification or separate research for each candidate.
+Resolve one name at a time with `ArcmiraResolve().invoke({"q": "Google", "type": "organization"})`. The name must contain at least two characters. Optional `context` must contain 2–300 characters from the user's description of that name. Preserve the result's distinction between `best`, `suggested` and `ask`. A suggested match is an assumption to disclose. An ambiguous result needs clarification or separate research for each candidate.
 
 Search takes IDs, not names:
 
