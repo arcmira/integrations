@@ -80,6 +80,6 @@ uv build
 uv run --frozen twine check dist/*
 ```
 
-The locked development environment uses Arcmira SDK 0.4.3, LangChain Core 1.6.5, LangChain Tests 1.1.9 and LangGraph 1.2.12. Third-party dependencies have a September 28, 2026 release cutoff. The first-party SDK uses its released PyPI wheel.
+The locked development environment uses Arcmira SDK 0.5.0, LangChain Core 1.6.5, LangChain Tests 1.1.9 and LangGraph 1.2.12. Third-party dependencies have a September 28, 2026 release cutoff. The first-party SDK uses its released PyPI wheel.
 
 [Report an issue](https://github.com/arcmira/integrations/issues) with package versions, the API error code or request ID, and a small reproduction. Never include your API key or private account data.
