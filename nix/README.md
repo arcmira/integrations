@@ -2,7 +2,7 @@
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [CLI and SDK guide](https://github.com/arcmira/arcmira)
 
-Build the Arcmira CLI from its published 0.4.3 source release with Nix. This is Arcmira's own package definition. It is not listed in Nixpkgs.
+Build the Arcmira CLI from its published 0.5.1 source release with Nix. This is Arcmira's own package definition. It is not listed in Nixpkgs.
 
 ## Install
 
@@ -37,4 +37,4 @@ pkgs.callPackage /path/to/integrations/nix/package.nix { }
 
 ## Validation
 
-The source build and installed CLI checks run locally. See the [release status](../RELEASE.md) for the tested platform and version. These checks use local fixture responses and no live API credentials. Other platforms and an unpinned package set require their own validation.
+On October 8, 2026, CLI 0.5.1 passed the source build, all 70 fixture tests and the documented install commands in an aarch64-linux container with Node 24.20.0. The installed CLI returned the expected version and entity-resolution schema. Nix sandboxing was disabled inside the disposable container; native sandboxed hosts remain unverified. See the [release status](../RELEASE.md) for the tested platform and version. These checks use local fixture responses and no live API credentials. Other platforms and an unpinned package set require their own validation.
