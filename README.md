@@ -9,7 +9,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.4.3 |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.4.3 |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.0](https://pypi.org/project/langchain-arcmira/0.1.0/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.1](https://pypi.org/project/langchain-arcmira/0.1.1/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Langflow | [Setup and components](packages/langflow) | Source preview; installed LFX runtime tested; PyPI and catalog publication pending |
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
@@ -21,7 +21,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Airbyte | [Scoped source and validation](packages/airbyte) | Local Airbyte 2.3.0 fixture checks and one live channel-video export passed; broader live validation and catalog acceptance pending |
 | Pipedream Connect / MCP | [Native actions and validation](packages/pipedream) | Locally tested source preview; app registration and hosted validation pending |
 | Dify | [Setup and plugin](packages/dify) | Plugin 0.1.2 passed native Community Edition research; Cloud workflow validation and Marketplace review pending |
-| Appmixer | [Setup and connector](packages/appmixer) | Connector 1.0.3 passed private hosted reads and invalid-query error routing; public catalog acceptance pending |
+| Appmixer | [Setup and connector](packages/appmixer) | [Connector 1.0.4](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.4) installed privately; native entity resolution verified; public catalog acceptance pending |
 
 For DSH, the [API documentation preset](examples/dsh) searches documentation without an API key. Its native session check passes; it does not provide YouTube research.
 
