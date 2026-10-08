@@ -269,3 +269,47 @@ def test_malformed_api_response_does_not_expose_raw_body(network):
         ArcmiraSearch(api_key=KEY).invoke({"q": "AI agents"})
     assert KEY not in str(error.value)
     assert len(network["requests"]) == 1
+
+
+@pytest.mark.parametrize("asynchronous", [False, True])
+@pytest.mark.parametrize(
+    "args",
+    [
+        {"q": ""},
+        {"q": "A"},
+        {"q": "AI", "context": ""},
+        {"q": "AI", "context": "x"},
+        {"q": "AI", "context": "x" * 301},
+    ],
+)
+def test_resolve_rejects_invalid_text_before_request(network, asynchronous, args):
+    tool = ArcmiraResolve(api_key=KEY)
+    with pytest.raises(ValidationError):
+        if asynchronous:
+            asyncio.run(tool.ainvoke(args))
+        else:
+            tool.invoke(args)
+    assert network["requests"] == []
+
+
+@pytest.mark.parametrize("asynchronous", [False, True])
+@pytest.mark.parametrize("context", [None, "AI", "x" * 300])
+def test_resolve_accepts_text_boundaries(network, asynchronous, context):
+    network["body"] = RESOLVE
+    tool = ArcmiraResolve(api_key=KEY)
+    args = {"q": "AI"}
+    if context is not None:
+        args["context"] = context
+    result = asyncio.run(tool.ainvoke(args)) if asynchronous else tool.invoke(args)
+    assert result == RESOLVE
+    assert len(network["requests"]) == 1
+    assert dict(network["requests"][0].url.params) == {**args, "limit": "8"}
+
+
+def test_resolve_exposes_deployed_text_limits():
+    schema = ArcmiraResolve(api_key=KEY).args_schema.model_json_schema()
+    properties = schema["properties"]
+    assert properties["q"]["minLength"] == 2
+    context = next(s for s in properties["context"]["anyOf"] if s["type"] == "string")
+    assert context["minLength"] == 2
+    assert context["maxLength"] == 300

@@ -68,11 +68,14 @@ class ResolveInput(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
     q: str = Field(
-        min_length=1, description="One name, handle, YouTube URL or channel ID."
+        min_length=2, description="One name, handle, YouTube URL or channel ID."
     )
     type: Literal["person", "organization", "product", "topic", "channel"] | None = None
     context: str | None = Field(
-        default=None, description="The user's own words describing the intended entity."
+        default=None,
+        min_length=2,
+        max_length=300,
+        description="The user's own words describing the intended entity.",
     )
     limit: int = Field(default=8, ge=1, le=15, strict=True)
 
