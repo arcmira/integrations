@@ -101,6 +101,11 @@ fi
   npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
   npm test
 )
+(
+  cd examples/remotion-quote-cards
+  pnpm install --frozen-lockfile --ignore-scripts "${install_args[@]}"
+  pnpm check
+)
 python3 scripts/test-python-release.py
 git diff --check
 git diff --cached --check
