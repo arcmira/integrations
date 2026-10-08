@@ -6,9 +6,9 @@ The TypeScript LangChain package is a verified release candidate at 0.1.0 with p
 
 | Package | Framework | Arcmira SDK | Checks |
 | --- | --- | --- | --- |
-| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.4.3 | TypeScript, 14 workflow tests, archive checks, live search and resolution |
+| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.5.0 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
 | langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.5.0 | 58 source tests and 58 public-wheel tests; no new live API test for this dependency update |
-| @arcmira/ai-sdk | ai 7.0.118 | 0.4.3 | TypeScript, 14 tool-loop tests, archive checks, live search and resolution |
+| @arcmira/ai-sdk | ai 7.0.118 | 0.5.0 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
 | @arcmira/piece-arcmira | Activepieces host 0.92.0; pieces-framework 0.32.0 | Direct HTTP | TypeScript, 13 action tests, isolated bundle check, live native-host search |
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
 | Arcmira for Dify | dify-plugin 0.10.2; plugin 0.1.2; Community Edition 1.17.1 | Direct HTTP | 18 SDK tests, local SDK research, native Community Edition resolution and bounded search; Cloud installation at 0.1.1 |
