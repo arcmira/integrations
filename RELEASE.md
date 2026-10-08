@@ -13,7 +13,7 @@ The TypeScript LangChain package is a verified release candidate at 0.1.0 with p
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
 | Arcmira for Dify | dify-plugin 0.10.2; plugin 0.1.2; Community Edition 1.17.1 | Direct HTTP | 18 SDK tests, local SDK research, native Community Edition resolution and bounded search; Cloud installation at 0.1.1 |
 
-Direct third-party dependencies met a seven-day release-age policy when selected on October 5, 2026. The first-party SDK uses the current released contract. AI SDK 7.0.127 was too new for that policy and needs a separate compatibility check after October 8, 2026 at 19:20 UTC. Recheck releases before publishing.
+Direct third-party dependencies met a seven-day release-age policy when selected on October 5, 2026. The first-party SDK uses the current released contract. AI SDK 7.0.127 passed the age policy and source/packed compatibility checks on October 8, 2026 after 19:20 UTC. Recheck newer releases before publishing.
 
 ## TypeScript LangChain first publication
 
@@ -118,7 +118,7 @@ The root `Formula/arcmira.rb` packages CLI 0.5.1 through this repository's first
 
 ## Nix CLI
 
-The [first-party Nix package](nix) builds CLI 0.4.3 from its GitHub release source with pinned npm dependencies. Nix 2.24.11, Nixpkgs `bfdc17373049aec7e5a4ad159f614c7a7c2e050c` and Node 24.20.0 passed the source build, 68 fixture-based tests and installed CLI checks on aarch64-linux in Docker on Apple Silicon. Nix sandboxing was disabled inside that disposable container; a sandboxed native-host build and other platforms remain unverified. The package adjusts only the setup test's shell and utility paths for Nix. All six skill guides are present. No live API credentials or paid calls were used. This is an Arcmira install route, with no Nixpkgs catalog inclusion claimed.
+The [first-party Nix package](nix) builds CLI 0.5.1 from its GitHub release source with pinned npm dependencies. Nix 2.24.11, Nixpkgs `bfdc17373049aec7e5a4ad159f614c7a7c2e050c` and Node 24.20.0 passed the October 8 source build, 70 fixture-based tests and documented nix-build/nix-env installation checks on aarch64-linux in Docker on Apple Silicon. Nix sandboxing was disabled inside that disposable container; a sandboxed native-host build and other platforms remain unverified. The package adjusts only the setup test's shell and utility paths for Nix. All six skill guides are present. No live API credentials or paid calls were used. This is an Arcmira install route, with no Nixpkgs catalog inclusion claimed.
 
 ## dlt REST example
 

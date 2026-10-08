@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "arcmira";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "arcmira";
     repo = "arcmira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/r3UJkpwosVah2iSthSI9zWRwMAUiQKaR/ZQ+sAWxsU=";
+    hash = "sha256-UyAGdp1/+xBy8s/6lRbUxeBiQ6tq4dQDoOw8/1kiUm4=";
   };
 
-  npmDepsHash = "sha256-RKlcjw01tI+mF53Mll7dfzdWJVnjk7AdchwpMGW+Nf4=";
+  npmDepsHash = "sha256-get7ZFuBkHprzfFkacR8yHLWzhuhiRNKVYikLuXXVNE=";
   npmPackFlags = [ "--ignore-scripts" ];
   makeWrapperArgs = [ "--set ARCMIRA_NO_UPDATE_CHECK 1" ];
 
@@ -52,7 +52,7 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "YouTube transcript search with timestamps, mentions, sponsors and recommendations";
-    homepage = "https://arcmira.com/docs";
+    homepage = "https://arcmira.com";
     changelog = "https://github.com/arcmira/arcmira/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "arcmira";
