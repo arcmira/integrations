@@ -9,7 +9,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.4.3 |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.4.3 |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.1](https://pypi.org/project/langchain-arcmira/0.1.1/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.2](https://pypi.org/project/langchain-arcmira/0.1.2/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Langflow | [Setup and components](packages/langflow) | Source preview; installed LFX runtime tested; PyPI and catalog publication pending |
 | Vercel AI SDK | [Setup and tools](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
@@ -73,7 +73,7 @@ A paid read uses credits from your plan, then any top-up credits, then your on-d
 
 ## Verification
 
-The Python LangChain package passes 41 local checks and 11 live integration checks, including LangChain standard tests. Its compiled LangGraph test preserves tool-call IDs and source evidence. The live checks used no credits or model inference.
+The Python LangChain 0.1.2 package passes 58 local tests and the same 58 tests from a fresh installation of the public PyPI wheel. Its compiled LangGraph test preserves tool-call IDs and source evidence. Eleven earlier live integration checks, including LangChain standard tests, used no credits or model inference.
 
 The TypeScript LangChain package and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
 

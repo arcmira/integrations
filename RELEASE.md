@@ -1,13 +1,13 @@
 # Release status
 
-The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.1](https://pypi.org/project/langchain-arcmira/0.1.1/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.2](https://pypi.org/project/langchain-arcmira/0.1.2/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
 
 ## Verified versions
 
 | Package | Framework | Arcmira SDK | Checks |
 | --- | --- | --- | --- |
 | @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.4.3 | TypeScript, 14 workflow tests, archive checks, live search and resolution |
-| langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.4.3 | 41 local checks, 11 live standard and evidence checks; zero credit delta |
+| langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.4.3 | 58 source tests and 58 public-wheel tests; 11 earlier live checks with zero credit delta |
 | @arcmira/ai-sdk | ai 7.0.118 | 0.4.3 | TypeScript, 14 tool-loop tests, archive checks, live search and resolution |
 | @arcmira/piece-arcmira | Activepieces host 0.92.0; pieces-framework 0.32.0 | Direct HTTP | TypeScript, 13 action tests, isolated bundle check, live native-host search |
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
@@ -50,13 +50,17 @@ Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `
 
 ## Python LangChain publication
 
-### 0.1.2 release candidate
+### Published 0.1.2
 
 Version 0.1.2 aligns `ArcmiraResolve` with the deployed API: `q` requires at least two characters and optional `context` accepts 2–300 characters. Invalid input is rejected before an HTTP request. Seventeen new sync/async boundary and schema cases extend the local suite to 58 tests. The Arcmira SDK remains pinned to 0.4.3; third-party dependencies and valid request behavior are unchanged.
 
-The release candidate is prepared for the existing trusted-publisher workflow. PyPI remains at 0.1.1 until publication and registry verification complete. Local artifacts and their package tree are recorded in `release-artifacts/langchain-python/current.json`.
+Published October 8, 2026 through the existing trusted publisher. Both downloaded PyPI artifacts match the signed release hashes in `release-artifacts/langchain-python/current.json`. PyPI provides attestations for both files from `arcmira/integrations` and `publish-langchain-python.yml`. A fresh installation of the public wheel passed all 58 unit tests with external network access blocked. Full local repository CI also passed before publication.
 
-### Published 0.1.1
+- [PyPI 0.1.2](https://pypi.org/project/langchain-arcmira/0.1.2/)
+- [Signed source and artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.2)
+- [Successful publication run](https://github.com/arcmira/integrations/actions/runs/37763501324)
+
+### Previous release 0.1.1
 
 `langchain-arcmira==0.1.1` is published with PyPI trusted-publisher attestations. Both downloaded PyPI artifact hashes match the signed GitHub release and recorded manifest. Registry metadata points to the Arcmira homepage, and the package guide includes the current pip quick start and top-up credit wording. Dependencies and request behavior are unchanged.
 
