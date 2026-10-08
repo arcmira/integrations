@@ -9,7 +9,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.5.1 |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.5.1 |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.3](https://pypi.org/project/langchain-arcmira/0.1.3/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.4](https://pypi.org/project/langchain-arcmira/0.1.4/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Langflow | [Setup and components](packages/langflow) | Source preview; installed LFX runtime tested; PyPI and catalog publication pending |
 | Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
@@ -34,7 +34,7 @@ For creators, the [reel workflow note](examples/reel-workflow) follows source di
 ## Install the Python package
 
 ```sh
-pip install langchain-arcmira==0.1.3
+pip install langchain-arcmira==0.1.4
 export ARCMIRA_API_KEY='your-key'
 python - <<'PYTHON'
 from langchain_arcmira import ArcmiraSearch
