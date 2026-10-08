@@ -25,12 +25,14 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 
 For DSH, the [API documentation preset](examples/dsh) searches documentation without an API key. Its native session check passes; it does not provide YouTube research.
 
+For Mastra, the [API documentation guide](https://arcmira.com/docs/documentation-mcp) includes a tested keyless example in the Mastra tab. It searches API documentation; authenticated YouTube research is separate.
+
 For a standard MCP connection, use the authenticated [OpenAI Agents SDK](examples/openai-agents) or [Pydantic AI](examples/pydantic-ai) research example. Both retrieve a timestamped passage without an external model call.
 
 ## Install the Python package
 
 ```sh
-pip install langchain-arcmira==0.1.0
+pip install langchain-arcmira==0.1.2
 export ARCMIRA_API_KEY='your-key'
 python - <<'PYTHON'
 from langchain_arcmira import ArcmiraSearch
