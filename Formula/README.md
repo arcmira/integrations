@@ -11,7 +11,7 @@ arcmira --version
 arcmira schema resolve --json
 ```
 
-The formula installs CLI 0.4.3 and declares Node 24 LTS. Homebrew can install or upgrade dependencies. If your environment enforces a release-age policy, check the current dependency releases before installing. Arcmira does not pin Homebrew's dependency catalog.
+The formula installs CLI 0.5.1 and declares Node 24 LTS. Homebrew can install or upgrade dependencies. If your environment enforces a release-age policy, check the current dependency releases before installing. Arcmira does not pin Homebrew's dependency catalog.
 
 The version and schema commands run without an API key. For research commands, follow the [authentication guide](https://arcmira.com/docs/authentication). A paid read uses credits from your plan, then any top-up credits, then your on-demand budget.
 
@@ -28,11 +28,11 @@ The wrapper disables npm update notices. Homebrew manages the installed CLI vers
 
 ## Validation
 
-On October 5, 2026, the formula installed on Apple Silicon macOS with existing Node 24.19.0. The unchanged formula test passed through Homebrew's `Formula.run_test` and assertion helpers, checking the CLI version and offline entity-resolution schema. `brew audit --new --formula` passed against the published remote tap.
+On October 8, 2026, CLI 0.5.1 installed unlinked on Apple Silicon macOS with the existing Node 24.19.0 runtime. The formula's test passed through Homebrew's `Formula.run_test` and assertion helpers, checking the installed version and offline entity-resolution schema. `brew audit --new --formula` passed.
 
-The standard `brew test --force` command stopped at dependency preflight because the local runtime and several libraries were older than the current Homebrew catalog. It did not execute the test block. No dependency was upgraded to bypass that check. Linux, Intel macOS and the full current dependency matrix remain unverified.
+The development install used `--ignore-dependencies --skip-link` to test the new first-party archive without changing the host's dependencies or default CLI. Standard `brew test --force` stopped at dependency preflight because the installed dependency versions lag Homebrew's catalog. It did not run the test block. The current dependency matrix, Linux and Intel macOS remain unverified.
 
-Our validation environment uses a seven-day release-age policy. On October 5, the current Homebrew dependency OpenSSL 3.6.5 was still too new under that policy. It becomes eligible for our next validation run on October 6, 2026 at 14:01:50 UTC. We will recheck the dependency catalog before that run. This date applies to our validation environment; it is not an installation requirement for all users.
+Our validation environment applies a seven-day release-age policy to third-party software. Recheck the complete live dependency graph before the next standard-install test; an earlier dependency's eligibility date does not establish that today's graph is eligible.
 
 The release archive is SHA-256 checked and has no runtime npm dependencies. Installation uses Homebrew's npm helper with lifecycle scripts disabled. No account credential or network research request is needed for the formula test.
 
