@@ -1,0 +1,45 @@
+{
+  "source_repository": "https://github.com/appsmithorg/appsmith",
+  "revision": "552488b0f380c2383e8bfa1e69408c227b963b39",
+  "license": "Apache-2.0",
+  "sources": [
+    {
+      "path": "app/client/cypress/fixtures/Api_withPageload_Input_TestData.json",
+      "url": "https://github.com/appsmithorg/appsmith/blob/552488b0f380c2383e8bfa1e69408c227b963b39/app/client/cypress/fixtures/Api_withPageload_Input_TestData.json",
+      "sha256": "8934c4e5fea5b9e4dd88ae9c0d04c3407159d8640d8f3d7ece4d2516afbd56cc"
+    },
+    {
+      "path": "app/client/cypress/fixtures/ActionSelectorAppNewExported.json",
+      "url": "https://github.com/appsmithorg/appsmith/blob/552488b0f380c2383e8bfa1e69408c227b963b39/app/client/cypress/fixtures/ActionSelectorAppNewExported.json",
+      "sha256": "1024f3ae080632ec728ddcd1d3cf482707877d859fd895bc6e7d5c9d3a8c8c8d"
+    },
+    {
+      "path": "app/client/cypress/fixtures/Table/TableV2FilterImportApp.json",
+      "url": "https://github.com/appsmithorg/appsmith/blob/552488b0f380c2383e8bfa1e69408c227b963b39/app/client/cypress/fixtures/Table/TableV2FilterImportApp.json",
+      "sha256": "f2c738e861d2f3d48eca18f9eec049ebe2a0de25fd82a9dd5db1a94df2ae015d"
+    },
+    {
+      "path": "app/client/cypress/fixtures/JSObjectMutationTestApp.json",
+      "url": "https://github.com/appsmithorg/appsmith/blob/552488b0f380c2383e8bfa1e69408c227b963b39/app/client/cypress/fixtures/JSObjectMutationTestApp.json",
+      "sha256": "36bec1fce94d13372d3519810ac94bdf5253fde4285006c57ba8962a0943a3dd"
+    },
+    {
+      "path": "app/client/cypress/fixtures/textNewDsl.json",
+      "url": "https://github.com/appsmithorg/appsmith/blob/552488b0f380c2383e8bfa1e69408c227b963b39/app/client/cypress/fixtures/textNewDsl.json",
+      "sha256": "6a19987224f13e1a77fd298c44cfacf39f1d9a05a4cffcc9b549101caea17d9e"
+    }
+  ],
+  "format": {
+    "clientSchemaVersion": 2,
+    "serverSchemaVersion": 11,
+    "canvasVersion": 91,
+    "source": "Api_withPageload_Input_TestData.json"
+  },
+  "modifications": [
+    "Single-page synthetic Arcmira demonstration",
+    "Replaced sample data, widgets, bindings and JS methods",
+    "Removed API actions, datasources, external library entries, on-load actions and upstream git IDs",
+    "Removed inherited bicycle icon"
+  ],
+  "native_validation": "Pending import, rendering and downloads in Appsmith; local formatting and packaging tests are separate."
+}
