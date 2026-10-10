@@ -1,6 +1,6 @@
 # Source and verification boundaries
 
-Arcmira authored the service runtime, component declarations, documentation and three behavior-test files in this package. They use Apache-2.0 under `LICENSE`. The service and component versions are 1.0.4, and the [service ZIP is published](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.4). Version 1.0.4 changes usage descriptions, version metadata and documentation relative to 1.0.3. Request behavior is unchanged. The reviewed-file hashes cover the 1.0.4 runtime and manifests. See [release status](../../RELEASE.md#appmixer-connector) for hosted verification and the separate catalog review.
+Arcmira authored the service runtime, component declarations, documentation and three behavior-test files in this package. They use Apache-2.0 under `LICENSE`. The service and component versions are 1.0.5. This release candidate updates usage descriptions, version metadata and documentation relative to 1.0.4. Request behavior is unchanged. The reviewed-file hashes cover the 1.0.5 runtime and manifests. See [release status](../../RELEASE.md#appmixer-connector) for publication, hosted verification and the separate catalog review.
 
 The context stub in `service/artifacts/test/context.js` was independently written for the APIs used by these tests. It records calls and returns configured synthetic responses. It does not import or copy Appmixer's test utilities. Tests use Node's built-in test runner.
 

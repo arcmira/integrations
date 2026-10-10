@@ -1,7 +1,10 @@
 {
     "name": "appmixer.arcmira",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "changelog": {
+        "1.0.5": [
+            "Paid reads use credits from your plan, then your on-demand budget. Request behavior is unchanged."
+        ],
         "1.0.0": [
             "Initial native API candidate with managed API-key authentication, entity resolution and bounded transcript search. Full envelopes and coverage preserved; no automatic entity selection or quality fallback.",
             "Advanced MakeApiCall supports explicit GET, POST, PUT, PATCH and DELETE requests within Arcmira v1, with managed credentials and unchanged HTTP envelopes. Write methods may modify data."

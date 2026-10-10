@@ -4,7 +4,7 @@
 
 Search indexed YouTube videos and livestreams for timestamped passages. Resolve people, organizations, products, topics and channels before filtering your research.
 
-This is Arcmira's first-party source for Appmixer connector 1.0.4. See [release status](../../RELEASE.md#appmixer-connector) for hosted verification and downloadable packages. Public Appmixer catalog acceptance is pending.
+This is Arcmira's first-party source for Appmixer connector 1.0.5. See [release status](../../RELEASE.md#appmixer-connector) for hosted verification and downloadable packages. Public Appmixer catalog acceptance is pending.
 
 ## Build and install
 
@@ -51,7 +51,7 @@ These checks used an isolated Free account. The test flow remained inactive. The
 
 Local tests exercise the actual component modules with synthetic HTTP responses. They cover filters, output routing, ambiguity, managed authentication, account-label fallbacks, request restrictions and error retention. They do not certify Appmixer marketplace acceptance.
 
-Request behavior is unchanged from the privately tested 1.0.3 source. Version 1.0.4 changes usage descriptions, version metadata and the bundled guide. Upstream E2E templates and the copied publisher manifest schema are not included in this first-party package. The existing [Appmixer proposal](https://github.com/Appmixer-ai/appmixer-connectors/issues/1369) tracks the separate catalog process.
+Request behavior is unchanged from the privately tested 1.0.3 source. Version 1.0.5 describes paid reads as credits from your plan, then your on-demand budget. Its changes are limited to usage descriptions, version metadata and documentation. Version 1.0.5 has not been tested in the Appmixer host. Upstream E2E templates and the copied publisher manifest schema are not included in this first-party package. The existing [Appmixer proposal](https://github.com/Appmixer-ai/appmixer-connectors/issues/1369) tracks the separate catalog process.
 
 ## Feedback
 

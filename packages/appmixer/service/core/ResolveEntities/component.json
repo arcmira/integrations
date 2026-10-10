@@ -2,7 +2,7 @@
     "name": "appmixer.arcmira.core.ResolveEntities",
     "description": "Resolve a name, handle or YouTube URL to entity candidates. Exact best matches go to resolved; suggestions, fuzzy and ambiguous matches go to review without choosing one. Returns every candidate and the API guidance. Uses no credits. API docs: https://arcmira.com/docs.",
     "author": "Arcmira <zeal@arcmira.com>",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "auth": {
         "service": "appmixer:arcmira"
     },
