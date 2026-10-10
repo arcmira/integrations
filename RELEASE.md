@@ -1,5 +1,10 @@
 # Release status
 
+## Unreleased usage-description correction
+
+Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Package versions and request behavior are unchanged. Published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. The Appmixer provenance manifest records the corrected source and does not claim it matches the published 1.0.4 ZIP.
+
+
 The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.4](https://pypi.org/project/langchain-arcmira/0.1.4/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
 
 ## Verified versions

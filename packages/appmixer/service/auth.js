@@ -55,7 +55,7 @@ module.exports = {
                 type: 'password',
                 name: 'Arcmira API key',
                 tooltip:
-                    'Use your account API key. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. API docs: https://arcmira.com/docs.'
+                    'Use your account API key. A paid read uses credits from your plan, then your on-demand budget. API docs: https://arcmira.com/docs.'
             }
         },
         accountNameFromProfileInfo: 'accountName',

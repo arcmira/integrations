@@ -34,7 +34,7 @@ For the advanced action, supply a relative path such as `entities/resolve`, sele
 
 Explicit `POST`, `PUT`, `PATCH` and `DELETE` requests can modify account data under the key's scopes. There are no automatic retries or transcript-quality fallbacks. If a write loses its response, check its outcome before retrying.
 
-A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Account access and indexed coverage vary. Preserve the API's error explanation and documentation link instead of silently changing the requested source or filters.
+A paid read uses credits from your plan, then your on-demand budget. Account access and indexed coverage vary. Preserve the API's error explanation and documentation link instead of silently changing the requested source or filters.
 
 ## What has been verified
 

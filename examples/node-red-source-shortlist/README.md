@@ -15,7 +15,7 @@ The summary reports response processing; it does not confirm completion of both 
 
 The HTTP node makes one `GET https://api.arcmira.com/v1/search` with `limit=3`. It refuses redirects and does not retry, paginate, read Premium transcripts, write monitors or call a model. Repeated button clicks are separate requests.
 
-The API currently makes the first five search passages in each request free. Account access, freshness restrictions and service limits still apply. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. This flow uses the hosted service and requires your account; the open-source client does not make the hosted service open source.
+The API currently makes the first five search passages in each request free. Account access, freshness restrictions and service limits still apply. A paid read uses credits from your plan, then your on-demand budget. This flow uses the hosted service and requires your account; the open-source client does not make the hosted service open source.
 
 ## Read the source sheet
 

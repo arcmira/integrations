@@ -29,7 +29,7 @@ Pipedream must confirm the managed `arcmira` app slug and secret `api_key` field
 
 Private Connect custom-tool publishing requires a Business plan. Ask for a first-party contributor testing route or confirm an existing entitlement before a paid upgrade. Then validate the managed connection, all three actions, refusal exports and MCP discovery in the actual host. No host tests or live authenticated Arcmira calls have run for this preview.
 
-A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Each action makes one bounded read and preserves account restrictions, explicit source choices and complete coverage metadata. It never retries automatically or substitutes a lower-quality source after refusal.
+A paid read uses credits from your plan, then your on-demand budget. Each action makes one bounded read and preserves account restrictions, explicit source choices and complete coverage metadata. It never retries automatically or substitutes a lower-quality source after refusal.
 
 ## Snapshot and dependencies
 
