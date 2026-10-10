@@ -15,6 +15,6 @@ export ARCMIRA_API_KEY='your-key'
 
 The example checks both the MCP error flag and Arcmira's execution outcome. Its JSON output preserves the transcript-source label, timestamp, watch link, account window and coverage note. Empty results do not establish that nobody discussed the topic.
 
-The `Agent` receives the research connection through `mcp_servers`. This example exposes `arcmira_describe` and `arcmira_execute_read`; monitor writes and feedback are outside its scope. Consult `arcmira_describe` for the current client reference when writing other research programs. The research tool can perform metered reads: a paid read uses credits from your plan, then any top-up credits, then your on-demand budget. See [usage and billing](https://arcmira.com/docs/usage-and-billing).
+The `Agent` receives the research connection through `mcp_servers`. This example exposes `arcmira_describe` and `arcmira_execute_read`; monitor writes and feedback are outside its scope. Consult `arcmira_describe` for the current client reference when writing other research programs. The research tool can perform metered reads: a paid read uses credits from your plan, then your on-demand budget. See [usage and billing](https://arcmira.com/docs/usage-and-billing).
 
 Verified on October 5, 2026 with `openai-agents` 0.22.3, MCP client 2.2.0 and Arcmira's deployed MCP 0.10.4. The bounded free-account check returned source evidence successfully with on-demand disabled. This is a tested example, not a separate package or framework catalog listing.

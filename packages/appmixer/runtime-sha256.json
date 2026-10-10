@@ -1,15 +1,15 @@
 {
   "version": "1.0.4",
-  "scope": "Reviewed 1.0.4 service files. Changes from hosted-tested 1.0.3 are usage descriptions and version metadata; request handlers and shared request logic are unchanged. See RELEASE.md for current hosted verification and publication status.",
+  "scope": "Reviewed service source with an unreleased usage-description correction after 1.0.4. Request handlers and shared request logic are unchanged. Published 1.0.4 archives retain their original hashes. See RELEASE.md for release status.",
   "files": {
-    "auth.js": "576532c92cb1349befc8a73292ad4a7752ce0386b177bd63c5a0dd9f1b06460c",
+    "auth.js": "509d28aee4696c79b0103a15822268d510956180ad6258f10e43e8766f0a5a16",
     "bundle.json": "8bde4947d2b47e30e8ee4c745aacbe412ce0056203b7beed729e13b91b436bb8",
     "core/MakeApiCall/MakeApiCall.js": "92ffefa067d81d9b48c2f7e88662d022b35df2d0f1d0d66659469e0e22488713",
-    "core/MakeApiCall/component.json": "5f727494ce9cf8d0261cc192d899418431ee7da4fe34d794b4c41b3b20af3817",
+    "core/MakeApiCall/component.json": "ad61a5779d14e65545df74607bc45b1db15dda3917940b9699462d1641d6850f",
     "core/ResolveEntities/ResolveEntities.js": "279a13a0b415b05883ed86c71cd77a4eb61b43a4b73507b6e1d16fc0b99d611c",
     "core/ResolveEntities/component.json": "c06b0a3b36e40ad275d6d94d7ba4748a35b4d2641e3d4d47b2f2055ceaa91ef5",
     "core/SearchTranscripts/SearchTranscripts.js": "af0ef58d4f287dc5ce9c50e146afd19ca352562f597b8962f27d0881dc676d23",
-    "core/SearchTranscripts/component.json": "760f16cc6f8e1e26baf3f92119792dd65381b9762ccc1c7db2595a4015fa599d",
+    "core/SearchTranscripts/component.json": "52ab24d16ccb5806e19f6786be7dc4c094b19e5bd38f2ee49868c21d9e4372f1",
     "lib.js": "b989e4d2d4a34ce46d01ff005862616b2ddf71c03de83101df973b6fa5c8ad1e",
     "package.json": "1c31674587b5b473aeabd908be563a06e59e5ba229d5fe03285a77fb1cd08784",
     "service.json": "92ffe1cc4fc5f8972d1476fa039b2f18eed01b716750a0a515e3270775a7f645"

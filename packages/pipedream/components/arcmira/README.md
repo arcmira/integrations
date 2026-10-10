@@ -14,7 +14,7 @@ Arcmira searches indexed YouTube videos and livestreams, including podcast shows
 
 Connect a customer-owned Arcmira API key with read access. The connection test uses `/v1/me` and does not require a remaining usage allowance. Credentials belong in Pipedream's managed connection, never action inputs.
 
-A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Account limits still apply. These actions do not request transcript generation or mutate monitors.
+A paid read uses credits from your plan, then your on-demand budget. Account limits still apply. These actions do not request transcript generation or mutate monitors.
 
 Each action makes one bounded request. The selected endpoints have no cursor/offset parameter in the current API contract. Sponsor filters are unset by default; advanced filters require Pro+. Explicit filters and source choices are never dropped after a refusal. No automatic retry or alternate data source is used.
 

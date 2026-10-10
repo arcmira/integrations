@@ -17,6 +17,6 @@ The JSON output retains the transcript-source label, timestamp, watch link, acco
 
 Pass the filtered `MCPToolset` to your agent's `toolsets` argument. To let your own model choose research calls, replace `FunctionModel(search_once)` with your configured Pydantic AI model and set appropriate run limits. The deterministic callback belongs to this connection check. See [Pydantic AI's MCP client guide](https://pydantic.dev/docs/ai/mcp/client/) for model setup and toolset configuration.
 
-This example exposes `arcmira_describe` and `arcmira_execute_read`. Consult `arcmira_describe` for the current client reference when writing other research programs. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. See [usage and billing](https://arcmira.com/docs/usage-and-billing).
+This example exposes `arcmira_describe` and `arcmira_execute_read`. Consult `arcmira_describe` for the current client reference when writing other research programs. A paid read uses credits from your plan, then your on-demand budget. See [usage and billing](https://arcmira.com/docs/usage-and-billing).
 
 Verified on October 5, 2026 with `pydantic-ai-slim` 2.51.0, MCP client 2.2.0 and Arcmira's deployed MCP 0.10.4. The bounded free-account check returned source evidence with on-demand disabled and no observed credit decrease. No external model call or trace exporter was used. This is a tested example, not a separate package or framework catalog listing.

@@ -15,20 +15,20 @@ if (( $# > 1 )); then echo "Usage: $0 [--offline]" >&2; exit 2; fi
 for package in langchain ai-sdk; do
   (
     cd "packages/$package"
-    npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
+    npm ci --ignore-scripts --no-audit --no-fund ${install_args[@]+"${install_args[@]}"}
     npm run build
     npm test
   )
 done
 (
   cd packages/appmixer
-  npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
+  npm ci --ignore-scripts --no-audit --no-fund ${install_args[@]+"${install_args[@]}"}
   npm test
   npm run pack:service
 )
 (
   cd packages/activepieces
-  npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
+  npm ci --ignore-scripts --no-audit --no-fund ${install_args[@]+"${install_args[@]}"}
   npm test
   npm run bundle
   npm pack ./bundle --json > pack.json
@@ -37,7 +37,7 @@ done
 )
 (
   cd packages/n8n
-  pnpm install --frozen-lockfile --ignore-scripts "${install_args[@]}"
+  pnpm install --frozen-lockfile --ignore-scripts ${install_args[@]+"${install_args[@]}"}
   pnpm build
   pnpm lint
   pnpm test
@@ -45,18 +45,18 @@ done
 )
 (
   cd packages/pipedream
-  npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
+  npm ci --ignore-scripts --no-audit --no-fund ${install_args[@]+"${install_args[@]}"}
   npm test
   npm run validate
 )
 (
   cd packages/dify
-  uv sync --frozen "${install_args[@]}"
+  uv sync --frozen ${install_args[@]+"${install_args[@]}"}
   uv run --frozen python -m unittest discover -s test -v
 )
 (
   cd packages/langchain-python
-  uv sync --frozen "${install_args[@]}"
+  uv sync --frozen ${install_args[@]+"${install_args[@]}"}
   uv run --frozen ruff check .
   uv run --frozen pytest tests/unit_tests -q
   uv build
@@ -64,7 +64,7 @@ done
 )
 (
   cd examples/dlt
-  uv sync --frozen "${install_args[@]}"
+  uv sync --frozen ${install_args[@]+"${install_args[@]}"}
   RUNTIME__DLTHUB_TELEMETRY=false uv run --frozen python -m unittest discover -s test -v
 )
 airbyte_python="${ARCMIRA_AIRBYTE_PYTHON:-$PWD/packages/airbyte/.venv/bin/python}"
@@ -90,7 +90,7 @@ fi
 )
 (
   cd packages/langflow
-  uv sync --frozen "${install_args[@]}"
+  uv sync --frozen ${install_args[@]+"${install_args[@]}"}
   uv run --frozen python -m unittest discover -s tests -v
   uv run --frozen lfx extension validate . --execute-imports
   uv run --frozen lfx extension list --format json
@@ -98,12 +98,12 @@ fi
 )
 (
   cd examples/node-red-source-shortlist
-  npm ci --ignore-scripts --no-audit --no-fund "${install_args[@]}"
+  npm ci --ignore-scripts --no-audit --no-fund ${install_args[@]+"${install_args[@]}"}
   npm test
 )
 (
   cd examples/remotion-quote-cards
-  pnpm install --frozen-lockfile --ignore-scripts "${install_args[@]}"
+  pnpm install --frozen-lockfile --ignore-scripts ${install_args[@]+"${install_args[@]}"}
   pnpm check
 )
 python3 scripts/test-python-release.py

@@ -34,7 +34,7 @@ Pass both returned tools to a LangChain agent or a LangGraph `ToolNode`. The too
 
 Resolve a name before using ID filters. A channel's `youtube_channel_id` goes in `channel_ids`. Preserve ambiguous results for the user to disambiguate. Search accepts the current API's topic, entity, channel, speaker, mention kind, source, date and result-limit filters. Returned passages retain source URLs, timestamps and coverage notes.
 
-A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Account access and indexed coverage vary. An empty result does not prove a topic was never discussed. Speaker labels are not available for every show. These tools expose search and entity resolution; they do not retrieve a full transcript or manage monitors.
+A paid read uses credits from your plan, then your on-demand budget. Account access and indexed coverage vary. An empty result does not prove a topic was never discussed. Speaker labels are not available for every show. These tools expose search and entity resolution; they do not retrieve a full transcript or manage monitors.
 
 API errors propagate with their code, status and response body. The adapter makes no retries and does not change refused filters or transcript sources. When using `ToolNode`, choose error handling for your application; the verification workflow uses `{ handleToolErrors: false }` to retain the original SDK error. Runnable cancellation reaches the API request.
 

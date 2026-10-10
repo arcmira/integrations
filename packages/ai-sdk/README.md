@@ -38,7 +38,7 @@ The model string uses the AI SDK's gateway. Configure its credentials separately
 
 Results retain the API's source links, publication dates, speaker information and coverage notes. Indexed coverage varies. Speaker labels cover a minority of shows. An empty result does not establish that a topic or person never appeared in a video.
 
-A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. Search uses four credits per returned chunk after the first five. Account access and freshness limits still apply. API refusals retain their typed error body. The adapter does not retry a refused request or silently substitute another transcript source.
+A paid read uses credits from your plan, then your on-demand budget. Search uses four credits per returned chunk after the first five. Account access and freshness limits still apply. API refusals retain their typed error body. The adapter does not retry a refused request or silently substitute another transcript source.
 
 The tools accept the AI SDK cancellation signal. This candidate exposes search and entity resolution. Full transcripts, recommendations, account management and monitor writes remain available through Arcmira's SDK or MCP server.
 

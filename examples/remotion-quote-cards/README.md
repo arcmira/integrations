@@ -18,7 +18,7 @@ Connect [Arcmira MCP](https://arcmira.com/docs/mcp-server), then copy this promp
 
 > Find three short passages about [topic] in indexed YouTube videos published between [start date] and [end date]. Keep the original wording and nearby context for review. For each result, return its video ID, title, channel, publication date, passage start time in seconds, and timestamped source URL. Do not infer a speaker from the channel name. Keep excerpts brief and record the search scope and retrieval date.
 
-Review the original source and context before publishing a quotation. Replace `src/quotes.json` with the reviewed results in the same structure, then run the commands again. Keep credentials out of this file. A paid read uses credits from your plan, then any top-up credits, then your on-demand budget.
+Review the original source and context before publishing a quotation. Replace `src/quotes.json` with the reviewed results in the same structure, then run the commands again. Keep credentials out of this file. A paid read uses credits from your plan, then your on-demand budget.
 
 The JSON was copied without changing values from the [source-linked timeline example](../quote-timeline/fixture.js). It records an August 2026 search for "vibe coding" and its retrieval date. These three results demonstrate the handoff; they are not a representative survey or complete coverage.
 

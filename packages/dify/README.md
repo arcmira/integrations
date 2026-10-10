@@ -10,7 +10,7 @@ Plugin version 0.1.1 was installed as a local plugin in the branded Dify Cloud w
 
 Install the reviewed plugin package in Dify, then enter your own Arcmira API key in its secret credential field. Credential validation reads `/v1/me`; it does not run a transcript search. The runtime needs HTTPS access to `api.arcmira.com`.
 
-A paid read uses credits from your plan, then any top-up credits, then your on-demand budget. The budget configured in your dashboard approves on-demand usage. See [usage and billing](https://arcmira.com/docs/usage-and-billing) for account access and limits.
+A paid read uses credits from your plan, then your on-demand budget. The budget configured in your dashboard approves on-demand usage. See [usage and billing](https://arcmira.com/docs/usage-and-billing) for account access and limits.
 
 ## Use
 
