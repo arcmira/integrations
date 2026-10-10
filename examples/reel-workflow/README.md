@@ -4,7 +4,9 @@
 
 Use transcript search to shortlist source moments. Carry the selected quotes into a local JavaScript Canvas edit rendered with ffmpeg.
 
-Start with this research prompt:
+Read the [original creative brief and production guide](original-brief.md) for the instructions used during the reel project.
+
+Start with this separate research prompt:
 
 ```text
 Find five candidate YouTube moments about [topic] for a short reel.

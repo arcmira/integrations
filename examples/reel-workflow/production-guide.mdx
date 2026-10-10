@@ -1,0 +1,146 @@
+---
+title: The stage, a guide for registry owners
+---
+
+# The stage
+
+The video is an anti-doomer hype edit: 26 real spoken lines over a song that builds to three drops. lilguy, Arcmira's mascot, is the user and the narrator. They search, pull each clip into the world they are building, react to it, and show the viewer what the line means. The frame always moves. The clips always pop. This guide is the contract every registry file builds against.
+
+## How a frame is made
+
+`edit.html` plays the edit. `stage/core.js` holds shared helpers and the registries. `stage/engine.js` is the director. It reads `direction.json`, which names, for every line (keyed by id), the world, the layout, the enter and exit, the camera, the pin, the search bar placement, the card style, the caption, lilguy's acts and the effects. Registry files fill in those names.
+
+Each frame renders in this order:
+
+1. The world, in screen space. During a world change, the transition paints both worlds.
+2. The camera transform (`zoom`, `rot`, centred on `x, y`). Everything until step 6 is in world coordinates, 1920 by 1080 at camera rest.
+3. Pinned cards, then `under` effects, then exiting cards, then the entering or resting card, then `over` effects.
+4. The caption of the line being spoken.
+5. lilguy (the act's `back` prop, lilguy, the act's `front` prop), then `world-top` effects.
+6. The camera is removed. The search bar is drawn, then `screen` effects, then the end card after the last line.
+
+Lines are grouped into runs: consecutive lines that share a world. Pins keep a run's finished cards in the world until the run ends. Interludes (`direction.json` `interludes`) are the instrumental stretches. An interlude is a line with no clip: it has a world, acts and effects, but no card and no caption.
+
+## Rules
+
+- **Pure functions of t.** Frames render out of order (the scrubber, the contact sheets, the final render). Nothing may carry state between calls. A module-level cache is fine only for static art whose pixels depend on nothing but its key, such as a pre-rendered starfield tile.
+- **No `Math.random()`.** Use `Stage.hash(n)` for stable randomness, seeded by index, line id length, and so on.
+- **Own file only.** Each owner edits only their file in `stage/`. Never edit `engine.js`, `core.js`, `edit.html`, `direction.json` or another owner's file. If you need an engine change or a direction change, say so in your final report with the exact change.
+- **Keep ctx balanced.** The engine wraps every call in `save`/`restore` and catches throws, but leave `globalAlpha`, transforms and composite modes as you found them anyway.
+- **Performance.** A frame must draw in well under 16 ms on a laptop. Avoid large `shadowBlur` on many shapes, per-frame `createPattern` or offscreen canvas allocation, and per-pixel loops. Gradients and paths are cheap.
+- **Text-light.** At most one short word or phrase of lettering per effect, big and bold (`Stage.letter`). No paragraphs, no UI chrome, no status lines, no song or Arcmira meta.
+- **Hits land on beats.** `Stage.pulse(t)` is 1 on every beat and decays. Accents go on beats and on spoken words (`at` in the direction). Use squash and stretch, anticipation, overshoot and settle (`backOut`, `elasticOut`).
+- **One focal action per moment.** The clip is the star while someone speaks. Effects frame it and punctuate the key word; they never cover a face for more than a flash.
+- **No em dashes** in any lettering or comments.
+
+## Coordinates and helpers
+
+The frame is `Stage.W` 1920 by `Stage.H` 1080. `core.js` exports `clamp, lerp, seg, frac, ease, easeOut, easeIn, easeIO, backOut, elasticOut, hash, wob, kf, TAU`, beat helpers `beatOf, pulse, pulse2, onBeat`, colours `PAL, rgba, mix`, and drawing helpers `font, rr, around, letter, cover`. `Stage.cover(ctx, src, x, y, w, h, framing)` cover-fits a clip. `Stage.MARK` and `Stage.KEYHOLE` are the Arcmira mark paths (28 by 28 box). `Stage.lines`, `Stage.runs`, `Stage.sourceOf(line, t)` and `Stage.framingOf(line)` give any line's picture, for montage effects.
+
+Every call receives an argument object `a`. Common fields: `t` (song seconds), `lt` (seconds since the item's start), `line` (id, speaker, words `[{text, start, end}]` in line seconds, `start`, `dur`, `end`, `vertical`, `aspect`, `energy` 0..1, `d` the merged direction), `p` (the item's own entry from `direction.json`, so extra keys like `text`, `color`, `high` arrive here), `pal` (the world's palette), `beat`.
+
+## Registry signatures
+
+Register with `Stage.<kind>(name, fn, opts)`.
+
+| Kind | Call | Returns | Options |
+|---|---|---|---|
+| `world` | `fn(ctx, a)` with `a.t, lt` (since the run began), `energy, beat, cam, pal, run, section, line` | paints the whole frame | `pal` (palette merged into `a.pal` for everything in that world) |
+| `transition` | `fn(ctx, a)` with `a.k` 0..1, `a.from(ctx)`, `a.to(ctx)` (paint either world), `lil` | paints the blend | `dur` seconds (default 0.8); it starts 0.9 s before the new world's first line |
+| `card` | `fn(ctx, a)` with `a.x, y, w, h, rot, alpha, reveal, phase` (`enter`, `rest`, `exit`, `pinning`, `pinned`), `src`, `framing`, `pinned` | paints the clip in its frame, rotated about its centre | none |
+| `layout` | `fn(a)` with `a.t, lt, dur, vertical, aspect, k` (index in run), `n, energy` | `{x, y, w, h, rot?}` resting rect, may drift with t | none |
+| `enter` | `fn(a)` with `a.k` 0..1, `rect, lil` | `{dx, dy, s or sx and sy, rot, alpha, reveal, extra}` relative to the rest rect | `dur`, `lead` (seconds before the line starts) |
+| `exit` | same as enter | same | `dur` |
+| `cam` | `fn(a)` with `a.t, lt, dur, energy, card` (rest rect) | `{x, y, zoom, rot}` (defaults 960, 540, 1, 0) | none |
+| `pin` | `fn(a)` with `a.i` (index in run), `j` (order pinned), `n, pinned, since, vertical, aspect, run` | `{x, y, w, h, rot, alpha}` where a finished card lives | none |
+| `search` | `fn(a)` with `a.t, lt, line, lil` | `{x, y, w, h, rot?, scale?, alpha?}` in screen space | none |
+| `caption` | `fn(ctx, a)` with `a.lt, line, card` | paints the spoken words and the speaker tag | none |
+| `effect` | `fn(ctx, a)` with `a.lt` (since it fired, negative during `pre`), `k` (lt / life), `life, card` (the line's card state or rest rect), `lil` | paints the effect | `life`, `pre`, `layer` (`under`, `over`, `world-top`, `screen`) |
+| `act` | `fn(a)` with `a.lt, dur, x, y, s` (base position and size from the act's home), `hop` (0..1 while travelling), `card, line, search, energy, beat` | `{x?, y?, s?, moods?, state?, back?(ctx), front?(ctx), hide?}` | `home` |
+
+A line's `punch` in direction.json is a hype-edit framing the engine applies to its card: `{ x, y, zoom, out }` opens the card tight on the speaker's face (`x`, `y` in 0 to 1 of the source) at `zoom`, bumps it on every beat, then snaps out to the clip's own framing at `out` (a word or time like any `at`, or `{ clip: s }` for a camera cut inside the clip, which the snap's blur hides) with a flash, an overshoot and a glow ring that pulses on the beats after. Measure the face on a gridded frame of the clip; a webcam inset in a screen recording (Theo) is a good target.
+
+Captions show a word when its forced-aligned start falls inside the line's cut, and never show words marked `filler` in media/clips.json. Karaoke pops each word in as it is spoken; nothing is shown ahead of the voice.
+
+`Stage.drawSearch = (ctx, a) => ...` replaces the default search bar. It gets the placement rect plus `query`, `typed` (what is typed so far), `found`, `line`, `lil`. The query text comes from `queries.json` (line id to the search that found the line, shared by every pitch); adjacent lines that share a query are one search: it types once, the results drop under the bar as a row of thumbnails, lilguy taps each in turn (the `tap` act, added by the engine), and the tapped result grows into the line's card while the rest park small and greyed until their turn. A grouped line's own acts start just after its tap.
+
+## lilguy
+
+`lilguy/lilguy.js` draws lilguy: `Lilguy.drawLilguy(ctx, x, y, size, t, state)`. The engine calls it for you at the act's `x, y, s`, with `variant: 'snap'`. An act controls lilguy through `state` and `moods`:
+
+- `moods: [[seconds into the act, 'mood', over?], ...]` changes expression. The engine blends every change through `Lilguy.moods` (anticipation, a take, colour cross-fade), including the change from the previous act, so faces never snap. Moods: `idle, scanning, found, listening, thinking, talking, dancing, surprised, looking, search`.
+- `state` fields: `look {x, y}` (-1..1 gaze), `hands: true` (draw mitten hands, posed by the mood), `pose {dx, dy, tilt, sq}` (added body motion, in units of the radius), `turn` (0..1 spin), `open` (0..1.4 eye opening), `scanColor` (face light colour), `beamLen`, `talk` (0..1).
+- `back(ctx)` and `front(ctx)` draw props behind and in front of lilguy in world coordinates: a hard hat, an umbrella, scissors, a flag. Props are drawn relative to the returned `x, y, s` (s is lilguy's diameter).
+
+lilguy has one sphere head with a visor band and no body. They are a cute, expressive little being. Read `lilguy/index.html` and the character sheet in `lilguy/strip.html` to see them move.
+
+Homes, the places the engine moves lilguy between (with a hop arc), are `corner` (the card's lower right), `left`, `right`, `top`, `center`, `search`, `stage` (lower left, large) or `{x, y, s}`.
+
+## Craft references
+
+Two reference projects are cloned in the session scratchpad under `refs/`:
+
+- `refs/pdoom-video`: a hand-made motion graphics explainer with a mascot, sets and camera. Read its scene files for pacing, set building and how the mascot acts.
+- `refs/ClaudeAnimationBase` and `refs/PDoomVideo`: the animation base and the video built on it. Read the emotion morphs, camera moves and palette arc.
+
+Lessons carried over from them. Something happens in every shot. Build sets, not floating cards. Transitions are motivated by an action (lilguy pops the storm, and the storm bursts into sunrise). Faces morph. The camera always moves a little. The palette shifts across the song. Lettering stays light. Hits land on beats, with squash and stretch. Each shot has one focal action.
+
+## Caption colours
+
+Captions take their colours from the world's palette, so the palette arc carries through the lettering. Karaoke lights each spoken word in the next colour of a five-colour cycle (the world's accent, greenHi, ember, sky, goldHi). A stamp caption lights its longest word in the world's accent. Drop stickers cycle the accent, greenHi, gold and white. One pass on 2026-09-28 forced every caption to one green with red doomer words; Zeal called it an overcorrection, and it was reverted.
+
+A line opts out of the cycle through `captionP`, and only these lines do (Zeal's picks, 2026-09-28):
+
+| Line | captionP | Why |
+|---|---|---|
+| golden-age | `hot: ['golden', 'age'], color: 'gold'` | GOLDEN AGE both light, in gold. |
+| time-to-build | `hot: ['build', 'grow', 'do', 'things']` | Andreessen's BUILD, GROW and DO THINGS light, not only the longest word. |
+| team-america | `flag: ['america', 'reindustrialize']` | America and Reindustrialize fill with a waving flag once said. |
+
+`hot` names the words a stamp caption lights, `color` holds a line to one palette colour, and `flag` fills words with the flag. Stamp effects (FAKE, LOSER, MYTH) set their own colour on the effect.
+
+## The world arc
+
+| World | Lines | Look |
+|---|---|---|
+| `doom` | intro, marketing, nuclear-bomb, alarmist, psyop | Grey drizzle, low storm clouds, desaturated feed of doom headlines as blurry shapes (no readable text). Cards are old CRT sets. Muted, a little ominous, a little silly. |
+| `dawn` | clearing, golden-age, Drop one lines, dawn-dance | The storm is gone. Sunrise gold and peach, long rays, a warm horizon with rolling hills. Cards are gold framed. Energy on every beat. |
+| `build` | time-to-build, Drop two lines | A construction site at full swing: blueprint blue sky grid, cranes, scaffolds, safety yellow, flag red. Cards have caution tape frames. A storm tries to creep back during same-people and is cleared on encourage. |
+| `party` | break-party | A dance floor in the site after hours: neon violet, a disco ball, beat-lit floor. |
+| `launch` | ambition, kardashev, next-level | Night launchpad, navy sky, gantry and rocket, floodlights, orange fuel glow. Cards are HUD panels. |
+| `space` | future-great, Drop three lines, comet-ride | Deep violet to teal space, stars streaking, planets, the sun on the horizon of a planet. Cards are portholes. |
+| `finale` | roars, bow | Golden sunrise over the world built across the video. The finished cards form a collage. |
+
+## Owners
+
+| File | Owner builds |
+|---|---|
+| `stage/worlds.js` | worlds `doom, dawn, build, party, launch, space, finale` (each with its `pal`); transitions `storm-burst, blueprint, curtain, night-fall, liftoff, sunrise-collage`; cards `crt, gold, caution, neon, hud, porthole` |
+| `stage/motion.js` | layouts `hero, full, left-hero, right-hero, tilt-left, tilt-right, tall`; enters `pop, static-in, slam, crane-drop, unfold, warp, zoom-through, swing, burst`; exits `shrink, whip, fling, zoom-past`; cams `drift, beat-bump, push-in, crane-up, orbit, shake, dutch`; pins `feed, gallery, billboards, gantry, orbit, collage`; searches `top, top-left, bottom, follow, swing`; `Stage.drawSearch` |
+| `stage/fx-a.js` | captions `karaoke, stamp`; effects for doom, dawn and build: `doom-billboard, megaphone, cardboard-bomb, stamp, siren, rain-heavy, storm-pop, sun-rays, gold-dust, drop-flash, orb-vs-globe, pdoom-meter, cape-streak, planet-lights, skyline-rise, timeline-now, blueprint-grid, flag-wave, datacenter-stack, storm-creep, doodle-robot, reins-orb, storm-clear, confetti` |
+| `stage/fx-b.js` | effects for party, launch, space and finale: `disco-ball, rocket-fuel, shockwave, kardashev-meter, level-up, starfield-rush, solar-bloom, gear-to-chip, new-planet, sparkles, lightbulbs, idea-bubbles, fireworks, comet-trail, roar-waves, collage` |
+| `stage/acts-a.js` | acts `summon, watch, hover, peek, side-eye, umbrella, poke-prop, shake-head, unplug, point, pop-storm, shades, sunrise, inflate, meter, superhero, conductor, plant-pin, dance, hardhat, salute, stack` |
+| `stage/acts-b.js` | acts `eye-roll, laugh, scissors, dj, fuel, climb, jump, ride-rocket, lean, plant-flag, wand, juggle, cheer, surf, roar, bow` |
+
+`direction.json` is the brief for every name: read the entries that use your names, including their `at` words and extra keys. Pairs that must agree:
+
+- `pop-storm` (act) jabs a pin upward at the storm; `storm-pop` (effect) bursts the clouds into confetti at the same moment; `storm-burst` (transition) opens the doom sky into dawn right after.
+- `scissors` (act) snips at the spoken word "rein"; `reins-orb` (effect, `p.cut` names the word) draws a glowing orb held by reins that snap at that word and fly up.
+- `meter` (act) stands beside and points at the needle of `pdoom-meter` (effect); the effect draws the gauge at the card's opposite side from lilguy (`a.lil`).
+- `poke-prop` (act) pokes the cardboard cutout `cardboard-bomb` (effect draws it, wobbling when poked about 0.3 s after its start).
+- `inflate` (act) pumps; `orb-vs-globe` swells the AI orb.
+- `fuel` (act) holds a hose; `rocket-fuel` (effect) fills the rocket.
+- `plant-flag` (act) plants a flag on the planet from `new-planet`.
+- `hardhat` is lilguy with a hard hat hammering on beats; `superhero` has a cape; `shades` puts on sunglasses.
+
+When a line's act has no pair, it still reacts to the words: point at the card on the key word, turn to look at the card, bounce on beats.
+
+## Testing
+
+The local server on port 4417 must be running (`python3 -m http.server 4417` from the worktree root). Render a labelled contact sheet of the real edit:
+
+```bash
+node frames.mjs --sheet media/sheets/<you>.jpg --cols 4 --scale 0.25 --range 22:26:0.25
+```
+
+It prints every stage warning (unknown names, items that threw) after the image path. Open the sheet with the Read tool and judge it as a viewer would. Pick times from the line table: open `edit.html` in a browser, or read `edit.json` (each cue has `start` and `dur`). Other owners are working at the same time, so their items may be missing or half done in your sheets; judge only yours.
