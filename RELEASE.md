@@ -55,6 +55,10 @@ Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `
 
 ## Python LangChain publication
 
+### Prepared 0.1.5
+
+Version 0.1.5 ships the current paid-read description: credits from your plan, then your on-demand budget. Request behavior and dependencies are unchanged. The locally built wheel passed all 58 adapter tests in an isolated environment with external network connections blocked. Publication and public-artifact verification are pending.
+
 ### Published 0.1.4
 
 Version 0.1.4 pins released Arcmira SDK 0.5.1. Full local `scripts/ci.sh --offline` passed. The built wheel passed all 58 adapter tests in a fresh environment with external network connections blocked. Third-party versions and artifact hashes are unchanged. No new live API test was performed. Publication completed through the existing trusted publisher. Both public PyPI artifacts match the signed manifest, and the downloaded wheel passed all 58 tests with external network connections blocked.
