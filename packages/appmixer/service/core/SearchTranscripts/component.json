@@ -2,7 +2,7 @@
     "name": "appmixer.arcmira.core.SearchTranscripts",
     "description": "Search indexed YouTube videos and livestreams for timestamped passages. Returns one complete response envelope with up to 20 ranked results, not a catalog export. Limited coverage goes to the limited output. A paid read uses credits from your plan, then your on-demand budget. API docs: https://arcmira.com/docs.",
     "author": "Arcmira <zeal@arcmira.com>",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "auth": {
         "service": "appmixer:arcmira"
     },
