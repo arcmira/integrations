@@ -9,7 +9,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.5.1 |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.5.1 |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.4](https://pypi.org/project/langchain-arcmira/0.1.4/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.5](https://pypi.org/project/langchain-arcmira/0.1.5/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Langflow | [Setup and components](packages/langflow) | Source preview; installed LFX runtime tested; PyPI and catalog publication pending |
 | Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
@@ -21,7 +21,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Airbyte | [Scoped source and validation](packages/airbyte) | Local Airbyte 2.3.0 fixture checks and one live channel-video export passed; broader live validation and catalog acceptance pending |
 | Pipedream Connect / MCP | [Native actions and validation](packages/pipedream) | Locally tested source preview; app registration and hosted validation pending |
 | Dify | [Setup and plugin](packages/dify) | Plugin 0.1.2 passed native Community Edition research; Cloud workflow validation and Marketplace review pending |
-| Appmixer | [Setup and connector](packages/appmixer) | [Connector 1.0.4](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.4) installed privately; native entity resolution verified; public catalog acceptance pending |
+| Appmixer | [Setup and connector](packages/appmixer) | [Connector 1.0.5](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.5) published; 1.0.4 installed privately with native entity resolution verified; public catalog acceptance pending |
 
 For DSH, the [API documentation preset](examples/dsh) searches documentation without an API key. Its native session check passes; it does not provide YouTube research.
 
@@ -34,7 +34,7 @@ For creators, the [reel workflow note](examples/reel-workflow) follows source di
 ## Install the Python package
 
 ```sh
-pip install langchain-arcmira==0.1.4
+pip install langchain-arcmira==0.1.5
 export ARCMIRA_API_KEY='your-key'
 python - <<'PYTHON'
 from langchain_arcmira import ArcmiraSearch
@@ -77,7 +77,7 @@ A paid read uses credits from your plan, then your on-demand budget. Coverage an
 
 ## Verification
 
-The Python LangChain 0.1.4 package uses Arcmira SDK 0.5.1 and passes 58 local tests and the same 58 tests from a fresh installation of the public PyPI wheel. Its compiled LangGraph test preserves tool-call IDs and source evidence. Eleven earlier live integration checks, including LangChain standard tests, used no credits or model inference.
+Python LangChain 0.1.5 uses Arcmira SDK 0.5.1 and updates the paid-read description. Its wheel passed 58 adapter tests with external network connections blocked, and both public PyPI archives match the tested artifacts. Earlier live integration checks used no credits or model inference. See [release verification](RELEASE.md#published-015) for evidence and scope.
 
 The TypeScript LangChain package and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
 
