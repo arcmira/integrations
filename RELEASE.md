@@ -2,7 +2,7 @@
 
 ## Usage-description correction
 
-Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 is a release candidate for this correction; its published 1.0.4 ZIP is unchanged.
+Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
 The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.5](https://pypi.org/project/langchain-arcmira/0.1.5/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
@@ -171,7 +171,7 @@ The target is Connect/MCP; Workflows and String are being retired. App registrat
 
 ## Appmixer connector
 
-Version 1.0.5 is prepared with current plan-credit then on-demand-budget descriptions. It changes only copy and version metadata relative to 1.0.4. Publication and native-host verification are pending.
+[Appmixer 1.0.5](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.5) is published with current plan-credit then on-demand-budget descriptions. The downloaded ZIP matches the locally verified archive and published checksum. All 160 behavior tests and full local CI pass. Only copy and version metadata differ from 1.0.4. Native-host verification of 1.0.5 remains pending.
 
 The [Appmixer connector](packages/appmixer) provides transcript search, entity resolution and an advanced managed-account API action. Version 1.0.4 is installed in a private test tenant and passed native entity resolution on October 7, returning an exact OpenAI match through `resolved`. Fresh 1.0.4 transcript-search and advanced-action execution remain unverified. The [first-party 1.0.4 service ZIP](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.4) is published and its exact final archive was installed successfully. It adds top-up credit wording and a homepage link without changing request behavior. The published [1.0.3 service ZIP](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.3) remains available. Appmixer catalog acceptance is separate and remains pending under [proposal #1369](https://github.com/Appmixer-ai/appmixer-connectors/issues/1369).
 
