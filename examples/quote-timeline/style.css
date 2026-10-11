@@ -81,15 +81,15 @@ footer {
 }
 .brand { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; cursor: pointer; }
 .brand img { display: block; width: 25px; height: 25px; flex-shrink: 0; }
-.logo-text { font-family: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 600; font-size: 19px; line-height: 28.5px; margin-left: 10px; letter-spacing: 0; color: #000; }
-.masthead { background: #fff; max-width: none; height: 72px; -webkit-font-smoothing: antialiased; }
+.logo-text { font-family: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 600; font-size: 19px; line-height: 28.5px; margin-left: 10px; letter-spacing: 0; color: #fff; }
+.masthead { background: #000; max-width: none; height: 72px; -webkit-font-smoothing: antialiased; }
 .source-player { margin-top: 16px; aspect-ratio: 16 / 9; min-height: 200px; background: #000; }
 .source-player iframe { display: block; width: 100%; height: 100%; min-height: 200px; border: 0; }
 .masthead nav {
   display: flex;
   gap: 28px;
   font-size: 13px;
-  color: #363f43;
+  color: #fff;
 }
 .masthead nav a {
   text-decoration: none;

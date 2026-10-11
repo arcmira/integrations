@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="A small, source-linked quote timeline made from two saved Arcmira transcript search results."
+      content="A small, source-linked quote timeline made from five selected Arcmira transcript search results."
     />
     <title>YouTube Transcript Search to Quote Timeline | Arcmira</title>
-    <link rel="stylesheet" href="style.css?v=source-audio-2" />
-    <script defer src="fixture.js?v=source-audio-2"></script>
-    <script defer src="timeline.js?v=source-audio-2"></script>
+    <link rel="stylesheet" href="style.css?v=source-audio-3" />
+    <script defer src="fixture.js?v=source-audio-3"></script>
+    <script defer src="timeline.js?v=source-audio-3"></script>
   </head>
   <body>
     <a class="skip" href="#demo">Skip to timeline</a>
@@ -28,7 +28,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">A saved search, made visible</p>
-        <h1 id="title">A phrase.<br />Two sources.</h1>
+        <h1 id="title">One idea.<br />Five sources.</h1>
         <p class="lede">
           Find a spoken moment. Keep the words, the timestamp and the way back.
         </p>
@@ -37,10 +37,10 @@
         <div>
           <p class="eyebrow">Try it with your AI</p>
           <p id="prompt">
-            Use Arcmira to find three transcript passages about “vibe coding” in
-            YouTube videos published in August 2026. Return short verbatim
-            excerpts, channel names and source timestamp links. State the search
-            window and coverage limits.
+            Use Arcmira to find five compelling quotes about vibe coding from videos published this year.
+            Prioritize TBPN, Monitor The Situation, Lenny’s Podcast and Theo at t3.gg.
+            Return each complete sentence with its channel, video title and timestamp link.
+            Check that the videos play and keep enough context to preserve each speaker’s meaning.
           </p>
         </div>
         <button id="copy-prompt" class="button bright" type="button">
@@ -55,7 +55,7 @@
         <div class="query-row">
           <span class="query">“vibe coding”</span
           ><span class="query-meta"
-            >Global search · Aug 1–31, 2026 · 2 playable sources</span
+            >2026 · 5 selected sources</span
           >
         </div>
         <div class="workspace">
@@ -63,7 +63,7 @@
             <div class="stage" id="stage">
               <div class="stage-top">
                 <span class="eyebrow">Transcript excerpt</span
-                ><span id="card-count" class="mono">01 / 02</span>
+                ><span id="card-count" class="mono">01 / 05</span>
               </div>
               <figure id="quote-card">
                 <span class="quote-mark" aria-hidden="true">“</span>
@@ -85,10 +85,10 @@
             </div>
             <div class="source-player"><div id="player"></div></div>
             <p id="playback-status" class="sequence-note" role="status" aria-live="polite">Loading YouTube. You can also open the timestamp link.</p>
-            <p class="sequence-note">Playback starts at the saved passage timestamp. The excerpt may begin later in that passage.</p>
+            <p class="sequence-note">Playback is pinned near the quoted sentence. Use the video controls to hear the surrounding context.</p>
           </div>
           <aside class="sources" aria-label="Choose a saved source">
-            <p class="eyebrow source-heading">Source index <span>02</span></p>
+            <p class="eyebrow source-heading">Source index <span>05</span></p>
             <div id="source-list"></div>
             <div class="source-detail">
               <p class="eyebrow">Selected passage</p>
@@ -98,9 +98,10 @@
                 target="_blank"
                 rel="noreferrer"
               ></a>
+              <p id="source-context" class="sequence-note"></p>
               <dl>
                 <div>
-                  <dt>Passage starts</dt>
+                  <dt>Quote starts near</dt>
                   <dd id="source-time" class="mono"></dd>
                 </div>
                 <div>
@@ -131,43 +132,27 @@
       <details class="provenance">
         <summary>What you are looking at</summary>
         <p>
-          These are two short, exact transcript excerpts from a saved Arcmira
-          search, captured October 8, 2026. The query was global, not limited to
-          one channel. It used August 1 inclusive through September 1 exclusive,
-          in UTC, and returned three results. The response’s as-of value was
-          August 25, 2026 at 22:17:26 UTC.
+          Five selected moments from videos published in 2026, found through Arcmira transcript search.
+          Selected October 11, 2026 for a short, energetic introduction to vibe coding.
+          These are editorial choices, not a ranking or a complete survey. Search coverage is partial.
         </p>
         <p>
-          Coverage is partial and results are recency-boosted. This fixture
-          shows two of those results. The third source became private on YouTube and was removed from playback on October 11, 2026. It shows these saved results only. It is not a ranking, a complete survey
-          or a performance benchmark. A live search may return different
-          results.
+          Quotes preserve the spoken words, including repetitions and fillers. Punctuation and line breaks are formatted for reading.
+          Playback pins use source caption cues near each sentence start, not word-level timing.
+          Channel names identify the source, not the speaker. YouTube plays the original audio and video.
         </p>
         <p>
-          Transcript wording is preserved, including repetitions. Channel names
-          are not speaker attribution. Speaker identities were not independently checked. Each source link starts at the
-          returned passage timestamp; the short excerpt may begin later inside
-          that passage.
+          The earlier MTS livestream became private on YouTube, so this edition uses another MTS video.
+          The original Columbia Business School pin at <a href="https://arcmira.com/watch?v=zdVkL23jqiw&amp;t=5">0:05</a>
+          reads: “Um, I'm going to be speaking about vibe coding and the subtitle here is how business leaders are are building software without writing code.”
         </p>
         <p>
-          The embedded YouTube player plays the original source with sound.
-          Selecting a card stops the previous source and cues the new passage.
-          This page uses saved search results and makes no Arcmira API calls.
-          <a href="fixture.js?v=source-audio-2">Inspect the public fixture</a> ·
+          No credentials are required. This page uses saved results and makes no Arcmira API calls.
+          <a href="fixture.js?v=source-audio-3">Inspect the public fixture</a> ·
           <a href="https://arcmira.com/docs">Read the API docs</a>
         </p>
       </details>
-      <noscript
-        ><p>
-          This interactive demo needs JavaScript. Its saved sources are
-          <a href="https://arcmira.com/watch?v=zdVkL23jqiw&amp;t=5"
-            >Columbia Business School at 0:05</a
-          >,
-          <a href="https://arcmira.com/watch?v=mD1F-yy_D8E&amp;t=823"
-            >Masters of Scale at 13:43</a
-          >.
-        </p></noscript
-      >
+      <noscript><p>This demo needs JavaScript for playback. <a href="fixture.js?v=source-audio-3">Read the saved quotes and timestamp links</a>.</p></noscript>
     </main>
     <footer>
       <a href="https://arcmira.com/">Arcmira: YouTube Transcript Search</a

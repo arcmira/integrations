@@ -8,11 +8,12 @@ let ready = false;
 let apiReady = false;
 
 function clock(seconds) {
-  return `${Math.floor(seconds / 60)
-    .toString()
-    .padStart(2, "0")}:${Math.floor(seconds % 60)
-    .toString()
-    .padStart(2, "0")}`;
+  const total = Math.floor(seconds);
+  const minutes = Math.floor(total / 60);
+  const tail = String(total % 60).padStart(2, "0");
+  return minutes >= 60
+    ? `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, "0")}:${tail}`
+    : `${String(minutes).padStart(2, "0")}:${tail}`;
 }
 
 const buttons = fixture.quotes.map((item, index) => {
@@ -21,7 +22,7 @@ const buttons = fixture.quotes.map((item, index) => {
   button.className = "source-option";
   button.setAttribute(
     "aria-label",
-    `Show excerpt ${index + 1}, ${item.channel}, passage starts ${clock(item.passageStartSeconds)}`,
+    `Show excerpt ${index + 1}, ${item.channel}, quote starts near ${clock(item.passageStartSeconds)}`,
   );
   for (const [className, text] of [
     ["number", `0${index + 1}`],
@@ -48,6 +49,7 @@ function render(index) {
   active = index;
   $("quote").textContent = item.quote;
   $("channel").textContent = item.channel;
+  $("source-context").textContent = item.context || "";
   $("published").textContent = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
