@@ -2,22 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="A small, source-linked quote timeline made from three saved Arcmira transcript search results."
+      content="A small, source-linked quote timeline made from five selected Arcmira transcript search results."
     />
     <title>YouTube Transcript Search to Quote Timeline | Arcmira</title>
-    <link rel="stylesheet" href="style.css" />
-    <script defer src="fixture.js"></script>
-    <script defer src="timeline.js"></script>
+    <link rel="stylesheet" href="style.css?v=app-theme-1" />
+    <script defer src="fixture.js?v=app-theme-1"></script>
+    <script defer src="timeline.js?v=app-theme-1"></script>
   </head>
   <body>
     <a class="skip" href="#demo">Skip to timeline</a>
     <header class="masthead">
-      <a class="wordmark" href="https://arcmira.com/"
-        >arcmira<span aria-hidden="true">↗</span></a
-      >
+      <a class="brand" href="https://arcmira.com/" aria-label="Arcmira home">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCAA4ADgDASIAAhEBAxEB/8QAGwABAAIDAQEAAAAAAAAAAAAAAAcIAQYJAwT/xAA3EAAABQMCBAMFBQkAAAAAAAAAAQIDBAUGEQcSCBMhMRUicRYjMoGRFEFRYYIYUlNVlKKjsdP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AqoAAAAJS4e9JYmrN3SYFUcls0uFFU++5GUSVmozJKEkZkZFkzM+3ZJixH7F+nX8wuT+qa/5AKSgJG150wY0qvtyjQHJLtNfjtyYjkgyUs0nlKiMyIiMyWlX3dsCOQAAAAGRgfVSqdIq9SiU6IjmSZbyGGk/vLUokpL6mQC6HB1aHgenEivPN7X63JNaVGWD5LWUI/u5h/Mhu0biE01l3MVuM3PHVNU7yEr5ayYW5nG0ncbD6/fnB/iNjhWfHp1hN2jDeVHZapvhyHkF5k+72by/PPX1HPqmaeT52paLD+3Q25viB05Ukl5aJSVGRqI+5/CeC7meCAWb40bP8Ss6l3Qy3l2lSTYeUX8F3pk/RaUl+oxTYdMb3tJq7rEqtsuqNZTYSo6HFnkyc2+RZ/mSiSfyHNOTHdiSHY77am3mlmhaFd0qI8GR/MB5AAAAmbhOs/wBpdV4s51vdForKpyzPtzPgbL13K3foEMibdANcrc0fpVVbnUSoTqhUX0KU8wtskk0hPlT5jznKlmfqQC69wVhm3qDUavIMuTAjOSV5PHRCTUf+hzUptyzIF1xrl3mqazOTPNRH1U4Tm8/qeRP+qnFjSr3sKrW5SqHUoUqoNpZ577iDSlG8jX0SeeqSMvmK0Z65AdTIE1mpQY82MvexIaS82r8UqIjI/oYoRxOWf7I6t1U2m9kWq7akzgsF7zO//Ilf1ISZp3xeUm1bJo1BqlCqkyXToyYynmnG9q0o6Jxk8/CSSGhcQOtFvavtUh6n0WfT51PU4hTr60GlxpeDx5T7kpOS9TAQ0AAAAAAAAADORgAAAAAH/9k=" width="25" height="25" alt="" />
+        <span class="logo-text">Arcmira</span>
+      </a>
       <nav aria-label="Resources">
         <a href="https://arcmira.com/docs">API docs ↗</a
         ><a href="https://arcmira.com/agent-setup">Connect your AI ↗</a>
@@ -26,7 +28,7 @@
     <main>
       <section class="intro" aria-labelledby="title">
         <p class="eyebrow">A saved search, made visible</p>
-        <h1 id="title">A phrase.<br />Three sources.</h1>
+        <h1 id="title">One idea. Five sources.</h1>
         <p class="lede">
           Find a spoken moment. Keep the words, the timestamp and the way back.
         </p>
@@ -35,10 +37,10 @@
         <div>
           <p class="eyebrow">Try it with your AI</p>
           <p id="prompt">
-            Use Arcmira to find three transcript passages about “vibe coding” in
-            YouTube videos published in August 2026. Return short verbatim
-            excerpts, channel names and source timestamp links. State the search
-            window and coverage limits.
+            Use Arcmira to find five compelling quotes about vibe coding from videos published this year.
+            Prioritize TBPN, Monitor The Situation, Lenny’s Podcast and Theo at t3.gg.
+            Return each complete sentence with its channel, video title and timestamp link.
+            Check that the videos play and keep enough context to preserve each speaker’s meaning.
           </p>
         </div>
         <button id="copy-prompt" class="button bright" type="button">
@@ -53,7 +55,7 @@
         <div class="query-row">
           <span class="query">“vibe coding”</span
           ><span class="query-meta"
-            >Global search · Aug 1–31, 2026 · 3 saved results</span
+            >2026 · 5 selected sources</span
           >
         </div>
         <div class="workspace">
@@ -61,7 +63,7 @@
             <div class="stage" id="stage">
               <div class="stage-top">
                 <span class="eyebrow">Transcript excerpt</span
-                ><span id="card-count" class="mono">01 / 03</span>
+                ><span id="card-count" class="mono">01 / 05</span>
               </div>
               <figure id="quote-card">
                 <span class="quote-mark" aria-hidden="true">“</span>
@@ -78,37 +80,15 @@
               </div>
             </div>
             <div class="transport">
-              <button
-                id="play"
-                class="button play"
-                type="button"
-                aria-label="Play card sequence"
-              >
-                Play sequence
-              </button>
-              <label for="scrub" class="sr-only"
-                >Card sequence position, in seconds</label
-              >
-              <input
-                id="scrub"
-                type="range"
-                min="0"
-                max="18"
-                value="0"
-                step="0.01"
-                aria-valuetext="0 seconds, card 1 of 3"
-              />
-              <output id="position" for="scrub" class="mono"
-                >00:00 / 00:18</output
-              >
+              <button id="play" class="button play" type="button" disabled>Loading player…</button>
+              <span class="sequence-note">Original source audio and video</span>
             </div>
-            <p class="sequence-note">
-              Six seconds per card. This is a visual sequence, not audio
-              playback or word-level timing.
-            </p>
+            <div class="source-player"><div id="player"></div></div>
+            <p id="playback-status" class="sequence-note" role="status" aria-live="polite">Loading YouTube. You can also open the timestamp link.</p>
+            <p class="sequence-note">Playback is pinned near the quoted sentence. Use the video controls to hear the surrounding context.</p>
           </div>
           <aside class="sources" aria-label="Choose a saved source">
-            <p class="eyebrow source-heading">Source index <span>03</span></p>
+            <p class="eyebrow source-heading">Source index <span>05</span></p>
             <div id="source-list"></div>
             <div class="source-detail">
               <p class="eyebrow">Selected passage</p>
@@ -118,9 +98,10 @@
                 target="_blank"
                 rel="noreferrer"
               ></a>
+              <p id="source-context" class="sequence-note"></p>
               <dl>
                 <div>
-                  <dt>Passage starts</dt>
+                  <dt>Quote starts near</dt>
                   <dd id="source-time" class="mono"></dd>
                 </div>
                 <div>
@@ -151,47 +132,27 @@
       <details class="provenance">
         <summary>What you are looking at</summary>
         <p>
-          These are short, exact transcript excerpts from a saved Arcmira
-          search, captured October 8, 2026. The query was global, not limited to
-          one channel. It used August 1 inclusive through September 1 exclusive,
-          in UTC, and returned three results. The response’s as-of value was
-          August 25, 2026 at 22:17:26 UTC.
+          Five selected moments from videos published in 2026, found through Arcmira transcript search.
+          Selected October 11, 2026 for a short, energetic introduction to vibe coding.
+          These are editorial choices, not a ranking or a complete survey. Search coverage is partial.
         </p>
         <p>
-          Coverage is partial and results are recency-boosted. This fixture
-          shows these three results only. It is not a ranking, a complete survey
-          or a performance benchmark. A live search may return different
-          results.
+          Quotes preserve the spoken words, including repetitions and fillers. Punctuation and line breaks are formatted for reading.
+          Playback pins use source caption cues near each sentence start, not word-level timing.
+          Channel names identify the source, not the speaker. YouTube plays the original audio and video.
         </p>
         <p>
-          Transcript wording is preserved, including repetitions. Channel names
-          are not speaker attribution. Speaker identities and original playback
-          were not independently checked. Each source link starts at the
-          returned passage timestamp; the short excerpt may begin later inside
-          that passage.
+          The earlier MTS livestream became private on YouTube, so this edition uses another MTS video.
+          The original Columbia Business School pin at <a href="https://arcmira.com/watch?v=zdVkL23jqiw&amp;t=5">0:05</a>
+          reads: “Um, I'm going to be speaking about vibe coding and the subtitle here is how business leaders are are building software without writing code.”
         </p>
         <p>
-          The animation has no audio or video assets and makes no API calls. Its
-          six-second card intervals are presentation timing. Source timestamps
-          remain unchanged.
-          <a href="fixture.js">Inspect the public fixture</a> ·
+          No credentials are required. This page uses saved results and makes no Arcmira API calls.
+          <a href="fixture.js?v=app-theme-1">Inspect the public fixture</a> ·
           <a href="https://arcmira.com/docs">Read the API docs</a>
         </p>
       </details>
-      <noscript
-        ><p>
-          This interactive demo needs JavaScript. Its saved sources are
-          <a href="https://arcmira.com/watch?v=zdVkL23jqiw&amp;t=5"
-            >Columbia Business School at 0:05</a
-          >,
-          <a href="https://arcmira.com/watch?v=mD1F-yy_D8E&amp;t=823"
-            >Masters of Scale at 13:43</a
-          >, and
-          <a href="https://arcmira.com/watch?v=3JWaCAkx5cQ&amp;t=743"
-            >Monitor The Situation at 12:23</a
-          >.
-        </p></noscript
-      >
+      <noscript><p>This demo needs JavaScript for playback. <a href="fixture.js?v=app-theme-1">Read the saved quotes and timestamp links</a>.</p></noscript>
     </main>
     <footer>
       <a href="https://arcmira.com/">Arcmira: YouTube Transcript Search</a
