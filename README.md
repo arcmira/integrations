@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search Integrations
 
-[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing) · [MCP and agent skills](https://github.com/arcmira/mcp)
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing) · [MCP and agent skills](https://github.com/arcmira/mcp) · [YouTube](https://www.youtube.com/@arcmira)
 
 Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n8n and Dify also resolve people, organizations, products, topics and channels. Results retain timestamped source links and coverage notes.
 
@@ -10,7 +10,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.5.1 |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
 | LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.5](https://pypi.org/project/langchain-arcmira/0.1.5/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
-| Langflow | [Setup and components](packages/langflow) | Source preview; installed LFX runtime tested; PyPI and catalog publication pending |
+| Langflow | [Setup and components](packages/langflow) | [PyPI 0.1.0](https://pypi.org/project/lfx-arcmira/0.1.0/); installed LFX runtime tested; visual-editor validation and catalog review pending |
 | Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | Source preview; npm and catalog publication pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
