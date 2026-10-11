@@ -38,6 +38,6 @@ assert.equal(credentials.documentationUrl,'https://arcmira.com/docs');
 assert.equal(credentials.authenticate.properties.headers.Authorization,'=Bearer {{$credentials.apiKey}}');
 assert.equal(node.usableAsTool,true);
 const pkg=JSON.parse(fs.readFileSync(path.join(candidate,'package.json'),'utf8'));
-assert.equal(pkg.private,true);assert.equal(pkg.dependencies,undefined);
+assert.equal(pkg.dependencies,undefined);
 const result={checked_at:new Date().toISOString(),scope:'Compiled n8n node and credential classes load. Request declarations compared with saved deployed OpenAPI; not a host execution test.',results,credentials:'pass',runtime_dependencies:0,host_execution_tested:false};
 console.log(JSON.stringify(result,null,2));

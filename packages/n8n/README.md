@@ -42,4 +42,4 @@ The official n8n-node CLI builds and lints this declarative node. Seven tests ex
 
 On October 11, 2026, the current candidate passed authenticated search and entity resolution in the official n8n 2.41.3 browser editor. Search returned a passage with its video title, channel, publication date, timestamp and watch URL. Entity resolution returned TBPN with its channel link. The check used an isolated test account with on-demand usage disabled. Paid filters and Premium access were not exercised.
 
-Browser-editor validation is complete. First publication to npm with GitHub Actions provenance and n8n Creator Portal review remain. The package stays private and retains a publication guard until release setup is complete. The MIT adapter license does not change Arcmira service or content rights.
+Browser-editor validation is complete. First publication to npm with GitHub Actions provenance and n8n Creator Portal review remain. The release candidate is publishable; release approval, npm authentication and registry verification remain separate steps. The MIT adapter license does not change Arcmira service or content rights.
