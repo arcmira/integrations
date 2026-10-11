@@ -1,17 +1,19 @@
-# YouTube transcript search → quote timeline
+# YouTube transcript search to playable quotes
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Live demo](https://arcmira.github.io/integrations/quote-timeline/) · [Connect your AI](https://arcmira.com/agent-setup)
 
-A static, keyboard-accessible example of turning saved Arcmira search results into a source-linked quote sequence. Open `index.html` directly, or serve this folder:
+Five editorial selections from 2026 videos on Masters of Scale, TBPN, Monitor The Situation, Lenny’s Podcast and Theo at t3.gg. Each card preserves a complete spoken thought. Select a source and click **Play source** to hear its original audio. The YouTube controls provide seeking and volume.
+
+Serve this folder locally:
 
 ```sh
 python3 -m http.server 8080 --bind 127.0.0.1
 ```
 
-Then open <http://127.0.0.1:8080>. No dependencies, credentials, API calls or media downloads are needed.
+Open <http://127.0.0.1:8080>. No credentials or Arcmira API calls are needed. Playback loads the original video through YouTube’s embedded player. Selecting another source destroys the previous player. If an embed fails, use the YouTube timestamp link. Clipboard failures expose selectable text.
 
-The prompt near the top is copyable. Select a source, scrub the 18-second sequence, or play it. Each card displays a short, verbatim transcript excerpt, its channel, video ID and exact source passage timestamp. Copy the timestamp link to return to its context.
+`fixture.js` preserves the quote text, source metadata, date window and selection notes. Punctuation and line breaks are formatted for reading; repetitions remain. Playback pins use caption cues near sentence starts, not word-level alignment. This is a partial editorial selection, not an exhaustive search or ranking. The former MTS video became private; a different MTS video replaces it. The corrected Columbia quote remains in the source notes.
 
-`fixture.js` contains three saved results for a global “vibe coding” search restricted to videos published in August 2026. Search coverage is partial. These are examples, not a complete survey. Channel names are not speaker attributions. Source timestamps mark the returned passage start; the short excerpt can begin later within that passage.
+The header uses the production Arcmira image and Helvetica Now Display cuts. Preserve the capitalized wordmark, 25px mark, 19px type, 600 weight, 28.5px line height, zero letter spacing and 10px gap. This demo uses the owner-approved black header with white text. Do not independently typeset or decorate the brand.
 
-Each card occupies six seconds of the demo. This is a presentation clock, not audio playback or word timing. Reduced-motion preferences remove the reveal effect. Clipboard failures expose selectable text.
+The page uses Arcmira’s app dark palette (`#121212`, `#242424`, `#363636`), Helvetica Now Display, 12px panels, 7px controls and the shared `#187246` primary action. Source selection changes its neutral background only.
