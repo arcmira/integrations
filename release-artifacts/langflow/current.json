@@ -1,0 +1,10 @@
+{
+  "package": "lfx-arcmira",
+  "version": "0.1.0",
+  "tag": "langflow-v0.1.0",
+  "package_tree": "102a2a03c6723b6fdc5aee6e056ed4656abde020",
+  "files": {
+    "lfx_arcmira-0.1.0-py3-none-any.whl": "cc9f184306220fed035a96bf554fcc3b5495dc15da6b931c0214d64201aba7a5",
+    "lfx_arcmira-0.1.0.tar.gz": "e2395f440cef5d67a37b5c7ad8651070883150b937031608314baf2c881de5df"
+  }
+}
