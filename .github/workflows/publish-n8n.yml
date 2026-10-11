@@ -1,0 +1,38 @@
+name: Publish n8n community node
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-n8n
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'arcmira/integrations' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.22.3'
+      - name: Download and verify locally built release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="$(python3 -c 'import json; print(json.load(open("release-artifacts/n8n/current.json"))["tag"])')"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern 'n8n-nodes-arcmira-*.tgz' --dir release
+          python3 scripts/verify-n8n-release.py release --tag "$tag"
+      - name: Publish with npm trusted publishing and provenance
+        run: npx --yes npm@11.15.0 publish release/n8n-nodes-arcmira-*.tgz --ignore-scripts --provenance --access public
