@@ -40,6 +40,6 @@ Selecting Arcmira Premium requires the corresponding entitlement. Premium and fr
 
 The official n8n-node CLI builds and lints this declarative node. Seven tests exercise n8n's real routing engine with fixture HTTP responses, including filters, source evidence, ambiguity, errors, credential redaction and redirect refusal. A contract check compares compiled node parameters with the repository's public OpenAPI subset.
 
-On October 5, 2026, official n8n 2.41.3 ran authenticated search and entity resolution through the actual node. Both returned live evidence successfully. This covered basic free-account research, with no observed credit decrease and on-demand disabled. Paid filters and Premium access were not exercised.
+On October 11, 2026, the current candidate passed authenticated search and entity resolution in the official n8n 2.41.3 browser editor. Search returned a passage with its video title, channel, publication date, timestamp and watch URL. Entity resolution returned TBPN with its channel link. The check used an isolated test account with on-demand usage disabled. Paid filters and Premium access were not exercised.
 
-Browser-editor validation, npm first publication with provenance, and n8n Creator Portal review remain. The package stays private and retains a publication guard until release setup is complete. The MIT adapter license does not change Arcmira service or content rights.
+Browser-editor validation is complete. First publication to npm with GitHub Actions provenance and n8n Creator Portal review remain. The package stays private and retains a publication guard until release setup is complete. The MIT adapter license does not change Arcmira service or content rights.
