@@ -17,3 +17,5 @@ Open <http://127.0.0.1:8080>. No credentials or Arcmira API calls are needed. Pl
 The header uses the production Arcmira image and Helvetica Now Display cuts. Preserve the capitalized wordmark, 25px mark, 19px type, 600 weight, 28.5px line height, zero letter spacing and 10px gap. This demo uses the owner-approved black header with white text. Do not independently typeset or decorate the brand.
 
 The page uses Arcmira’s app dark palette (`#121212`, `#242424`, `#363636`), Helvetica Now Display, 12px panels, 7px controls and the shared `#187246` primary action. Source selection changes its neutral background only.
+
+Use the [source-checking guide](../../guides/source-checking) to build an editorial brief from transcript search and verify each quote before publication.

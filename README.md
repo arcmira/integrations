@@ -31,6 +31,8 @@ For a standard MCP connection, use the authenticated [OpenAI Agents SDK](example
 
 For creators, the [reel workflow note](examples/reel-workflow) follows source discovery, human selection and a local JavaScript Canvas/ffmpeg edit. The [Remotion quote-card example](examples/remotion-quote-cards) renders saved search excerpts into an 18-second vertical video with source attribution.
 
+For editors and researchers, [build a source-linked brief](guides/source-checking) with a copyable research prompt, a timestamped example, and checks for attribution, context and source availability.
+
 ## Install the Python package
 
 ```sh
