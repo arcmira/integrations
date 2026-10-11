@@ -6,6 +6,7 @@ window.QUOTE_FIXTURE = {
   channelFiltered: false,
   savedAt: "2026-10-08T07:52:00.092Z",
   resultAsOf: "2026-08-25T22:17:26Z",
+  excludedSources: [{ videoId: "3JWaCAkx5cQ", reason: "YouTube reports this video is private", checkedAt: "2026-10-11" }],
   quotes: [
     {
       quote:
@@ -29,17 +30,6 @@ window.QUOTE_FIXTURE = {
       passageStartSeconds: 823,
       sourceUrl: "https://arcmira.com/watch?v=mD1F-yy_D8E&t=823",
       youtubeUrl: "https://www.youtube.com/watch?v=mD1F-yy_D8E&t=823s",
-    },
-    {
-      quote:
-        "their agents can be vibe coding for them and generating the right experiences for them",
-      videoId: "3JWaCAkx5cQ",
-      title: "OPENAI JALAPEÑO | NEW MAC MINI | FLOCK BACKLASH",
-      channel: "Monitor The Situation",
-      publishedAt: "2026-08-25T22:17:26Z",
-      passageStartSeconds: 743,
-      sourceUrl: "https://arcmira.com/watch?v=3JWaCAkx5cQ&t=743",
-      youtubeUrl: "https://www.youtube.com/watch?v=3JWaCAkx5cQ&t=743s",
     },
   ],
 };

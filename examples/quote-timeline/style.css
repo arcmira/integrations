@@ -1,3 +1,18 @@
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("assets/HelveticaNowDisplay-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("assets/HelveticaNowDisplay-Medium.woff2") format("woff2");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("assets/HelveticaNowDisplay-Bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
 :root {
   color-scheme: dark;
   --bg: #111210;
@@ -64,24 +79,17 @@ footer {
   justify-content: space-between;
   border-bottom: 1px solid var(--line);
 }
-.wordmark {
-  font-size: 25px;
-  font-weight: 750;
-  letter-spacing: -1.3px;
-  text-decoration: none;
-  display: flex;
-  gap: 12px;
-}
-.wordmark span {
-  font-size: 19px;
-  color: var(--accent);
-  font-weight: 400;
-}
+.brand { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; cursor: pointer; }
+.brand img { display: block; width: 25px; height: 25px; flex-shrink: 0; }
+.logo-text { font-family: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 600; font-size: 19px; line-height: 28.5px; margin-left: 10px; letter-spacing: 0; color: #000; }
+.masthead { background: #fff; max-width: none; height: 72px; -webkit-font-smoothing: antialiased; }
+.source-player { margin-top: 16px; aspect-ratio: 16 / 9; min-height: 200px; background: #000; }
+.source-player iframe { display: block; width: 100%; height: 100%; min-height: 200px; border: 0; }
 .masthead nav {
   display: flex;
   gap: 28px;
   font-size: 13px;
-  color: var(--muted);
+  color: #363f43;
 }
 .masthead nav a {
   text-decoration: none;
@@ -279,16 +287,6 @@ figcaption .muted {
 .play {
   min-width: 116px;
 }
-.transport input {
-  flex: 1;
-  min-width: 0;
-  accent-color: var(--accent);
-  height: 22px;
-}
-.transport output {
-  color: var(--muted);
-  white-space: nowrap;
-}
 .sequence-note {
   font-size: 10px;
   line-height: 1.5;
@@ -467,7 +465,7 @@ footer > span {
     padding-inline: 20px;
   }
   .masthead {
-    height: 68px;
+    height: 72px;
   }
   .masthead nav {
     gap: 16px;

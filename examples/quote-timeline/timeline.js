@@ -2,15 +2,10 @@
 
 const fixture = window.QUOTE_FIXTURE;
 const $ = (id) => document.getElementById(id);
-const cardDuration = 6;
-const duration = fixture.quotes.length * cardDuration;
-const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-let position = 0;
-let playing = false;
-let active = -1;
-let frame = 0;
-let startClock = 0;
-let startPosition = 0;
+let active = 0;
+let player;
+let ready = false;
+let apiReady = false;
 
 function clock(seconds) {
   return `${Math.floor(seconds / 60)
@@ -39,8 +34,8 @@ const buttons = fixture.quotes.map((item, index) => {
     button.append(span);
   }
   button.addEventListener("click", () => {
-    render(index * cardDuration);
-    pause();
+    render(index);
+    if (apiReady) loadSource();
     $("status").textContent =
       `Showing excerpt ${index + 1} from ${item.channel}.`;
   });
@@ -48,82 +43,76 @@ const buttons = fixture.quotes.map((item, index) => {
   return button;
 });
 
-function render(seconds) {
-  position = Math.min(duration, Math.max(0, seconds));
-  const index = Math.min(
-    fixture.quotes.length - 1,
-    Math.floor(position / cardDuration),
-  );
+function render(index) {
   const item = fixture.quotes[index];
-  if (active !== index) {
-    active = index;
-    $("quote").textContent = item.quote;
-    $("channel").textContent = item.channel;
-    $("published").textContent = new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(item.publishedAt));
-    $("card-count").textContent = `0${index + 1} / 0${fixture.quotes.length}`;
-    $("source-title").textContent = item.title;
-    $("source-title").href = item.sourceUrl;
-    $("source-time").textContent = clock(item.passageStartSeconds);
-    $("video-id").textContent = item.videoId;
-    $("youtube").href = item.youtubeUrl;
-    buttons.forEach((button, i) =>
-      button.setAttribute("aria-pressed", String(i === index)),
-    );
-  }
-  // This deterministic reveal belongs to the card sequence, never the source audio.
-  const reveal = motion.matches
-    ? 1
-    : Math.min(1, 0.7 + (position - index * cardDuration) / 0.4);
-  $("quote-card").style.opacity = String(reveal);
-  $("quote-card").style.transform = motion.matches
-    ? "none"
-    : `translateY(${(1 - reveal) * 18}px)`;
-  $("scrub").value = String(position);
-  $("scrub").setAttribute(
-    "aria-valuetext",
-    `${position.toFixed(1)} seconds, card ${index + 1} of ${fixture.quotes.length}`,
+  active = index;
+  $("quote").textContent = item.quote;
+  $("channel").textContent = item.channel;
+  $("published").textContent = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(item.publishedAt));
+  $("card-count").textContent = `0${index + 1} / 0${fixture.quotes.length}`;
+  $("source-title").textContent = item.title;
+  $("source-title").href = item.sourceUrl;
+  $("source-time").textContent = clock(item.passageStartSeconds);
+  $("video-id").textContent = item.videoId;
+  $("youtube").href = item.youtubeUrl;
+  buttons.forEach((button, i) =>
+    button.setAttribute("aria-pressed", String(i === index)),
   );
-  $("position").textContent = `${clock(position)} / ${clock(duration)}`;
 }
 
-function pause() {
-  playing = false;
-  cancelAnimationFrame(frame);
-  $("play").textContent =
-    position >= duration ? "Replay sequence" : "Play sequence";
-  $("play").setAttribute("aria-label", $("play").textContent);
+function loadSource() {
+  ready = false;
+  $("play").disabled = true;
+  $("play").textContent = "Loading source…";
+  $("playback-status").textContent = "Loading YouTube source.";
+  if (player) {
+    player.destroy();
+    const mount = document.createElement("div");
+    mount.id = "player";
+    document.querySelector(".source-player").append(mount);
+  }
+  const item = fixture.quotes[active];
+  player = new YT.Player("player", {
+    width: "640", height: "360", videoId: item.videoId,
+    playerVars: { start: item.passageStartSeconds, playsinline: 1, origin: location.origin, rel: 0 },
+    events: {
+      onReady: () => {
+        ready = true;
+        const selected = fixture.quotes[active];
+        $("play").disabled = false;
+        $("play").textContent = "Play source";
+        $("playback-status").textContent = `Ready at ${clock(selected.passageStartSeconds)}. Play to hear the original source.`;
+      },
+      onStateChange: ({ data }) => {
+        $("play").disabled = false;
+        if (data === YT.PlayerState.CUED) $("playback-status").textContent = `Ready at ${clock(fixture.quotes[active].passageStartSeconds)}.`;
+        $("play").textContent = data === YT.PlayerState.PLAYING ? "Pause source" : "Play source";
+        if (data === YT.PlayerState.PLAYING) $("playback-status").textContent = "Playing original YouTube source. Volume is controlled in the player.";
+        if (data === YT.PlayerState.PAUSED) $("playback-status").textContent = "Source paused.";
+      },
+      onAutoplayBlocked: () => { $("playback-status").textContent = "Press Play inside the YouTube player to start with sound."; },
+      onError: () => { $("play").disabled = true; $("play").textContent = "Source unavailable"; $("playback-status").textContent = "YouTube could not play this embed. Open the YouTube timestamp link to watch the source."; },
+    },
+  });
 }
-
-function tick(now) {
-  if (!playing) return;
-  render(startPosition + (now - startClock) / 1000);
-  if (position >= duration) pause();
-  else frame = requestAnimationFrame(tick);
-}
-
+window.onYouTubeIframeAPIReady = () => { apiReady = true; loadSource(); };
+const youtubeAPI = document.createElement("script");
+youtubeAPI.src = "https://www.youtube.com/iframe_api";
+youtubeAPI.onerror = () => { $("playback-status").textContent = "YouTube could not load. Open the YouTube timestamp link to watch the source."; $("play").textContent = "Player unavailable"; };
+document.head.append(youtubeAPI);
 $("play").addEventListener("click", () => {
-  if (playing) return pause();
-  if (position >= duration) render(0);
-  startPosition = position;
-  startClock = performance.now();
-  playing = true;
-  $("play").textContent = "Pause sequence";
-  $("play").setAttribute("aria-label", "Pause sequence");
-  frame = requestAnimationFrame(tick);
-});
-
-$("scrub").addEventListener("input", (event) => {
-  render(Number(event.target.value));
-  pause();
-});
-motion.addEventListener("change", () => render(position));
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) pause();
+  if (!ready) return;
+  if (player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo();
+  else {
+    player.unMute();
+    if (player.getVolume() === 0) player.setVolume(100);
+    player.playVideo();
+  }
 });
 
 async function copy(text, label) {
