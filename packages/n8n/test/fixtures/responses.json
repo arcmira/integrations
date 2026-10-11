@@ -64,7 +64,7 @@
         "state": "live",
         "missing_before": null
       },
-      "note": "Quote text as a spoken beat of a few sentences and cite watch_url with published_at. Results are recency-boosted; state the window from window.after when you passed one."
+      "note": "Quote text as a spoken beat of a few sentences and cite watch_url with published_at. State the window from window.after when you passed one."
     }
   },
   "EntityResolveResponse": {
