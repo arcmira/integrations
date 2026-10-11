@@ -2,7 +2,7 @@
 
 [Arcmira](https://arcmira.com) · [API documentation](https://arcmira.com/docs) · [API schema](https://api.arcmira.com/v1/openapi.json)
 
-An opt-in Python extension preview with two native Langflow components:
+An opt-in Python extension with two native Langflow components:
 
 - **YouTube Transcript Search:** find timestamped passages, retaining source links, coverage and access metadata.
 - **Entity Resolve:** resolve names and handles without silently choosing among ambiguous candidates.
@@ -11,10 +11,10 @@ A paid read uses credits from your plan, then your on-demand budget. The configu
 
 ## Local installation
 
-This package is not published to PyPI or included in Langflow. With a compatible Langflow/LFX installation, install this source preview in the same environment:
+This extension is installed separately from Langflow. With a compatible Langflow/LFX installation, install it in the same environment:
 
 ```sh
-python -m pip install "git+https://github.com/arcmira/integrations.git#subdirectory=packages/langflow"
+python -m pip install lfx-arcmira==0.1.0
 lfx extension list
 ```
 
