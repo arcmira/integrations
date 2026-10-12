@@ -19,3 +19,15 @@ The header uses the production Arcmira image and Helvetica Now Display cuts. Pre
 The page uses Arcmira’s app dark palette (`#121212`, `#242424`, `#363636`), Helvetica Now Display, 12px panels, 7px controls and the shared `#187246` primary action. Source selection changes its neutral background only.
 
 Use the [source-checking guide](../../guides/source-checking) to build an editorial brief from transcript search and verify each quote before publication.
+
+## Export the saved shortlist
+
+From this folder, run Python 3.9 or later:
+
+```sh
+python3 export-shortlist.py > shortlist.json
+```
+
+The JSON preserves the five selected quotes, source links, timestamps, search window, timing limits, context, and separate retired-source notes. This exports the saved fixture without an API key or network calls. It does not run a new search, download footage, or verify current playback availability.
+
+Use the `quotes` array for your source shortlist. Keep the selection and timing notes with it, and check the original recordings before publication. Start times are caption cues, not complete clip boundaries.
