@@ -6,7 +6,7 @@ Search indexed YouTube transcripts from Activepieces workflows. Get timestamped 
 
 ## Add transcript search to a workflow
 
-This source preview has passed authenticated search in an official Activepieces 0.92.0 development host. It is not yet available on npm or included in the Activepieces catalog. Browser-editor validation and fresh npm installation remain before release.
+This source preview has passed authenticated search in an official Activepieces 0.92.0 development host. It is not yet available on npm or included in the Activepieces catalog. Browser-editor validation also passed on October 13, 2026. npm publication and fresh npm installation remain before release.
 
 After publication:
 
@@ -43,6 +43,8 @@ node scripts/check-packed.cjs
 The 13 tests run the actual framework action with controlled HTTP responses. They cover evidence preservation, filters, authentication, failures, and the absence of automatic fallback. The bundled archive is also checked in isolation with external package imports blocked.
 
 On October 5, 2026, the official Activepieces 0.92.0 development host validated an Arcmira connection and ran a bounded search successfully. Native output retained its timestamp, watch link, source label, account window and coverage note. This covered basic free-account research, with no observed credit decrease and on-demand disabled. Premium access and paid filters were not exercised.
+
+On October 13, 2026, the Activepieces 0.92.0 browser editor discovered the piece and added its search action. The connection, query, limit, channel and date fields rendered, as did all three transcript source choices. Host-level retries were off by default. This editor check did not use a production key or execute a search.
 
 `node smoke.cjs` checks a live invalid-key refusal. It does not require an account key or run paid research.
 
