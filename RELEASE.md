@@ -5,7 +5,7 @@
 Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
-The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK package is also a release candidate at 0.1.0 with public publication metadata. Activepieces and n8n remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
 
 ## Python LangChain 0.1.6
 
@@ -37,6 +37,10 @@ The `@arcmira/langchain` 0.1.0 source is prepared for a public npm release. It i
 5. Verify registry metadata, a fresh installation, native tool execution, and provenance when configured. Then update this status and extend [LangChain listing issue #6442](https://github.com/langchain-ai/docs/issues/6442) to include TypeScript.
 
 After publication, install the package with `npm install @arcmira/langchain@0.1.0 @langchain/core zod` and import `createArcmiraTools` from `@arcmira/langchain`. Until then, use the [tested source quick start](packages/langchain).
+
+## AI SDK first publication
+
+The `@arcmira/ai-sdk` 0.1.0 candidate has public publication metadata and a [dedicated setup guide](https://arcmira.github.io/integrations/ai-sdk/). First npm publication is pending. Follow the same exact-source validation, archive inspection and registry verification steps as the TypeScript LangChain release above. Verify AI SDK tool execution from the packed artifact before publication.
 
 ## Before remaining npm and catalog publication
 

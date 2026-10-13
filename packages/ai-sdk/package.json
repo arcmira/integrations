@@ -1,7 +1,6 @@
 {
   "name": "@arcmira/ai-sdk",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "description": "YouTube transcript search tools for the AI SDK, powered by Arcmira.",
   "main": "./dist/index.js",
@@ -54,5 +53,8 @@
   ],
   "engines": {
     "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
