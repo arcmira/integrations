@@ -6,9 +6,9 @@ Search indexed YouTube transcripts from Activepieces workflows. Get timestamped 
 
 ## Add transcript search to a workflow
 
-This source preview has passed authenticated search in an official Activepieces 0.92.0 development host. It is not yet available on npm or included in the Activepieces catalog. Browser-editor validation also passed on October 13, 2026. npm publication and fresh npm installation remain before release.
+This piece has passed authenticated search in an official Activepieces 0.92.0 development host and browser-editor validation on October 13, 2026. It is not included in the Activepieces global catalog.
 
-After publication:
+For installation from npm:
 
 1. In Activepieces, open **Settings → My Pieces → Install Piece** and enter `@arcmira/piece-arcmira`.
 2. Add **Arcmira: YouTube Transcript Search** to your flow.

@@ -36,7 +36,6 @@
     "esbuild": "0.25.12",
     "typescript": "5.9.3"
   },
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arcmira/integrations.git",
