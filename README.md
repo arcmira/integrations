@@ -7,11 +7,11 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Integration | Source | Status |
 | --- | --- | --- |
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.5.1 |
-| Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.5.1 |
-| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | Release candidate; npm and catalog publication pending |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.5](https://pypi.org/project/langchain-arcmira/0.1.5/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
-| Langflow | [Setup and components](packages/langflow) | [PyPI 0.1.0](https://pypi.org/project/lfx-arcmira/0.1.0/); installed LFX runtime tested; visual-editor validation and catalog review pending |
-| Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | Source preview; npm and catalog publication pending |
+| Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.6.0 |
+| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/langchain); catalog update requested |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
+| Langflow | [Setup and components](packages/langflow) | [PyPI 0.1.0](https://pypi.org/project/lfx-arcmira/0.1.0/); native runtime and editor fields verified; live-account checks and catalog review pending |
+| Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk); catalog review pending |
 | Activepieces | [Setup and action](packages/activepieces) | Source preview; npm publication and editor validation pending |
 | n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
 | n8n built-in workflow | [Transcript source shortlist](examples/n8n-source-shortlist) | One bounded Free-account execution verified; importable example, not a catalog listing |
@@ -31,12 +31,14 @@ For a standard MCP connection, use the authenticated [OpenAI Agents SDK](example
 
 For creators, the [reel workflow note](examples/reel-workflow) follows source discovery, human selection and a local JavaScript Canvas/ffmpeg edit. The [Remotion quote-card example](examples/remotion-quote-cards) renders saved search excerpts into an 18-second vertical video with source attribution.
 
+Try the [interactive quote timeline](https://arcmira.github.io/integrations/quote-timeline/) to explore five conversations about vibe coding with quoted passages and timestamped video playback.
+
 For editors and researchers, [build a source-linked brief](guides/source-checking) with a copyable research prompt, a timestamped example, and checks for attribution, context and source availability.
 
 ## Install the Python package
 
 ```sh
-pip install langchain-arcmira==0.1.5
+pip install langchain-arcmira==0.1.6
 export ARCMIRA_API_KEY='your-key'
 python - <<'PYTHON'
 from langchain_arcmira import ArcmiraSearch
@@ -50,16 +52,13 @@ PYTHON
 
 See the [Python guide](packages/langchain-python) for entity resolution, filters, async calls, and LangGraph setup.
 
-## Try the TypeScript source preview
+## Install the TypeScript package
 
 ```sh
-git clone https://github.com/arcmira/integrations.git
-cd integrations/packages/langchain
-npm ci --ignore-scripts
-npm run build
+npm install @arcmira/langchain@0.1.0 @langchain/core zod
 export ARCMIRA_API_KEY='your-key'
 node --input-type=module <<'JS'
-import { createArcmiraTools } from './dist/index.js';
+import { createArcmiraTools } from '@arcmira/langchain';
 const [search] = createArcmiraTools({ apiKey: process.env.ARCMIRA_API_KEY });
 const result = await search.invoke({ q: 'AI agents', limit: 5 });
 console.log(result);
@@ -79,7 +78,7 @@ A paid read uses credits from your plan, then your on-demand budget. Coverage an
 
 ## Verification
 
-Python LangChain 0.1.5 uses Arcmira SDK 0.5.1 and updates the paid-read description. Its wheel passed 58 adapter tests with external network connections blocked, and both public PyPI archives match the tested artifacts. Earlier live integration checks used no credits or model inference. See [release verification](RELEASE.md#published-015) for evidence and scope.
+Python LangChain 0.1.6 uses Arcmira SDK 0.6.0. Its wheel passed 58 adapter tests with external network connections blocked, and both public PyPI archives match the tested artifacts. Earlier live integration checks used no credits or model inference. See [release verification](RELEASE.md#python-langchain-016) for evidence and scope.
 
 The TypeScript LangChain package and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
 

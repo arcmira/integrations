@@ -2,15 +2,21 @@
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
-Source preview for the Vercel AI SDK. This package is not published to npm yet.
+[Available on npm as @arcmira/ai-sdk 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk) for the Vercel AI SDK.
 
-[Open the AI SDK setup guide](https://arcmira.github.io/integrations/ai-sdk/) for a copyable setup prompt and source-preview examples.
+[Open the AI SDK setup guide](https://arcmira.github.io/integrations/ai-sdk/) for a copyable setup prompt and examples.
 
 Search indexed YouTube transcripts for timestamped passages. Resolve names to IDs, then filter by channel, speaker, topic, transcript source, or sponsored and organic passages.
 
 ## Quick start
 
-After publication, install `@arcmira/ai-sdk` with `ai` and `zod`. Set `ARCMIRA_API_KEY` and your model provider's credentials in the server environment.
+Install the published package:
+
+```sh
+npm install @arcmira/ai-sdk@0.1.0 ai zod
+```
+
+Set `ARCMIRA_API_KEY` and your model provider's credentials in the server environment.
 
 ```ts
 import { generateText, isStepCount } from 'ai';
@@ -40,15 +46,15 @@ Results retain the API's source links, publication dates, speaker information an
 
 A paid read uses credits from your plan, then your on-demand budget. Search uses four credits per returned chunk after the first five. Account access and freshness limits still apply. API refusals retain their typed error body. The adapter does not retry a refused request or silently substitute another transcript source.
 
-The tools accept the AI SDK cancellation signal. This candidate exposes search and entity resolution. Full transcripts, recommendations, account management and monitor writes remain available through Arcmira's SDK or MCP server.
+The tools accept the AI SDK cancellation signal. This adapter exposes search and entity resolution. Full transcripts, recommendations, account management and monitor writes remain available through Arcmira's SDK or MCP server.
 
 ## Documentation
 
 - [Search reference](https://arcmira.com/docs/search)
 - [Arcmira libraries](https://arcmira.com/docs/libraries)
 
-## Candidate verification
+## Verification
 
-Built with Arcmira SDK 0.5.1, AI SDK 7.0.127 and Zod 4.6.5. AI SDK 7.0.127 and its changed dependencies passed the repository's seven-day package hold on October 8, 2026. `npm run build` checks types. `npm test` runs the AI SDK tool-execution loop with simulated model and API responses. An earlier live check with SDK 0.4.3 ran search and entity resolution against Arcmira with existing smoke-test access. Both return real results through the AI SDK execution loop, using simulated model decisions. Timestamped evidence reaches the next model step. No paid model inference is included.
+Built with Arcmira SDK 0.6.0, AI SDK 7.0.127 and Zod 4.6.5. AI SDK 7.0.127 and its changed dependencies passed the repository's seven-day package hold on October 8, 2026. `npm run build` checks types. `npm test` runs the AI SDK tool-execution loop with simulated model and API responses. An earlier live check with SDK 0.4.3 ran search and entity resolution against Arcmira with existing smoke-test access. Both return real results through the AI SDK execution loop, using simulated model decisions. Timestamped evidence reaches the next model step. No paid model inference is included.
 
-Before release: publish a dedicated AI SDK integration guide and release the package from a public Arcmira repository. Recheck the registry's current-SDK compatibility requirement before submitting the tools-registry pull request; the newest npm release can be newer than this repository's eligible test version.
+Publication and tools-registry inclusion are separate steps. Recheck the registry's current-SDK compatibility requirement before submitting the tools-registry pull request; the newest npm release can be newer than this repository's eligible test version.

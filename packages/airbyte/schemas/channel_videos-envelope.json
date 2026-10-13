@@ -166,6 +166,49 @@
       ],
       "description": "Same as indexed_through."
     },
+    "freshness": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "delay_days": {
+              "type": "integer",
+              "description": "Days after publication before this plan reads a video."
+            },
+            "served_through": {
+              "type": "string",
+              "description": "YYYY-MM-DD (UTC). Results on this plan stop at this publish date; media published after it is not read."
+            }
+          },
+          "required": [
+            "delay_days",
+            "served_through"
+          ],
+          "description": "Where results stop on a plan that reads media after a delay."
+        },
+        {
+          "description": "Present when your plan's freshness gate cut the window: where results on this plan stop. unlock names the plan that reads past it."
+        }
+      ]
+    },
+    "unlock": {
+      "type": "object",
+      "properties": {
+        "tier": {
+          "type": "string",
+          "description": "The plan that lifts the freshness gate."
+        },
+        "url": {
+          "type": "string",
+          "description": "Where to start that plan."
+        }
+      },
+      "required": [
+        "tier",
+        "url"
+      ],
+      "description": "Present with freshness when your plan's freshness gate cut the window; note says so."
+    },
     "note": {
       "type": "string",
       "description": "One steering sentence for the agent reading this."

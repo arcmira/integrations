@@ -5,32 +5,35 @@
 Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
-The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.5](https://pypi.org/project/langchain-arcmira/0.1.5/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+The TypeScript LangChain and AI SDK packages are published on npm at 0.1.0. Activepieces and n8n remain unpublished previews at 0.1.0 with `private: true`. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+
+## Python LangChain 0.1.6
+
+Published October 13, 2026 with Arcmira SDK 0.6.0. Third-party dependencies are unchanged. The source and built wheel each passed 58 tests; full local validation passed. Both downloaded PyPI archives match the verified release manifest.
+
+[PyPI 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/) · [Release artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.6) · [Publication run](https://github.com/arcmira/integrations/actions/runs/38390141464)
 
 ## Verified versions
 
 | Package | Framework | Arcmira SDK | Checks |
 | --- | --- | --- | --- |
-| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.5.1 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
-| langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.5.1 | 58 source tests and 58 public-wheel tests; no new live API test for this dependency update |
-| @arcmira/ai-sdk | ai 7.0.127 | 0.5.1 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
+| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.6.0 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
+| langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.6.0 | 58 source tests and 58 built-wheel tests; public archive hashes match; no new live API test for this dependency update |
+| @arcmira/ai-sdk | ai 7.0.127 | 0.6.0 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
 | @arcmira/piece-arcmira | Activepieces host 0.92.0; pieces-framework 0.32.0 | Direct HTTP | TypeScript, 13 action tests, isolated bundle check, live native-host search |
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
 | Arcmira for Dify | dify-plugin 0.10.2; plugin 0.1.2; Community Edition 1.17.1 | Direct HTTP | 18 SDK tests, local SDK research, native Community Edition resolution and bounded search; Cloud installation at 0.1.1 |
 
 Direct third-party dependencies met a seven-day release-age policy when selected on October 5, 2026. The first-party SDK uses the current released contract. AI SDK 7.0.127 passed the age policy and source/packed compatibility checks on October 8, 2026 after 19:20 UTC. Recheck newer releases before publishing.
 
-## TypeScript LangChain first publication
+## TypeScript LangChain and AI SDK 0.1.0
 
-The `@arcmira/langchain` 0.1.0 source is prepared for a public npm release. It is not published yet. Its package metadata deliberately omits `private` and specifies the public npm registry. Keep release execution separate from preparing the source.
+Published October 13, 2026. The downloaded npm archives match the tested release artifacts, and each downloaded package passed 14 integration tests. Both use Arcmira SDK 0.6.0.
 
-1. Run `scripts/ci.sh` locally on the exact source commit.
-2. From `packages/langchain`, run `npm pack --ignore-scripts --json` and inspect the resulting archive. It must contain compiled JavaScript, declarations, README, Apache-2.0 license, and package metadata.
-3. Verify the archive imports and runs the native LangChain tools against fixture responses. Record the artifact SHA-256 and source commit before publishing.
-4. Confirm the branded npm identity and permission to publish in the `@arcmira` scope. Publish the verified archive only after the release is authorized.
-5. Verify registry metadata, a fresh installation, native tool execution, and provenance when configured. Then update this status and extend [LangChain listing issue #6442](https://github.com/langchain-ai/docs/issues/6442) to include TypeScript.
+- [@arcmira/langchain](https://www.npmjs.com/package/@arcmira/langchain): [setup](packages/langchain). The TypeScript catalog update was requested in [the existing listing issue](https://github.com/langchain-ai/docs/issues/6442#issuecomment-6152249700).
+- [@arcmira/ai-sdk](https://www.npmjs.com/package/@arcmira/ai-sdk): [setup guide](https://arcmira.github.io/integrations/ai-sdk/). Tools-registry inclusion remains pending; current-SDK compatibility is a separate admission check.
 
-After publication, install the package with `npm install @arcmira/langchain@0.1.0 @langchain/core zod` and import `createArcmiraTools` from `@arcmira/langchain`. Until then, use the [tested source quick start](packages/langchain).
+Registry archives retain the README shipped at publication. These guides describe the current installation route.
 
 ## Before remaining npm and catalog publication
 
@@ -49,7 +52,7 @@ The repository includes a public OpenAPI subset for schema parity tests. It cont
 
 Activepieces publishes the self-contained `bundle/` artifact, not its source dependency tree. Its bundle includes third-party license notices. Browser-editor validation and a fresh public npm installation still remain. Public npm installation is separate from global catalog inclusion; upstream contributions are currently paused.
 
-n8n has no runtime dependencies beyond its host peer. Its frozen pnpm lock includes build and test tools. The package remains private with a publication guard. Browser-editor validation, GitHub Actions publication with npm provenance, and Creator Portal review remain. See the [current n8n verification requirements](https://docs.n8n.io/connect/create-nodes/build-your-node/reference/verification-guidelines).
+n8n has no runtime dependencies beyond its host peer. Its frozen pnpm lock includes build and test tools. The package remains private with a publication guard. Native editor search and resolution passed with n8n 2.41.3. GitHub Actions publication with npm provenance and Creator Portal review remain. The manual n8n release workflow rebuilds the package with frozen dependencies and compares every packaged file and its mode against the approved, locally tested archive before publishing. A difference stops publication. Tests remain local. See the [current n8n verification requirements](https://docs.n8n.io/connect/create-nodes/build-your-node/reference/verification-guidelines).
 
 Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `uv.lock`. Its requirements export is pinned. The Marketplace artifact must exclude tests, local environments and credentials. Native Community Edition entity resolution and bounded transcript search passed with plugin 0.1.2. Authenticated Cloud workflow testing, publisher agreement and Marketplace review remain. See [Dify submission requirements](https://github.com/langgenius/dify-plugins/blob/main/docs/plugin-submission-requirements.md).
 
@@ -67,7 +70,7 @@ Version 0.1.4 pins released Arcmira SDK 0.5.1. Full local `scripts/ci.sh --offli
 
 [PyPI 0.1.4](https://pypi.org/project/langchain-arcmira/0.1.4/) · [Signed release artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.4) · [Publication run](https://github.com/arcmira/integrations/actions/runs/37855506741)
 
-The TypeScript LangChain and AI SDK candidates also pin SDK 0.5.1. Each passed 14 source tests and 14 packed-artifact tests. They remain unpublished on npm.
+The published TypeScript LangChain and AI SDK packages pin SDK 0.6.0. Each passed 14 source tests and 14 packed-artifact tests.
 
 ### Previous release 0.1.3
 
@@ -133,7 +136,7 @@ Never rebuild or replace assets after their checksums are recorded without repea
 
 ## Homebrew CLI
 
-The root `Formula/arcmira.rb` packages CLI 0.5.1 through this repository's first-party tap and links its homepage to Arcmira. On October 8, 2026, the SHA-256 checked archive installed unlinked on Apple Silicon macOS with existing Node 24.19.0. The actual offline formula test passed through `Formula.run_test`, and `brew audit --new --formula` passed. The development install skipped dependency upgrades; standard `brew test --force` stopped before running the test because local dependencies lag the catalog. The current dependency matrix, Linux and Intel macOS remain unverified. No Homebrew core inclusion is claimed. See the [Homebrew guide](Formula).
+The root `Formula/arcmira.rb` packages CLI 0.6.0 through this repository's first-party tap and links its homepage to Arcmira. The published npm archive hash, offline version and entity-resolution schema, and Ruby syntax were checked on October 13, 2026. A native Homebrew installation of 0.6.0 has not yet been verified. The following native-install evidence applies to 0.5.1. On October 8, 2026, the SHA-256 checked archive installed unlinked on Apple Silicon macOS with existing Node 24.19.0. The actual offline formula test passed through `Formula.run_test`, and `brew audit --new --formula` passed. The development install skipped dependency upgrades; standard `brew test --force` stopped before running the test because local dependencies lag the catalog. The current dependency matrix, Linux and Intel macOS remain unverified. No Homebrew core inclusion is claimed. See the [Homebrew guide](Formula).
 
 ## Nix CLI
 

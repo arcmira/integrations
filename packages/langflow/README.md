@@ -7,7 +7,7 @@ An opt-in Python extension with two native Langflow components:
 - **YouTube Transcript Search:** find timestamped passages, retaining source links, coverage and access metadata.
 - **Entity Resolve:** resolve names and handles without silently choosing among ambiguous candidates.
 
-A paid read uses credits from your plan, then your on-demand budget. The configured budget is the approval. API plan limits and refusals remain visible. Selecting Premium never triggers a caption fallback. This extension makes one API request per component execution; it does not retry automatically.
+A paid read uses credits from your plan, then your on-demand budget. Arcmira enforces the budget set in your dashboard, so no call takes a spending amount. API plan limits and refusals remain visible. Selecting Premium never triggers a caption fallback. This extension makes one API request per component execution; it does not retry automatically.
 
 ## Local installation
 
@@ -18,13 +18,15 @@ python -m pip install lfx-arcmira==0.1.0
 lfx extension list
 ```
 
-It registers through the official `langflow.extensions` entry point. Restart Langflow after installation. Add an Arcmira API key to the component's secret field. Search by IDs after resolving names; inspect candidates and clarification before choosing an entity. The query input supports native tool mode. No model is required to call a component's output directly.
+It registers through the official `langflow.extensions` entry point. Restart Langflow after installation. In **Components**, expand **Arcmira** and use the add button beside either component. Add an Arcmira API key to the component's secret field. Search by IDs after resolving names; inspect candidates and clarification before choosing an entity. The query input supports native tool mode. No model is required to call a component's output directly.
 
 Both components return the complete API JSON envelope in `Data`. A non-success HTTP response raises `ArcmiraReadError` with `status`, `body` and selected response `headers`; the error message retains the refusal body and redacts echoes of the supplied key. Visual editor presentation of these exceptions remains unverified.
 
 ## Validation status
 
-The candidate targets mature LFX 1.12.3 (September 22, 2026). Local HTTP fixtures use real HTTPX transport and prohibit socket connections; no real API key or paid call is involved. Released LFX manifest/AST validation and package build are recorded separately from full component import, native tool execution and frontend testing. The isolated LFX 1.12.3 runtime passes extension import validation, installed-extension discovery, four native component/tool checks and eleven HTTP fixture tests. Native tool output preserves the complete response as an artifact. Visual editor presentation and live-account reads remain unverified.
+The extension targets LFX 1.12.3 (September 22, 2026). Local HTTP fixtures use real HTTPX transport and prohibit socket connections; no real API key or paid call is involved. Released LFX manifest/AST validation and package build are recorded separately from full component import, native tool execution and frontend testing. The isolated LFX 1.12.3 runtime passes extension import validation, installed-extension discovery, four native component/tool checks and eleven HTTP fixture tests. Native tool output preserves the complete response as an artifact.
+
+A fresh PyPI installation of version 0.1.0 was checked in the Langflow 1.12.3 editor on October 11, 2026. Both components appear under **Components > Arcmira** and can be added to the canvas. The editor displays the metered-usage description, masks API-key inputs, and rejects an Entity Resolve run with missing required fields. Live-account reads and API-error presentation remain unverified.
 
 ```sh
 uv sync --frozen

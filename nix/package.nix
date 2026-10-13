@@ -14,7 +14,7 @@ buildNpmPackage (finalAttrs: {
     owner = "arcmira";
     repo = "arcmira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UyAGdp1/+xBy8s/6lRbUxeBiQ6tq4dQDoOw8/1kiUm4=";
+    hash = "sha256-O++O9vV0e35Bk12mW+0IDuvYwGtq4tiiyQ+F04MePR4=";
   };
 
   npmDepsHash = "sha256-get7ZFuBkHprzfFkacR8yHLWzhuhiRNKVYikLuXXVNE=";

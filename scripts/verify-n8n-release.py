@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a locally built n8n archive before the publishing-only workflow runs."""
+"""Verify the approved n8n archive and optional release-runner rebuild."""
 
 import argparse
 import hashlib
@@ -58,10 +58,30 @@ def verify(repo: Path, directory: Path, tag: str) -> str:
     return f"Verified n8n-nodes-arcmira {manifest['version']}: {name}"
 
 
+def compare_rebuild(approved: Path, rebuilt: Path) -> None:
+    def contents(path):
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("Rebuild archive must be a regular file")
+        result = {}
+        with tarfile.open(path, "r:gz") as archive:
+            for member in archive.getmembers():
+                if not member.isfile() or member.name in result:
+                    raise ValueError("Unexpected rebuild archive entry")
+                result[member.name] = (member.mode, archive.extractfile(member).read())
+        return result
+    if contents(approved) != contents(rebuilt):
+        raise ValueError("Rebuilt package differs from approved archive")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
     parser.add_argument("--tag", required=True)
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--rebuilt", type=Path)
     args = parser.parse_args()
     print(verify(args.repo, args.directory, args.tag))
+
+    if args.rebuilt:
+        compare_rebuild(next(args.directory.glob("*.tgz")), args.rebuilt)
+        print("Release-runner package contents match the approved archive")
