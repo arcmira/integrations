@@ -11,7 +11,7 @@ arcmira --version
 arcmira schema resolve --json
 ```
 
-The formula installs CLI 0.5.1 and declares Node 24 LTS. Homebrew can install or upgrade dependencies. If your environment enforces a release-age policy, check the current dependency releases before installing. Arcmira does not pin Homebrew's dependency catalog.
+The formula installs CLI 0.6.0 and declares Node 24 LTS. Homebrew can install or upgrade dependencies. If your environment enforces a release-age policy, check the current dependency releases before installing. Arcmira does not pin Homebrew's dependency catalog.
 
 The version and schema commands run without an API key. For research commands, follow the [authentication guide](https://arcmira.com/docs/authentication). A paid read uses credits from your plan, then your on-demand budget.
 

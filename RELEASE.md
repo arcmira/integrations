@@ -133,7 +133,7 @@ Never rebuild or replace assets after their checksums are recorded without repea
 
 ## Homebrew CLI
 
-The root `Formula/arcmira.rb` packages CLI 0.5.1 through this repository's first-party tap and links its homepage to Arcmira. On October 8, 2026, the SHA-256 checked archive installed unlinked on Apple Silicon macOS with existing Node 24.19.0. The actual offline formula test passed through `Formula.run_test`, and `brew audit --new --formula` passed. The development install skipped dependency upgrades; standard `brew test --force` stopped before running the test because local dependencies lag the catalog. The current dependency matrix, Linux and Intel macOS remain unverified. No Homebrew core inclusion is claimed. See the [Homebrew guide](Formula).
+The root `Formula/arcmira.rb` packages CLI 0.6.0 through this repository's first-party tap and links its homepage to Arcmira. The published npm archive hash, offline version and entity-resolution schema, and Ruby syntax were checked on October 13, 2026. A native Homebrew installation of 0.6.0 has not yet been verified. The following native-install evidence applies to 0.5.1. On October 8, 2026, the SHA-256 checked archive installed unlinked on Apple Silicon macOS with existing Node 24.19.0. The actual offline formula test passed through `Formula.run_test`, and `brew audit --new --formula` passed. The development install skipped dependency upgrades; standard `brew test --force` stopped before running the test because local dependencies lag the catalog. The current dependency matrix, Linux and Intel macOS remain unverified. No Homebrew core inclusion is claimed. See the [Homebrew guide](Formula).
 
 ## Nix CLI
 
