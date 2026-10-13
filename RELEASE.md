@@ -5,7 +5,7 @@
 Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
-The TypeScript LangChain and AI SDK packages are published on npm at 0.1.0. Activepieces and n8n remain unpublished previews at 0.1.0 with `private: true`. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+The TypeScript LangChain, AI SDK and Activepieces packages are published on npm at 0.1.0. n8n remains an unpublished preview at 0.1.0 with `private: true`. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
 
 ## Python LangChain 0.1.6
 
@@ -50,7 +50,7 @@ LangChain requires an independent published package before its integration listi
 
 The repository includes a public OpenAPI subset for schema parity tests. It contains no private backend code or credentials. Test responses are synthetic; live account and research responses are not committed.
 
-Activepieces publishes the self-contained `bundle/` artifact, not its source dependency tree. Its bundle includes third-party license notices. Browser-editor validation and a fresh public npm installation still remain. Public npm installation is separate from global catalog inclusion; upstream contributions are currently paused.
+Activepieces publishes the self-contained `bundle/` artifact, not its source dependency tree. Its bundle includes third-party license notices. The published 0.1.0 archive matches the locally tested artifact, and a fresh installation passed all 13 action tests. Earlier native-host search passed in Activepieces 0.92.0. Public npm installation is separate from global catalog inclusion; upstream contributions are currently paused.
 
 n8n has no runtime dependencies beyond its host peer. Its frozen pnpm lock includes build and test tools. The package remains private with a publication guard. Native editor search and resolution passed with n8n 2.41.3. GitHub Actions publication with npm provenance and Creator Portal review remain. The manual n8n release workflow rebuilds the package with frozen dependencies and compares every packaged file and its mode against the approved, locally tested archive before publishing. A difference stops publication. Tests remain local. See the [current n8n verification requirements](https://docs.n8n.io/connect/create-nodes/build-your-node/reference/verification-guidelines).
 
