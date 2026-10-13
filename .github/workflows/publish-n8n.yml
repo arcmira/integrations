@@ -46,4 +46,4 @@ jobs:
           tag="$(python3 -c 'import json; print(json.load(open("release-artifacts/n8n/current.json"))["tag"])')"
           python3 scripts/verify-n8n-release.py release --tag "$tag" --rebuilt rebuilt/n8n-nodes-arcmira-*.tgz
       - name: Publish with npm trusted publishing and provenance
-        run: npx --yes npm@11.15.0 publish rebuilt/n8n-nodes-arcmira-*.tgz --ignore-scripts --provenance --access public
+        run: npx --yes npm@11.15.0 publish ./rebuilt/n8n-nodes-arcmira-*.tgz --ignore-scripts --provenance --access public
