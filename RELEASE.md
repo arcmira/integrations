@@ -17,9 +17,9 @@ Published October 13, 2026 with Arcmira SDK 0.6.0. Third-party dependencies are 
 
 | Package | Framework | Arcmira SDK | Checks |
 | --- | --- | --- | --- |
-| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.5.1 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
+| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.6.0 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
 | langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.6.0 | 58 source tests and 58 built-wheel tests; public archive hashes match; no new live API test for this dependency update |
-| @arcmira/ai-sdk | ai 7.0.127 | 0.5.1 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
+| @arcmira/ai-sdk | ai 7.0.127 | 0.6.0 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
 | @arcmira/piece-arcmira | Activepieces host 0.92.0; pieces-framework 0.32.0 | Direct HTTP | TypeScript, 13 action tests, isolated bundle check, live native-host search |
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
 | Arcmira for Dify | dify-plugin 0.10.2; plugin 0.1.2; Community Edition 1.17.1 | Direct HTTP | 18 SDK tests, local SDK research, native Community Edition resolution and bounded search; Cloud installation at 0.1.1 |
@@ -73,7 +73,7 @@ Version 0.1.4 pins released Arcmira SDK 0.5.1. Full local `scripts/ci.sh --offli
 
 [PyPI 0.1.4](https://pypi.org/project/langchain-arcmira/0.1.4/) · [Signed release artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.4) · [Publication run](https://github.com/arcmira/integrations/actions/runs/37855506741)
 
-The TypeScript LangChain and AI SDK candidates also pin SDK 0.5.1. Each passed 14 source tests and 14 packed-artifact tests. They remain unpublished on npm.
+The TypeScript LangChain and AI SDK candidates now pin SDK 0.6.0. Each passed 14 source tests and 14 packed-artifact tests. They remain unpublished on npm.
 
 ### Previous release 0.1.3
 
