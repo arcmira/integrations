@@ -65,6 +65,25 @@ class ReleaseTest(unittest.TestCase):
     def test_valid_release(self):
         self.assertEqual(self.verify(), "Verified n8n-nodes-arcmira 0.1.0: n8n-nodes-arcmira-0.1.0.tgz")
 
+    def test_matching_rebuild(self):
+        rebuilt = self.repo / "rebuilt.tgz"
+        rebuilt.write_bytes(self.archive.read_bytes())
+        release.compare_rebuild(self.archive, rebuilt)
+
+    def test_changed_rebuild(self):
+        approved = self.repo / "approved.tgz"
+        approved.write_bytes(self.archive.read_bytes())
+        self.make_archive({"package/dist/nodes/Arcmira.js": "changed code"})
+        with self.assertRaisesRegex(ValueError, "differs"):
+            release.compare_rebuild(approved, self.archive)
+
+    def test_extra_rebuild_file(self):
+        approved = self.repo / "approved.tgz"
+        approved.write_bytes(self.archive.read_bytes())
+        self.make_archive({"package/unexpected.txt": "extra"})
+        with self.assertRaisesRegex(ValueError, "differs"):
+            release.compare_rebuild(approved, self.archive)
+
     def test_changed_archive(self):
         self.archive.write_bytes(self.archive.read_bytes() + b"changed")
         with self.assertRaisesRegex(ValueError, "checksum"):
