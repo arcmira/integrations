@@ -5,14 +5,20 @@
 Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
-The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.5](https://pypi.org/project/langchain-arcmira/0.1.5/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK, Activepieces and n8n JavaScript packages remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+
+## Python LangChain 0.1.6
+
+Published October 13, 2026 with Arcmira SDK 0.6.0. Third-party dependencies are unchanged. The source and built wheel each passed 58 tests; full local validation passed. Both downloaded PyPI archives match the verified release manifest.
+
+[PyPI 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/) · [Release artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.6) · [Publication run](https://github.com/arcmira/integrations/actions/runs/38390141464)
 
 ## Verified versions
 
 | Package | Framework | Arcmira SDK | Checks |
 | --- | --- | --- | --- |
 | @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.5.1 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
-| langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.5.1 | 58 source tests and 58 public-wheel tests; no new live API test for this dependency update |
+| langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.6.0 | 58 source tests and 58 built-wheel tests; public archive hashes match; no new live API test for this dependency update |
 | @arcmira/ai-sdk | ai 7.0.127 | 0.5.1 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
 | @arcmira/piece-arcmira | Activepieces host 0.92.0; pieces-framework 0.32.0 | Direct HTTP | TypeScript, 13 action tests, isolated bundle check, live native-host search |
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
