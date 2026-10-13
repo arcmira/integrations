@@ -1,10 +1,10 @@
 {
   "package": "langchain-arcmira",
-  "version": "0.1.5",
-  "tag": "langchain-python-v0.1.5",
-  "package_tree": "f466b59bc890cccb1d4dcef5687a324d089da2ad",
+  "version": "0.1.6",
+  "tag": "langchain-python-v0.1.6",
+  "package_tree": "ce27b0abc62fff85f2f46814367a747506f1bb92",
   "files": {
-    "langchain_arcmira-0.1.5-py3-none-any.whl": "33bc43a7b470b481436a41646f74dc35f83b2dbbcee5374bffb2aa388da5ac3c",
-    "langchain_arcmira-0.1.5.tar.gz": "8c36daff39ea05b8a821b79b4f622f82571bcefae63ea88e1af20ac4a0c3ed05"
+    "langchain_arcmira-0.1.6-py3-none-any.whl": "2874dc0a1cafb631b8cbc74966f4aabe6baa73e16ae60864a59ba10d5db21241",
+    "langchain_arcmira-0.1.6.tar.gz": "ab3166a32c993339c2ed43d935307d5075a38ac58752682c0af60bf84d69548f"
   }
 }
