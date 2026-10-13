@@ -5,7 +5,7 @@
 Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
-The TypeScript LangChain package is a verified release candidate at 0.1.0 with public publication metadata. Its first npm publication is pending. The AI SDK package is also a release candidate at 0.1.0 with public publication metadata. Activepieces and n8n remain previews at 0.1.0 with `private: true`. Pipedream is a separate private native-component preview at 0.0.1. None of these JavaScript packages is available on npm. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+The TypeScript LangChain and AI SDK packages are published on npm at 0.1.0. Activepieces and n8n remain unpublished previews at 0.1.0 with `private: true`. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
 
 ## Python LangChain 0.1.6
 
@@ -26,21 +26,14 @@ Published October 13, 2026 with Arcmira SDK 0.6.0. Third-party dependencies are 
 
 Direct third-party dependencies met a seven-day release-age policy when selected on October 5, 2026. The first-party SDK uses the current released contract. AI SDK 7.0.127 passed the age policy and source/packed compatibility checks on October 8, 2026 after 19:20 UTC. Recheck newer releases before publishing.
 
-## TypeScript LangChain first publication
+## TypeScript LangChain and AI SDK 0.1.0
 
-The `@arcmira/langchain` 0.1.0 source is prepared for a public npm release. It is not published yet. Its package metadata deliberately omits `private` and specifies the public npm registry. Keep release execution separate from preparing the source.
+Published October 13, 2026. The downloaded npm archives match the tested release artifacts, and each downloaded package passed 14 integration tests. Both use Arcmira SDK 0.6.0.
 
-1. Run `scripts/ci.sh` locally on the exact source commit.
-2. From `packages/langchain`, run `npm pack --ignore-scripts --json` and inspect the resulting archive. It must contain compiled JavaScript, declarations, README, Apache-2.0 license, and package metadata.
-3. Verify the archive imports and runs the native LangChain tools against fixture responses. Record the artifact SHA-256 and source commit before publishing.
-4. Confirm the branded npm identity and permission to publish in the `@arcmira` scope. Publish the verified archive only after the release is authorized.
-5. Verify registry metadata, a fresh installation, native tool execution, and provenance when configured. Then update this status and extend [LangChain listing issue #6442](https://github.com/langchain-ai/docs/issues/6442) to include TypeScript.
+- [@arcmira/langchain](https://www.npmjs.com/package/@arcmira/langchain): [setup](packages/langchain). The TypeScript catalog update was requested in [the existing listing issue](https://github.com/langchain-ai/docs/issues/6442#issuecomment-6152249700).
+- [@arcmira/ai-sdk](https://www.npmjs.com/package/@arcmira/ai-sdk): [setup guide](https://arcmira.github.io/integrations/ai-sdk/). Tools-registry inclusion remains pending; current-SDK compatibility is a separate admission check.
 
-After publication, install the package with `npm install @arcmira/langchain@0.1.0 @langchain/core zod` and import `createArcmiraTools` from `@arcmira/langchain`. Until then, use the [tested source quick start](packages/langchain).
-
-## AI SDK first publication
-
-The `@arcmira/ai-sdk` 0.1.0 candidate has public publication metadata and a [dedicated setup guide](https://arcmira.github.io/integrations/ai-sdk/). First npm publication is pending. Follow the same exact-source validation, archive inspection and registry verification steps as the TypeScript LangChain release above. Verify AI SDK tool execution from the packed artifact before publication.
+Registry archives retain the README shipped at publication. These guides describe the current installation route.
 
 ## Before remaining npm and catalog publication
 
@@ -77,7 +70,7 @@ Version 0.1.4 pins released Arcmira SDK 0.5.1. Full local `scripts/ci.sh --offli
 
 [PyPI 0.1.4](https://pypi.org/project/langchain-arcmira/0.1.4/) · [Signed release artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.4) · [Publication run](https://github.com/arcmira/integrations/actions/runs/37855506741)
 
-The TypeScript LangChain and AI SDK candidates now pin SDK 0.6.0. Each passed 14 source tests and 14 packed-artifact tests. They remain unpublished on npm.
+The published TypeScript LangChain and AI SDK packages pin SDK 0.6.0. Each passed 14 source tests and 14 packed-artifact tests.
 
 ### Previous release 0.1.3
 

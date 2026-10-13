@@ -2,7 +2,7 @@
 
 Native LangChain tools for searching indexed YouTube transcripts and resolving people, organizations, products, topics and channels with Arcmira.
 
-Check [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md) for npm and catalog availability. The quick start below runs the source checkout.
+[Install @arcmira/langchain 0.1.0 from npm](https://www.npmjs.com/package/@arcmira/langchain). Framework catalog inclusion is tracked separately in [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md).
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
@@ -11,13 +11,10 @@ Check [release status](https://github.com/arcmira/integrations/blob/master/RELEA
 Use Node.js 22 or later.
 
 ```sh
-git clone https://github.com/arcmira/integrations.git
-cd integrations/packages/langchain
-npm ci --ignore-scripts
-npm run build
+npm install @arcmira/langchain@0.1.0 @langchain/core zod
 export ARCMIRA_API_KEY='your-key'
 node --input-type=module <<'JS'
-import { createArcmiraTools } from "./dist/index.js";
+import { createArcmiraTools } from "@arcmira/langchain";
 
 const [search, resolve] = createArcmiraTools({
   apiKey: process.env.ARCMIRA_API_KEY ?? "",
@@ -40,4 +37,4 @@ API errors propagate with their code, status and response body. The adapter make
 
 ## Local verification
 
-The candidate uses Arcmira SDK 0.6.0. `npm run build` checks the public TypeScript declarations. `npm test` runs a compiled LangGraph against synthetic HTTP fixtures, covering filters, evidence, entity ambiguity, refusal responses, input validation and cancellation. An earlier live check with SDK 0.4.3 executed search and entity resolution against Arcmira through a compiled LangGraph with existing smoke-test access. Both return source-backed data. No model inference is part of these checks. Production authentication rejection is also verified with an invalid key.
+Version 0.1.0 uses Arcmira SDK 0.6.0. `npm run build` checks the public TypeScript declarations. `npm test` runs a compiled LangGraph against synthetic HTTP fixtures, covering filters, evidence, entity ambiguity, refusal responses, input validation and cancellation. An earlier live check with SDK 0.4.3 executed search and entity resolution against Arcmira through a compiled LangGraph with existing smoke-test access. Both return source-backed data. No model inference is part of these checks. Production authentication rejection is also verified with an invalid key.
