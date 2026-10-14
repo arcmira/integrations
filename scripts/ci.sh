@@ -106,6 +106,7 @@ fi
   pnpm install --frozen-lockfile --ignore-scripts ${install_args[@]+"${install_args[@]}"}
   pnpm check
 )
+node examples/n8n-clip-shortlist/check.mjs
 python3 scripts/test-python-release.py
 python3 scripts/test-n8n-release.py
 git diff --check
