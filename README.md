@@ -13,7 +13,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Langflow | [Setup and components](packages/langflow) | [PyPI 0.1.0](https://pypi.org/project/lfx-arcmira/0.1.0/); native runtime and editor fields verified; live-account checks and catalog review pending |
 | Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk); catalog review pending |
 | Activepieces | [Setup and action](packages/activepieces) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/piece-arcmira); native editor verified; manual installation available |
-| n8n | [Setup and node](packages/n8n) | Source preview; npm publication, editor validation and n8n review pending |
+| n8n | [Setup and node](packages/n8n) | Source preview; native editor search and entity resolution verified. npm publication and n8n review pending |
 | n8n CSV workflow | [YouTube clip shortlist](examples/n8n-clip-shortlist) | Native n8n 2.41.3 fixture and live CSV export verified; importable example |
 | n8n built-in workflow | [Transcript source shortlist](examples/n8n-source-shortlist) | One bounded Free-account execution verified; importable example, not a catalog listing |
 | Node-RED built-in flow | [Transcript source shortlist CSV](examples/node-red-source-shortlist) | Native fixture checks and one bounded Free-account execution passed; importable example, not a catalog listing |
