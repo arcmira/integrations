@@ -140,7 +140,7 @@ The root `Formula/arcmira.rb` packages CLI 0.6.0 through this repository's first
 
 ## Nix CLI
 
-The [first-party Nix package](nix) builds CLI 0.5.1 from its GitHub release source with pinned npm dependencies. Nix 2.24.11, Nixpkgs `bfdc17373049aec7e5a4ad159f614c7a7c2e050c` and Node 24.20.0 passed the October 8 source build, 70 fixture-based tests and documented nix-build/nix-env installation checks on aarch64-linux in Docker on Apple Silicon. Nix sandboxing was disabled inside that disposable container; a sandboxed native-host build and other platforms remain unverified. The package adjusts only the setup test's shell and utility paths for Nix. All six skill guides are present. No live API credentials or paid calls were used. This is an Arcmira install route, with no Nixpkgs catalog inclusion claimed.
+The [first-party Nix package](nix) builds CLI 0.6.2 from its GitHub release source with pinned npm dependencies. Nix 2.24.11, Nixpkgs `bfdc17373049aec7e5a4ad159f614c7a7c2e050c` and Node 24.20.0 passed the October 15 source build, 72 fixture-based tests and documented nix-build/nix-env installation checks on aarch64-linux in Docker on Apple Silicon. Nix sandboxing was disabled inside that disposable container; a sandboxed native-host build and other platforms remain unverified. The package adjusts only the setup test's shell and utility paths for Nix. All six skill guides are present. No live API credentials or paid calls were used. This is an Arcmira install route, with no Nixpkgs catalog inclusion claimed.
 
 ## dlt REST example
 

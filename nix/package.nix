@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "arcmira";
-  version = "0.5.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "arcmira";
     repo = "arcmira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O++O9vV0e35Bk12mW+0IDuvYwGtq4tiiyQ+F04MePR4=";
+    hash = "sha256-rGzWssyklEIPdMw7dCQXFBlzqsD8EyY+fB7jy7zbbXU=";
   };
 
-  npmDepsHash = "sha256-get7ZFuBkHprzfFkacR8yHLWzhuhiRNKVYikLuXXVNE=";
+  npmDepsHash = "sha256-RidUP8adCVVRDpg/JLWqupcFDV5BX/rdrZo0p+04zf8=";
   npmPackFlags = [ "--ignore-scripts" ];
   makeWrapperArgs = [ "--set ARCMIRA_NO_UPDATE_CHECK 1" ];
 
