@@ -11,7 +11,7 @@ arcmira --version
 arcmira schema resolve --json
 ```
 
-The formula installs CLI 0.6.0 and declares Node 24 LTS. Homebrew can install or upgrade dependencies. If your environment enforces a release-age policy, check the current dependency releases before installing. Arcmira does not pin Homebrew's dependency catalog.
+The formula installs CLI 0.6.2 and declares Node 24 LTS. Homebrew can install or upgrade dependencies. If your environment enforces a release-age policy, check the current dependency releases before installing. Arcmira does not pin Homebrew's dependency catalog.
 
 The version and schema commands run without an API key. For research commands, follow the [authentication guide](https://arcmira.com/docs/authentication). A paid read uses credits from your plan, then your on-demand budget.
 
@@ -28,9 +28,9 @@ The wrapper disables npm update notices. Homebrew manages the installed CLI vers
 
 ## Validation
 
-On October 8, 2026, CLI 0.5.1 installed unlinked on Apple Silicon macOS with the existing Node 24.19.0 runtime. The formula's test passed through Homebrew's `Formula.run_test` and assertion helpers, checking the installed version and offline entity-resolution schema. `brew audit --new --formula` passed.
+On October 15, 2026, CLI 0.6.2 installed unlinked on Apple Silicon macOS with the existing Node 24.19.0 runtime. The formula's test passed through Homebrew's `Formula.run_test` and assertion helpers, checking the installed version and offline entity-resolution schema. `brew audit --new --formula` passed.
 
-The development install used `--ignore-dependencies --skip-link` to test the new first-party archive without changing the host's dependencies or default CLI. Standard `brew test --force` stopped at dependency preflight because the installed dependency versions lag Homebrew's catalog. It did not run the test block. The current dependency matrix, Linux and Intel macOS remain unverified.
+The development install used `--ignore-dependencies --skip-link` to test the new first-party archive without changing the host's dependencies or default CLI. Standard `brew test --force` was not rerun for this version. Earlier attempts stopped at dependency preflight because the installed dependency versions lagged Homebrew's catalog. The current dependency matrix, Linux and Intel macOS remain unverified.
 
 Our validation environment applies a seven-day release-age policy to third-party software. Recheck the complete live dependency graph before the next standard-install test; an earlier dependency's eligibility date does not establish that today's graph is eligible.
 

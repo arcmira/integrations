@@ -1,8 +1,8 @@
 class Arcmira < Formula
   desc "Search YouTube transcripts, speaker appearances, mentions and sponsors"
   homepage "https://arcmira.com"
-  url "https://registry.npmjs.org/arcmira/-/arcmira-0.6.0.tgz"
-  sha256 "80108b6c9ea3871e1a57bca920396baed9482581b2f1c944517c4edc0cd82683"
+  url "https://registry.npmjs.org/arcmira/-/arcmira-0.6.2.tgz"
+  sha256 "5b8cbeb59228bd86e7662213ef0a2e07ae49c772066478fb85e82944580dea73"
   license "Apache-2.0"
 
   depends_on "node@24"
