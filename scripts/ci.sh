@@ -111,3 +111,5 @@ python3 scripts/test-python-release.py
 python3 scripts/test-n8n-release.py
 git diff --check
 git diff --cached --check
+
+node --test examples/appsmith-source-shortlist/source-sheet.test.mjs

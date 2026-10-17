@@ -1,0 +1,2133 @@
+{
+  "artifactJsonType": "APPLICATION",
+  "clientSchemaVersion": 2,
+  "serverSchemaVersion": 11,
+  "exportedApplication": {
+    "name": "Arcmira: YouTube Transcript Search",
+    "isPublic": false,
+    "pages": [
+      {
+        "id": "Sources",
+        "isDefault": true
+      }
+    ],
+    "publishedPages": [
+      {
+        "id": "Sources",
+        "isDefault": true
+      }
+    ],
+    "viewMode": false,
+    "appIsExample": false,
+    "unreadCommentThreads": 0,
+    "unpublishedApplicationDetail": {
+      "appPositioning": {
+        "type": "FIXED"
+      },
+      "navigationSetting": {},
+      "themeSetting": {
+        "sizing": 1,
+        "density": 1,
+        "appMaxWidth": "LARGE"
+      }
+    },
+    "publishedApplicationDetail": {
+      "appPositioning": {
+        "type": "FIXED"
+      },
+      "navigationSetting": {},
+      "themeSetting": {
+        "sizing": 1,
+        "density": 1,
+        "appMaxWidth": "LARGE"
+      }
+    },
+    "color": "#C7F3E3",
+    "slug": "arcmira-youtube-transcript-search",
+    "unpublishedCustomJSLibs": [],
+    "publishedCustomJSLibs": [],
+    "evaluationVersion": 2,
+    "applicationVersion": 2,
+    "collapseInvisibleWidgets": true,
+    "isManualUpdate": false,
+    "deleted": false,
+    "isCommunityTemplate": false
+  },
+  "datasourceList": [],
+  "customJSLibList": [],
+  "pageList": [
+    {
+      "unpublishedPage": {
+        "name": "Sources",
+        "slug": "sources",
+        "layouts": [
+          {
+            "viewMode": false,
+            "dsl": {
+              "widgetName": "MainContainer",
+              "backgroundColor": "none",
+              "rightColumn": 1224,
+              "snapColumns": 64,
+              "detachFromLayout": true,
+              "widgetId": "0",
+              "topRow": 0,
+              "bottomRow": 880,
+              "containerStyle": "none",
+              "snapRows": 127,
+              "parentRowSpace": 1,
+              "type": "CANVAS_WIDGET",
+              "canExtend": true,
+              "version": 91,
+              "minHeight": 880,
+              "parentColumnSpace": 1,
+              "dynamicBindingPathList": [],
+              "leftColumn": 0,
+              "children": [
+                {
+                  "isVisible": true,
+                  "text": "Arcmira: YouTube Transcript Search",
+                  "fontSize": "1.75rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Title",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 2,
+                  "bottomRow": 7,
+                  "parentId": "0",
+                  "widgetId": "title",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 2,
+                  "mobileBottomRow": 7,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "isVisible": true,
+                  "text": "Source shortlist. Review passages and timestamps before choosing clips.",
+                  "fontSize": "1rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Subtitle",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 7,
+                  "bottomRow": 10,
+                  "parentId": "0",
+                  "widgetId": "subtitle",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 7,
+                  "mobileBottomRow": 10,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 15,
+                  "widgetName": "Homepage",
+                  "onClick": "{{navigateTo(\"https://arcmira.com\", {}, \"NEW_WINDOW\")}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 11,
+                  "bottomRow": 15,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 12,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 2,
+                  "dynamicBindingPathList": [],
+                  "text": "Arcmira",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 12,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "homepage",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 11,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 2,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 15,
+                  "widgetName": "Docs",
+                  "onClick": "{{navigateTo(\"https://arcmira.com/docs\", {}, \"NEW_WINDOW\")}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 11,
+                  "bottomRow": 15,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 23,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 13,
+                  "dynamicBindingPathList": [],
+                  "text": "API docs",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 23,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "docs",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 11,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 13,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 15,
+                  "widgetName": "Source",
+                  "onClick": "{{navigateTo(\"https://github.com/arcmira/integrations/tree/master/examples/appsmith-source-shortlist\", {}, \"NEW_WINDOW\")}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 11,
+                  "bottomRow": 15,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 40,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 24,
+                  "dynamicBindingPathList": [],
+                  "text": "Source & setup",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 40,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "source",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 11,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 24,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "isVisible": true,
+                  "text": "DEMO ONLY. All recordings and passages below are invented. No API request runs in this template.",
+                  "fontSize": "1rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "DemoNotice",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 16,
+                  "bottomRow": 20,
+                  "parentId": "0",
+                  "widgetId": "demonotice",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 16,
+                  "mobileBottomRow": 20,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "isVisible": true,
+                  "text": "Example topic: creator economy | Requested dates: August 1 through August 31, 2026 UTC. These dates label the example only.",
+                  "fontSize": "0.875rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Window",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 20,
+                  "bottomRow": 23,
+                  "parentId": "0",
+                  "widgetId": "window",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 20,
+                  "mobileBottomRow": 23,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "boxShadow": "none",
+                  "widgetName": "Sources",
+                  "defaultPageSize": 0,
+                  "columnOrder": [
+                    "title",
+                    "text",
+                    "start_seconds",
+                    "transcript_type"
+                  ],
+                  "aliasMap": {
+                    "title": "title",
+                    "text": "text",
+                    "start_seconds": "start_seconds",
+                    "transcript_type": "transcript_type"
+                  },
+                  "isVisibleDownload": false,
+                  "dynamicPropertyPathList": [],
+                  "displayName": "Table",
+                  "iconSVG": "/static/media/icon.db8a9cbd.svg",
+                  "topRow": 23,
+                  "bottomRow": 54,
+                  "isSortable": true,
+                  "parentRowSpace": 10,
+                  "type": "TABLE_WIDGET_V2",
+                  "defaultSelectedRow": "0",
+                  "hideCard": false,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [],
+                  "dynamicBindingPathList": [
+                    {
+                      "key": "tableData"
+                    },
+                    {
+                      "key": "primaryColumns.title.computedValue"
+                    },
+                    {
+                      "key": "primaryColumns.text.computedValue"
+                    },
+                    {
+                      "key": "primaryColumns.start_seconds.computedValue"
+                    },
+                    {
+                      "key": "primaryColumns.transcript_type.computedValue"
+                    }
+                  ],
+                  "leftColumn": 2,
+                  "primaryColumns": {
+                    "title": {
+                      "index": 0,
+                      "width": 150,
+                      "id": "title",
+                      "alias": "title",
+                      "originalId": "title",
+                      "horizontalAlignment": "LEFT",
+                      "verticalAlignment": "CENTER",
+                      "columnType": "text",
+                      "textSize": "0.875rem",
+                      "enableFilter": true,
+                      "enableSort": true,
+                      "isVisible": true,
+                      "isDisabled": false,
+                      "isCellVisible": true,
+                      "isDerived": false,
+                      "label": "Demo recording",
+                      "computedValue": "{{Sources.processedTableData.map((currentRow) => currentRow.title)}}"
+                    },
+                    "text": {
+                      "index": 1,
+                      "width": 150,
+                      "id": "text",
+                      "alias": "text",
+                      "originalId": "text",
+                      "horizontalAlignment": "LEFT",
+                      "verticalAlignment": "CENTER",
+                      "columnType": "text",
+                      "textSize": "0.875rem",
+                      "enableFilter": true,
+                      "enableSort": true,
+                      "isVisible": true,
+                      "isDisabled": false,
+                      "isCellVisible": true,
+                      "isDerived": false,
+                      "label": "Synthetic passage",
+                      "computedValue": "{{Sources.processedTableData.map((currentRow) => currentRow.text)}}"
+                    },
+                    "start_seconds": {
+                      "index": 2,
+                      "width": 150,
+                      "id": "start_seconds",
+                      "alias": "start_seconds",
+                      "originalId": "start_seconds",
+                      "horizontalAlignment": "LEFT",
+                      "verticalAlignment": "CENTER",
+                      "columnType": "text",
+                      "textSize": "0.875rem",
+                      "enableFilter": true,
+                      "enableSort": true,
+                      "isVisible": true,
+                      "isDisabled": false,
+                      "isCellVisible": true,
+                      "isDerived": false,
+                      "label": "Start (seconds)",
+                      "computedValue": "{{Sources.processedTableData.map((currentRow) => currentRow.start_seconds)}}"
+                    },
+                    "transcript_type": {
+                      "index": 3,
+                      "width": 150,
+                      "id": "transcript_type",
+                      "alias": "transcript_type",
+                      "originalId": "transcript_type",
+                      "horizontalAlignment": "LEFT",
+                      "verticalAlignment": "CENTER",
+                      "columnType": "text",
+                      "textSize": "0.875rem",
+                      "enableFilter": true,
+                      "enableSort": true,
+                      "isVisible": true,
+                      "isDisabled": false,
+                      "isCellVisible": true,
+                      "isDerived": false,
+                      "label": "Transcript type",
+                      "computedValue": "{{Sources.processedTableData.map((currentRow) => currentRow.transcript_type)}}"
+                    }
+                  },
+                  "delimiter": ",",
+                  "key": "4u6cxamhqp",
+                  "derivedColumns": {},
+                  "rightColumn": 62,
+                  "textSize": "0.875rem",
+                  "widgetId": "sources",
+                  "accentColor": "#2459a8",
+                  "isVisibleFilters": false,
+                  "tableData": "{{SourceSheet.packet().candidates}}",
+                  "isVisible": true,
+                  "label": "Data",
+                  "searchKey": "",
+                  "enableClientSideSearch": true,
+                  "version": 3,
+                  "totalRecordsCount": 0,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "horizontalAlignment": "LEFT",
+                  "isVisibleSearch": true,
+                  "childStylesheet": {},
+                  "borderRadius": "6px",
+                  "isVisiblePagination": true,
+                  "verticalAlignment": "CENTER",
+                  "columnWidthMap": {
+                    "title": 180,
+                    "text": 510,
+                    "start_seconds": 120,
+                    "transcript_type": 130
+                  },
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 23,
+                  "mobileBottomRow": 54
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 60,
+                  "widgetName": "Demo",
+                  "onClick": "{{SourceSheet.demo()}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 56,
+                  "bottomRow": 60,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 14,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 2,
+                  "dynamicBindingPathList": [],
+                  "text": "Reset demo",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 14,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "demo",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 56,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 2,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 60,
+                  "widgetName": "EmptyDemo",
+                  "onClick": "{{SourceSheet.empty()}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 56,
+                  "bottomRow": 60,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 27,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 15,
+                  "dynamicBindingPathList": [],
+                  "text": "Empty demo",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 27,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "emptydemo",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 56,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 15,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 60,
+                  "widgetName": "CSV",
+                  "onClick": "{{SourceSheet.downloadCSV()}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 56,
+                  "bottomRow": 60,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 48,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 34,
+                  "dynamicBindingPathList": [],
+                  "text": "Download CSV",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 48,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "csv",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 56,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 34,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 60,
+                  "widgetName": "JSONExport",
+                  "onClick": "{{SourceSheet.downloadJSON()}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 56,
+                  "bottomRow": 60,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 62,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 49,
+                  "dynamicBindingPathList": [],
+                  "text": "Download JSON",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 62,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "jsonexport",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 56,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 49,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "isVisible": true,
+                  "text": "{{Sources.selectedRow && Sources.selectedRow.text ? \"Selected synthetic passage: \" + Sources.selectedRow.text + \" | Start: \" + Sources.selectedRow.start_seconds + \" seconds. No real source URL exists for demo rows.\" : \"No passage selected.\"}}",
+                  "fontSize": "1rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Selection",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 62,
+                  "bottomRow": 69,
+                  "parentId": "0",
+                  "widgetId": "selection",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 62,
+                  "mobileBottomRow": 69,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [
+                    {
+                      "key": "text"
+                    }
+                  ],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "isVisible": true,
+                  "text": "{{SourceSheet.packet().coverage_note + \" Rows: \" + SourceSheet.packet().candidates.length + \". JSON retains the requested window and unknown coverage fields. An empty CSV contains only its header.\"}}",
+                  "fontSize": "0.875rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Coverage",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 70,
+                  "bottomRow": 77,
+                  "parentId": "0",
+                  "widgetId": "coverage",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 70,
+                  "mobileBottomRow": 77,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [
+                    {
+                      "key": "text"
+                    }
+                  ],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "isVisible": true,
+                  "text": "To use live data, fork privately and follow the repository README. Add your own authenticated API datasource and a manual GET /v1/search query there. This public demo contains no API actions, datasource or credentials.",
+                  "fontSize": "0.875rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Setup",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 78,
+                  "bottomRow": 85,
+                  "parentId": "0",
+                  "widgetId": "setup",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 78,
+                  "mobileBottomRow": 85,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                }
+              ]
+            },
+            "layoutOnLoadActions": [],
+            "layoutOnLoadActionErrors": [],
+            "validOnPageLoadActions": true,
+            "id": "Sources",
+            "deleted": false,
+            "policies": [],
+            "userPermissions": []
+          }
+        ],
+        "userPermissions": [],
+        "policyMap": {}
+      },
+      "publishedPage": {
+        "name": "Sources",
+        "slug": "sources",
+        "layouts": [
+          {
+            "viewMode": false,
+            "dsl": {
+              "widgetName": "MainContainer",
+              "backgroundColor": "none",
+              "rightColumn": 1224,
+              "snapColumns": 64,
+              "detachFromLayout": true,
+              "widgetId": "0",
+              "topRow": 0,
+              "bottomRow": 880,
+              "containerStyle": "none",
+              "snapRows": 127,
+              "parentRowSpace": 1,
+              "type": "CANVAS_WIDGET",
+              "canExtend": true,
+              "version": 91,
+              "minHeight": 880,
+              "parentColumnSpace": 1,
+              "dynamicBindingPathList": [],
+              "leftColumn": 0,
+              "children": [
+                {
+                  "isVisible": true,
+                  "text": "Arcmira: YouTube Transcript Search",
+                  "fontSize": "1.75rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Title",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 2,
+                  "bottomRow": 7,
+                  "parentId": "0",
+                  "widgetId": "title",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 2,
+                  "mobileBottomRow": 7,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "isVisible": true,
+                  "text": "Source shortlist. Review passages and timestamps before choosing clips.",
+                  "fontSize": "1rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Subtitle",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 7,
+                  "bottomRow": 10,
+                  "parentId": "0",
+                  "widgetId": "subtitle",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 7,
+                  "mobileBottomRow": 10,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 15,
+                  "widgetName": "Homepage",
+                  "onClick": "{{navigateTo(\"https://arcmira.com\", {}, \"NEW_WINDOW\")}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 11,
+                  "bottomRow": 15,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 12,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 2,
+                  "dynamicBindingPathList": [],
+                  "text": "Arcmira",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 12,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "homepage",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 11,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 2,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 15,
+                  "widgetName": "Docs",
+                  "onClick": "{{navigateTo(\"https://arcmira.com/docs\", {}, \"NEW_WINDOW\")}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 11,
+                  "bottomRow": 15,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 23,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 13,
+                  "dynamicBindingPathList": [],
+                  "text": "API docs",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 23,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "docs",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 11,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 13,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 15,
+                  "widgetName": "Source",
+                  "onClick": "{{navigateTo(\"https://github.com/arcmira/integrations/tree/master/examples/appsmith-source-shortlist\", {}, \"NEW_WINDOW\")}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 11,
+                  "bottomRow": 15,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 40,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 24,
+                  "dynamicBindingPathList": [],
+                  "text": "Source & setup",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 40,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "source",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 11,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 24,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "isVisible": true,
+                  "text": "DEMO ONLY. All recordings and passages below are invented. No API request runs in this template.",
+                  "fontSize": "1rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "DemoNotice",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 16,
+                  "bottomRow": 20,
+                  "parentId": "0",
+                  "widgetId": "demonotice",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 16,
+                  "mobileBottomRow": 20,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "isVisible": true,
+                  "text": "Example topic: creator economy | Requested dates: August 1 through August 31, 2026 UTC. These dates label the example only.",
+                  "fontSize": "0.875rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Window",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 20,
+                  "bottomRow": 23,
+                  "parentId": "0",
+                  "widgetId": "window",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 20,
+                  "mobileBottomRow": 23,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "boxShadow": "none",
+                  "widgetName": "Sources",
+                  "defaultPageSize": 0,
+                  "columnOrder": [
+                    "title",
+                    "text",
+                    "start_seconds",
+                    "transcript_type"
+                  ],
+                  "aliasMap": {
+                    "title": "title",
+                    "text": "text",
+                    "start_seconds": "start_seconds",
+                    "transcript_type": "transcript_type"
+                  },
+                  "isVisibleDownload": false,
+                  "dynamicPropertyPathList": [],
+                  "displayName": "Table",
+                  "iconSVG": "/static/media/icon.db8a9cbd.svg",
+                  "topRow": 23,
+                  "bottomRow": 54,
+                  "isSortable": true,
+                  "parentRowSpace": 10,
+                  "type": "TABLE_WIDGET_V2",
+                  "defaultSelectedRow": "0",
+                  "hideCard": false,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [],
+                  "dynamicBindingPathList": [
+                    {
+                      "key": "tableData"
+                    },
+                    {
+                      "key": "primaryColumns.title.computedValue"
+                    },
+                    {
+                      "key": "primaryColumns.text.computedValue"
+                    },
+                    {
+                      "key": "primaryColumns.start_seconds.computedValue"
+                    },
+                    {
+                      "key": "primaryColumns.transcript_type.computedValue"
+                    }
+                  ],
+                  "leftColumn": 2,
+                  "primaryColumns": {
+                    "title": {
+                      "index": 0,
+                      "width": 150,
+                      "id": "title",
+                      "alias": "title",
+                      "originalId": "title",
+                      "horizontalAlignment": "LEFT",
+                      "verticalAlignment": "CENTER",
+                      "columnType": "text",
+                      "textSize": "0.875rem",
+                      "enableFilter": true,
+                      "enableSort": true,
+                      "isVisible": true,
+                      "isDisabled": false,
+                      "isCellVisible": true,
+                      "isDerived": false,
+                      "label": "Demo recording",
+                      "computedValue": "{{Sources.processedTableData.map((currentRow) => currentRow.title)}}"
+                    },
+                    "text": {
+                      "index": 1,
+                      "width": 150,
+                      "id": "text",
+                      "alias": "text",
+                      "originalId": "text",
+                      "horizontalAlignment": "LEFT",
+                      "verticalAlignment": "CENTER",
+                      "columnType": "text",
+                      "textSize": "0.875rem",
+                      "enableFilter": true,
+                      "enableSort": true,
+                      "isVisible": true,
+                      "isDisabled": false,
+                      "isCellVisible": true,
+                      "isDerived": false,
+                      "label": "Synthetic passage",
+                      "computedValue": "{{Sources.processedTableData.map((currentRow) => currentRow.text)}}"
+                    },
+                    "start_seconds": {
+                      "index": 2,
+                      "width": 150,
+                      "id": "start_seconds",
+                      "alias": "start_seconds",
+                      "originalId": "start_seconds",
+                      "horizontalAlignment": "LEFT",
+                      "verticalAlignment": "CENTER",
+                      "columnType": "text",
+                      "textSize": "0.875rem",
+                      "enableFilter": true,
+                      "enableSort": true,
+                      "isVisible": true,
+                      "isDisabled": false,
+                      "isCellVisible": true,
+                      "isDerived": false,
+                      "label": "Start (seconds)",
+                      "computedValue": "{{Sources.processedTableData.map((currentRow) => currentRow.start_seconds)}}"
+                    },
+                    "transcript_type": {
+                      "index": 3,
+                      "width": 150,
+                      "id": "transcript_type",
+                      "alias": "transcript_type",
+                      "originalId": "transcript_type",
+                      "horizontalAlignment": "LEFT",
+                      "verticalAlignment": "CENTER",
+                      "columnType": "text",
+                      "textSize": "0.875rem",
+                      "enableFilter": true,
+                      "enableSort": true,
+                      "isVisible": true,
+                      "isDisabled": false,
+                      "isCellVisible": true,
+                      "isDerived": false,
+                      "label": "Transcript type",
+                      "computedValue": "{{Sources.processedTableData.map((currentRow) => currentRow.transcript_type)}}"
+                    }
+                  },
+                  "delimiter": ",",
+                  "key": "4u6cxamhqp",
+                  "derivedColumns": {},
+                  "rightColumn": 62,
+                  "textSize": "0.875rem",
+                  "widgetId": "sources",
+                  "accentColor": "#2459a8",
+                  "isVisibleFilters": false,
+                  "tableData": "{{SourceSheet.packet().candidates}}",
+                  "isVisible": true,
+                  "label": "Data",
+                  "searchKey": "",
+                  "enableClientSideSearch": true,
+                  "version": 3,
+                  "totalRecordsCount": 0,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "horizontalAlignment": "LEFT",
+                  "isVisibleSearch": true,
+                  "childStylesheet": {},
+                  "borderRadius": "6px",
+                  "isVisiblePagination": true,
+                  "verticalAlignment": "CENTER",
+                  "columnWidthMap": {
+                    "title": 180,
+                    "text": 510,
+                    "start_seconds": 120,
+                    "transcript_type": 130
+                  },
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 23,
+                  "mobileBottomRow": 54
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 60,
+                  "widgetName": "Demo",
+                  "onClick": "{{SourceSheet.demo()}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 56,
+                  "bottomRow": 60,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 14,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 2,
+                  "dynamicBindingPathList": [],
+                  "text": "Reset demo",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 14,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "demo",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 56,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 2,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 60,
+                  "widgetName": "EmptyDemo",
+                  "onClick": "{{SourceSheet.empty()}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 56,
+                  "bottomRow": 60,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 27,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 15,
+                  "dynamicBindingPathList": [],
+                  "text": "Empty demo",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 27,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "emptydemo",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 56,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 15,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 60,
+                  "widgetName": "CSV",
+                  "onClick": "{{SourceSheet.downloadCSV()}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 56,
+                  "bottomRow": 60,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 48,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 34,
+                  "dynamicBindingPathList": [],
+                  "text": "Download CSV",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 48,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "csv",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 56,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 34,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "resetFormOnClick": false,
+                  "needsErrorInfo": false,
+                  "boxShadow": "none",
+                  "mobileBottomRow": 60,
+                  "widgetName": "JSONExport",
+                  "onClick": "{{SourceSheet.downloadJSON()}}",
+                  "buttonColor": "#2459a8",
+                  "dynamicPropertyPathList": [],
+                  "topRow": 56,
+                  "bottomRow": 60,
+                  "parentRowSpace": 10,
+                  "type": "BUTTON_WIDGET",
+                  "mobileRightColumn": 62,
+                  "animateLoading": true,
+                  "parentColumnSpace": 18.125,
+                  "dynamicTriggerPathList": [
+                    {
+                      "key": "onClick"
+                    }
+                  ],
+                  "leftColumn": 49,
+                  "dynamicBindingPathList": [],
+                  "text": "Download JSON",
+                  "isDisabled": false,
+                  "key": "kcco8g7h4l",
+                  "rightColumn": 62,
+                  "isDefaultClickDisabled": true,
+                  "widgetId": "jsonexport",
+                  "minWidth": 120,
+                  "isVisible": true,
+                  "recaptchaType": "V3",
+                  "version": 1,
+                  "parentId": "0",
+                  "renderMode": "CANVAS",
+                  "isLoading": false,
+                  "mobileTopRow": 56,
+                  "responsiveBehavior": "hug",
+                  "disabledWhenInvalid": false,
+                  "borderRadius": "6px",
+                  "mobileLeftColumn": 49,
+                  "buttonVariant": "PRIMARY",
+                  "placement": "CENTER"
+                },
+                {
+                  "isVisible": true,
+                  "text": "{{Sources.selectedRow && Sources.selectedRow.text ? \"Selected synthetic passage: \" + Sources.selectedRow.text + \" | Start: \" + Sources.selectedRow.start_seconds + \" seconds. No real source URL exists for demo rows.\" : \"No passage selected.\"}}",
+                  "fontSize": "1rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Selection",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 62,
+                  "bottomRow": 69,
+                  "parentId": "0",
+                  "widgetId": "selection",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 62,
+                  "mobileBottomRow": 69,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [
+                    {
+                      "key": "text"
+                    }
+                  ],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "isVisible": true,
+                  "text": "{{SourceSheet.packet().coverage_note + \" Rows: \" + SourceSheet.packet().candidates.length + \". JSON retains the requested window and unknown coverage fields. An empty CSV contains only its header.\"}}",
+                  "fontSize": "0.875rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Coverage",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 70,
+                  "bottomRow": 77,
+                  "parentId": "0",
+                  "widgetId": "coverage",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 70,
+                  "mobileBottomRow": 77,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [
+                    {
+                      "key": "text"
+                    }
+                  ],
+                  "dynamicTriggerPathList": []
+                },
+                {
+                  "isVisible": true,
+                  "text": "To use live data, fork privately and follow the repository README. Add your own authenticated API datasource and a manual GET /v1/search query there. This public demo contains no API actions, datasource or credentials.",
+                  "fontSize": "0.875rem",
+                  "fontStyle": "",
+                  "textAlign": "LEFT",
+                  "textColor": "#172033",
+                  "widgetName": "Setup",
+                  "version": 1,
+                  "type": "TEXT_WIDGET",
+                  "isLoading": false,
+                  "parentColumnSpace": 18.125,
+                  "parentRowSpace": 10,
+                  "leftColumn": 2,
+                  "rightColumn": 62,
+                  "topRow": 78,
+                  "bottomRow": 85,
+                  "parentId": "0",
+                  "widgetId": "setup",
+                  "mobileLeftColumn": 2,
+                  "mobileRightColumn": 62,
+                  "mobileTopRow": 78,
+                  "mobileBottomRow": 85,
+                  "renderMode": "CANVAS",
+                  "dynamicBindingPathList": [],
+                  "dynamicTriggerPathList": []
+                }
+              ]
+            },
+            "layoutOnLoadActions": [],
+            "layoutOnLoadActionErrors": [],
+            "validOnPageLoadActions": true,
+            "id": "Sources",
+            "deleted": false,
+            "policies": [],
+            "userPermissions": []
+          }
+        ],
+        "userPermissions": [],
+        "policyMap": {}
+      },
+      "deleted": false
+    }
+  ],
+  "actionList": [
+    {
+      "pluginType": "JS",
+      "pluginId": "js-plugin",
+      "unpublishedAction": {
+        "name": "fixture",
+        "fullyQualifiedName": "SourceSheet.fixture",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "function () {\n    return {\n      is_synthetic: true,\n      status: \"demo\",\n      query: \"creator economy\",\n      requested_window: { after: \"2026-08-01\", before: \"2026-09-01\" },\n      applied_window: null,\n      partial: null,\n      search_index: null,\n      coverage_note: \"Synthetic demonstration. No search was run; coverage and transcript quality are not measured.\",\n      candidates: [\n        { title: \"Synthetic recording A\", text: \"A creator can turn one interview into a short source-backed story.\", start_seconds: 42, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null },\n        { title: \"Synthetic recording B\", text: \"Keep the original context beside each candidate quote before editing.\", start_seconds: 95.5, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null },\n        { title: \"Synthetic recording C\", text: \"A timestamped shortlist gives the editor a place to begin, not a finished cut.\", start_seconds: 180, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null }\n      ]\n    };\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": false
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "publishedAction": {
+        "name": "fixture",
+        "fullyQualifiedName": "SourceSheet.fixture",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "function () {\n    return {\n      is_synthetic: true,\n      status: \"demo\",\n      query: \"creator economy\",\n      requested_window: { after: \"2026-08-01\", before: \"2026-09-01\" },\n      applied_window: null,\n      partial: null,\n      search_index: null,\n      coverage_note: \"Synthetic demonstration. No search was run; coverage and transcript quality are not measured.\",\n      candidates: [\n        { title: \"Synthetic recording A\", text: \"A creator can turn one interview into a short source-backed story.\", start_seconds: 42, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null },\n        { title: \"Synthetic recording B\", text: \"Keep the original context beside each candidate quote before editing.\", start_seconds: 95.5, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null },\n        { title: \"Synthetic recording C\", text: \"A timestamped shortlist gives the editor a place to begin, not a finished cut.\", start_seconds: 180, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null }\n      ]\n    };\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": false
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "id": "Sources_SourceSheet.fixture",
+      "deleted": false
+    },
+    {
+      "pluginType": "JS",
+      "pluginId": "js-plugin",
+      "unpublishedAction": {
+        "name": "packet",
+        "fullyQualifiedName": "SourceSheet.packet",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "function () {\n    return appsmith.store.arcmiraSourceSheet || this.fixture();\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": false
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "publishedAction": {
+        "name": "packet",
+        "fullyQualifiedName": "SourceSheet.packet",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "function () {\n    return appsmith.store.arcmiraSourceSheet || this.fixture();\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": false
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "id": "Sources_SourceSheet.packet",
+      "deleted": false
+    },
+    {
+      "pluginType": "JS",
+      "pluginId": "js-plugin",
+      "unpublishedAction": {
+        "name": "demo",
+        "fullyQualifiedName": "SourceSheet.demo",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "async function () {\n    return storeValue(\"arcmiraSourceSheet\", this.fixture(), false);\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": true
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "publishedAction": {
+        "name": "demo",
+        "fullyQualifiedName": "SourceSheet.demo",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "async function () {\n    return storeValue(\"arcmiraSourceSheet\", this.fixture(), false);\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": true
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "id": "Sources_SourceSheet.demo",
+      "deleted": false
+    },
+    {
+      "pluginType": "JS",
+      "pluginId": "js-plugin",
+      "unpublishedAction": {
+        "name": "empty",
+        "fullyQualifiedName": "SourceSheet.empty",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "async function () {\n    return storeValue(\"arcmiraSourceSheet\", { ...this.fixture(), status: \"demo_empty\", candidates: [] }, false);\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": true
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "publishedAction": {
+        "name": "empty",
+        "fullyQualifiedName": "SourceSheet.empty",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "async function () {\n    return storeValue(\"arcmiraSourceSheet\", { ...this.fixture(), status: \"demo_empty\", candidates: [] }, false);\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": true
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "id": "Sources_SourceSheet.empty",
+      "deleted": false
+    },
+    {
+      "pluginType": "JS",
+      "pluginId": "js-plugin",
+      "unpublishedAction": {
+        "name": "csv",
+        "fullyQualifiedName": "SourceSheet.csv",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "function () {\n    const packet = this.packet();\n    const fields = [\"is_synthetic\", \"query\", \"requested_after\", \"requested_before\", \"applied_window\", \"partial\", \"search_index\", \"coverage_note\", \"title\", \"text\", \"start_seconds\", \"transcript_type\", \"video_id\", \"published_at\", \"watch_url\"];\n    const cell = (value) => {\n      let text = value == null ? \"\" : typeof value === \"object\" ? JSON.stringify(value) : String(value);\n      if (/^[\\s\\u0000-\\u001f]*[=+@-]/u.test(text) || /^[\\t\\r\\n]/u.test(text)) text = \"'\" + text;\n      return '\"' + text.replaceAll('\"', '\"\"') + '\"';\n    };\n    const rows = packet.candidates.map((candidate) => ({\n      ...candidate,\n      is_synthetic: packet.is_synthetic,\n      query: packet.query,\n      requested_after: packet.requested_window.after,\n      requested_before: packet.requested_window.before,\n      applied_window: packet.applied_window,\n      partial: packet.partial,\n      search_index: packet.search_index,\n      coverage_note: packet.coverage_note\n    }));\n    return [fields.map(cell).join(\",\"), ...rows.map((row) => fields.map((key) => cell(row[key])).join(\",\"))].join(\"\\r\\n\") + \"\\r\\n\";\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": false
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "publishedAction": {
+        "name": "csv",
+        "fullyQualifiedName": "SourceSheet.csv",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "function () {\n    const packet = this.packet();\n    const fields = [\"is_synthetic\", \"query\", \"requested_after\", \"requested_before\", \"applied_window\", \"partial\", \"search_index\", \"coverage_note\", \"title\", \"text\", \"start_seconds\", \"transcript_type\", \"video_id\", \"published_at\", \"watch_url\"];\n    const cell = (value) => {\n      let text = value == null ? \"\" : typeof value === \"object\" ? JSON.stringify(value) : String(value);\n      if (/^[\\s\\u0000-\\u001f]*[=+@-]/u.test(text) || /^[\\t\\r\\n]/u.test(text)) text = \"'\" + text;\n      return '\"' + text.replaceAll('\"', '\"\"') + '\"';\n    };\n    const rows = packet.candidates.map((candidate) => ({\n      ...candidate,\n      is_synthetic: packet.is_synthetic,\n      query: packet.query,\n      requested_after: packet.requested_window.after,\n      requested_before: packet.requested_window.before,\n      applied_window: packet.applied_window,\n      partial: packet.partial,\n      search_index: packet.search_index,\n      coverage_note: packet.coverage_note\n    }));\n    return [fields.map(cell).join(\",\"), ...rows.map((row) => fields.map((key) => cell(row[key])).join(\",\"))].join(\"\\r\\n\") + \"\\r\\n\";\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": false
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "id": "Sources_SourceSheet.csv",
+      "deleted": false
+    },
+    {
+      "pluginType": "JS",
+      "pluginId": "js-plugin",
+      "unpublishedAction": {
+        "name": "downloadCSV",
+        "fullyQualifiedName": "SourceSheet.downloadCSV",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "async function () {\n    return download(this.csv(), \"arcmira-synthetic-source-shortlist.csv\", \"text/csv\");\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": true
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "publishedAction": {
+        "name": "downloadCSV",
+        "fullyQualifiedName": "SourceSheet.downloadCSV",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "async function () {\n    return download(this.csv(), \"arcmira-synthetic-source-shortlist.csv\", \"text/csv\");\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": true
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "id": "Sources_SourceSheet.downloadCSV",
+      "deleted": false
+    },
+    {
+      "pluginType": "JS",
+      "pluginId": "js-plugin",
+      "unpublishedAction": {
+        "name": "downloadJSON",
+        "fullyQualifiedName": "SourceSheet.downloadJSON",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "async function () {\n    return download(JSON.stringify(this.packet(), null, 2), \"arcmira-synthetic-source-shortlist.json\", \"application/json\");\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": true
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "publishedAction": {
+        "name": "downloadJSON",
+        "fullyQualifiedName": "SourceSheet.downloadJSON",
+        "datasource": {
+          "name": "UNUSED_DATASOURCE",
+          "pluginId": "js-plugin",
+          "invalids": [
+            "No datasource configuration found. Please configure it and try again."
+          ],
+          "messages": [],
+          "isAutoGenerated": false,
+          "deleted": false,
+          "policies": [],
+          "userPermissions": []
+        },
+        "pageId": "Sources",
+        "collectionId": "Sources_SourceSheet",
+        "actionConfiguration": {
+          "timeoutInMillisecond": 10000,
+          "paginationType": "NONE",
+          "encodeParamsToggle": true,
+          "body": "async function () {\n    return download(JSON.stringify(this.packet(), null, 2), \"arcmira-synthetic-source-shortlist.json\", \"application/json\");\n  }",
+          "selfReferencingDataPaths": [],
+          "jsArguments": [],
+          "isAsync": true
+        },
+        "runBehaviour": "MANUAL",
+        "dynamicBindingPathList": [
+          {
+            "key": "body"
+          }
+        ],
+        "isValid": true,
+        "invalids": [],
+        "messages": [],
+        "jsonPathKeys": [],
+        "userSetOnLoad": false,
+        "confirmBeforeExecute": false,
+        "policies": [],
+        "userPermissions": []
+      },
+      "id": "Sources_SourceSheet.downloadJSON",
+      "deleted": false
+    }
+  ],
+  "actionCollectionList": [
+    {
+      "id": "Sources_SourceSheet",
+      "unpublishedCollection": {
+        "name": "SourceSheet",
+        "pageId": "Sources",
+        "pluginId": "js-plugin",
+        "pluginType": "JS",
+        "actions": [],
+        "archivedActions": [],
+        "body": "export default {\n  fixture() {\n    return {\n      is_synthetic: true,\n      status: \"demo\",\n      query: \"creator economy\",\n      requested_window: { after: \"2026-08-01\", before: \"2026-09-01\" },\n      applied_window: null,\n      partial: null,\n      search_index: null,\n      coverage_note: \"Synthetic demonstration. No search was run; coverage and transcript quality are not measured.\",\n      candidates: [\n        { title: \"Synthetic recording A\", text: \"A creator can turn one interview into a short source-backed story.\", start_seconds: 42, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null },\n        { title: \"Synthetic recording B\", text: \"Keep the original context beside each candidate quote before editing.\", start_seconds: 95.5, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null },\n        { title: \"Synthetic recording C\", text: \"A timestamped shortlist gives the editor a place to begin, not a finished cut.\", start_seconds: 180, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null }\n      ]\n    };\n  },\n  packet() {\n    return appsmith.store.arcmiraSourceSheet || this.fixture();\n  },\n  async demo() {\n    return storeValue(\"arcmiraSourceSheet\", this.fixture(), false);\n  },\n  async empty() {\n    return storeValue(\"arcmiraSourceSheet\", { ...this.fixture(), status: \"demo_empty\", candidates: [] }, false);\n  },\n  csv() {\n    const packet = this.packet();\n    const fields = [\"is_synthetic\", \"query\", \"requested_after\", \"requested_before\", \"applied_window\", \"partial\", \"search_index\", \"coverage_note\", \"title\", \"text\", \"start_seconds\", \"transcript_type\", \"video_id\", \"published_at\", \"watch_url\"];\n    const cell = (value) => {\n      let text = value == null ? \"\" : typeof value === \"object\" ? JSON.stringify(value) : String(value);\n      if (/^[\\s\\u0000-\\u001f]*[=+@-]/u.test(text) || /^[\\t\\r\\n]/u.test(text)) text = \"'\" + text;\n      return '\"' + text.replaceAll('\"', '\"\"') + '\"';\n    };\n    const rows = packet.candidates.map((candidate) => ({\n      ...candidate,\n      is_synthetic: packet.is_synthetic,\n      query: packet.query,\n      requested_after: packet.requested_window.after,\n      requested_before: packet.requested_window.before,\n      applied_window: packet.applied_window,\n      partial: packet.partial,\n      search_index: packet.search_index,\n      coverage_note: packet.coverage_note\n    }));\n    return [fields.map(cell).join(\",\"), ...rows.map((row) => fields.map((key) => cell(row[key])).join(\",\"))].join(\"\\r\\n\") + \"\\r\\n\";\n  },\n  async downloadCSV() {\n    return download(this.csv(), \"arcmira-synthetic-source-shortlist.csv\", \"text/csv\");\n  },\n  async downloadJSON() {\n    return download(JSON.stringify(this.packet(), null, 2), \"arcmira-synthetic-source-shortlist.json\", \"application/json\");\n  }\n};\n",
+        "variables": [],
+        "userPermissions": []
+      },
+      "deleted": false,
+      "publishedCollection": {
+        "name": "SourceSheet",
+        "pageId": "Sources",
+        "pluginId": "js-plugin",
+        "pluginType": "JS",
+        "actions": [],
+        "archivedActions": [],
+        "body": "export default {\n  fixture() {\n    return {\n      is_synthetic: true,\n      status: \"demo\",\n      query: \"creator economy\",\n      requested_window: { after: \"2026-08-01\", before: \"2026-09-01\" },\n      applied_window: null,\n      partial: null,\n      search_index: null,\n      coverage_note: \"Synthetic demonstration. No search was run; coverage and transcript quality are not measured.\",\n      candidates: [\n        { title: \"Synthetic recording A\", text: \"A creator can turn one interview into a short source-backed story.\", start_seconds: 42, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null },\n        { title: \"Synthetic recording B\", text: \"Keep the original context beside each candidate quote before editing.\", start_seconds: 95.5, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null },\n        { title: \"Synthetic recording C\", text: \"A timestamped shortlist gives the editor a place to begin, not a finished cut.\", start_seconds: 180, transcript_type: \"synthetic\", video_id: null, published_at: null, watch_url: null }\n      ]\n    };\n  },\n  packet() {\n    return appsmith.store.arcmiraSourceSheet || this.fixture();\n  },\n  async demo() {\n    return storeValue(\"arcmiraSourceSheet\", this.fixture(), false);\n  },\n  async empty() {\n    return storeValue(\"arcmiraSourceSheet\", { ...this.fixture(), status: \"demo_empty\", candidates: [] }, false);\n  },\n  csv() {\n    const packet = this.packet();\n    const fields = [\"is_synthetic\", \"query\", \"requested_after\", \"requested_before\", \"applied_window\", \"partial\", \"search_index\", \"coverage_note\", \"title\", \"text\", \"start_seconds\", \"transcript_type\", \"video_id\", \"published_at\", \"watch_url\"];\n    const cell = (value) => {\n      let text = value == null ? \"\" : typeof value === \"object\" ? JSON.stringify(value) : String(value);\n      if (/^[\\s\\u0000-\\u001f]*[=+@-]/u.test(text) || /^[\\t\\r\\n]/u.test(text)) text = \"'\" + text;\n      return '\"' + text.replaceAll('\"', '\"\"') + '\"';\n    };\n    const rows = packet.candidates.map((candidate) => ({\n      ...candidate,\n      is_synthetic: packet.is_synthetic,\n      query: packet.query,\n      requested_after: packet.requested_window.after,\n      requested_before: packet.requested_window.before,\n      applied_window: packet.applied_window,\n      partial: packet.partial,\n      search_index: packet.search_index,\n      coverage_note: packet.coverage_note\n    }));\n    return [fields.map(cell).join(\",\"), ...rows.map((row) => fields.map((key) => cell(row[key])).join(\",\"))].join(\"\\r\\n\") + \"\\r\\n\";\n  },\n  async downloadCSV() {\n    return download(this.csv(), \"arcmira-synthetic-source-shortlist.csv\", \"text/csv\");\n  },\n  async downloadJSON() {\n    return download(JSON.stringify(this.packet(), null, 2), \"arcmira-synthetic-source-shortlist.json\", \"application/json\");\n  }\n};\n",
+        "variables": [],
+        "userPermissions": []
+      }
+    }
+  ],
+  "editModeTheme": {
+    "name": "Default-New",
+    "displayName": "Modern",
+    "isSystemTheme": true,
+    "deleted": false
+  },
+  "publishedTheme": {
+    "name": "Default-New",
+    "displayName": "Modern",
+    "isSystemTheme": true,
+    "deleted": false
+  }
+}

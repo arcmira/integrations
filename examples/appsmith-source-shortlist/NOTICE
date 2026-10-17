@@ -1,0 +1,9 @@
+Arcmira Appsmith source-shortlist example
+Copyright 2026 Arcmira
+
+Application export structure and stock widget/JS collection structures adapted
+from Appsmith, Copyright Appsmith, Inc., licensed under Apache License 2.0.
+The original fixture data, API actions, credentials and identifiers are not used.
+Source repository: https://github.com/appsmithorg/appsmith
+Pinned revision: 552488b0f380c2383e8bfa1e69408c227b963b39
+See provenance.json for exact source files and their SHA-256 digests.
