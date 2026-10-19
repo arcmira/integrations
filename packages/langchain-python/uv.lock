@@ -36,15 +36,15 @@ wheels = [
 
 [[package]]
 name = "arcmira"
-version = "0.6.0"
-source = { url = "https://files.pythonhosted.org/packages/01/c5/cd69fda49b01cbfdfec2420d24bd84fdac5caabc62ea967e637d29140f5b/arcmira-0.6.0-py3-none-any.whl" }
+version = "0.6.2"
+source = { url = "https://files.pythonhosted.org/packages/ef/0a/5159534f8bc236d67889a413506d1b67c912325dfc6f4c0022390cf3cd7b/arcmira-0.6.2-py3-none-any.whl" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },
     { name = "typing-extensions" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/01/c5/cd69fda49b01cbfdfec2420d24bd84fdac5caabc62ea967e637d29140f5b/arcmira-0.6.0-py3-none-any.whl", hash = "sha256:179c4fe70aea82ca84c4b89bd713473d5dc87cc45e31e144909d8ad2d6b46a86" },
+    { url = "https://files.pythonhosted.org/packages/ef/0a/5159534f8bc236d67889a413506d1b67c912325dfc6f4c0022390cf3cd7b/arcmira-0.6.2-py3-none-any.whl", hash = "sha256:ff606bb2c4e1ce1a22d28e2ba5545d9261b36a4678b47215087cf67ecea3ceb5" },
 ]
 
 [package.metadata]
@@ -617,7 +617,7 @@ wheels = [
 
 [[package]]
 name = "langchain-arcmira"
-version = "0.1.6"
+version = "0.1.7"
 source = { editable = "." }
 dependencies = [
     { name = "arcmira" },
@@ -639,7 +639,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "arcmira", url = "https://files.pythonhosted.org/packages/01/c5/cd69fda49b01cbfdfec2420d24bd84fdac5caabc62ea967e637d29140f5b/arcmira-0.6.0-py3-none-any.whl" },
+    { name = "arcmira", url = "https://files.pythonhosted.org/packages/ef/0a/5159534f8bc236d67889a413506d1b67c912325dfc6f4c0022390cf3cd7b/arcmira-0.6.2-py3-none-any.whl" },
     { name = "httpx", specifier = ">=0.28.1,<1" },
     { name = "langchain-core", specifier = ">=1.6.5,<2" },
     { name = "pydantic", specifier = ">=2.7.4,<3" },

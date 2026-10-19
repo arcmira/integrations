@@ -7,6 +7,10 @@ Current guides and agent-visible descriptions say paid reads use credits from yo
 
 The TypeScript LangChain, AI SDK and Activepieces packages are published on npm at 0.1.0. n8n remains an unpublished preview at 0.1.0 with `private: true`. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify is a source preview at version 0.1.2, tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
 
+## Python LangChain 0.1.7 candidate
+
+Updates the pinned Arcmira SDK to 0.6.2. Third-party dependencies are unchanged. The source and built wheel each pass 58 adapter tests. This version is not published; PyPI 0.1.6 remains the current release.
+
 ## Python LangChain 0.1.6
 
 Published October 13, 2026 with Arcmira SDK 0.6.0. Third-party dependencies are unchanged. The source and built wheel each passed 58 tests; full local validation passed. Both downloaded PyPI archives match the verified release manifest.
