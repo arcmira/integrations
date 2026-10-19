@@ -11,7 +11,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/langchain); catalog update requested |
 | LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Langflow | [Setup and components](packages/langflow) | [PyPI 0.1.0](https://pypi.org/project/lfx-arcmira/0.1.0/); native runtime and editor fields verified; live-account checks and catalog review pending |
-| Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk); catalog review pending |
+| Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk); catalog submission pending |
 | Activepieces | [Setup and action](packages/activepieces) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/piece-arcmira); native editor verified; manual installation available |
 | n8n | [Setup and node](packages/n8n) | Source preview; native editor search and entity resolution verified. npm publication and n8n review pending |
 | n8n CSV workflow | [YouTube clip shortlist](examples/n8n-clip-shortlist) | Native n8n 2.41.3 fixture and live CSV export verified; importable example |
