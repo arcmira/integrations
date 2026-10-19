@@ -9,7 +9,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.5.1 |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.6.0 |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/langchain); catalog update requested |
-| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.6](https://pypi.org/project/langchain-arcmira/0.1.6/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
+| LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Langflow | [Setup and components](packages/langflow) | [PyPI 0.1.0](https://pypi.org/project/lfx-arcmira/0.1.0/); native runtime and editor fields verified; live-account checks and catalog review pending |
 | Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk); catalog submission pending |
 | Activepieces | [Setup and action](packages/activepieces) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/piece-arcmira); native editor verified; manual installation available |
@@ -39,7 +39,7 @@ For editors and researchers, [build a source-linked brief](guides/source-checkin
 ## Install the Python package
 
 ```sh
-pip install langchain-arcmira==0.1.6
+pip install langchain-arcmira==0.1.7
 export ARCMIRA_API_KEY='your-key'
 python - <<'PYTHON'
 from langchain_arcmira import ArcmiraSearch
@@ -79,7 +79,7 @@ A paid read uses credits from your plan, then your on-demand budget. Coverage an
 
 ## Verification
 
-Python LangChain 0.1.6 uses Arcmira SDK 0.6.0. Its wheel passed 58 adapter tests with external network connections blocked, and both public PyPI archives match the tested artifacts. Earlier live integration checks used no credits or model inference. See [release verification](RELEASE.md#python-langchain-016) for evidence and scope.
+Python LangChain 0.1.7 uses Arcmira SDK 0.6.2. Its wheel passed 58 adapter tests with external network connections blocked, and both public PyPI archives match the tested artifacts. Earlier live integration checks used no credits or model inference. See [release verification](RELEASE.md#python-langchain-017) for evidence and scope.
 
 The TypeScript LangChain package and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
 
