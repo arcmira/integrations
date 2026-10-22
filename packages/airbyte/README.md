@@ -1,4 +1,4 @@
-# Arcmira source for Airbyte
+# Arcmira: YouTube Data Exports for Airbyte
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing) · [Existing connector proposal](https://github.com/airbytehq/airbyte/discussions/87666)
 

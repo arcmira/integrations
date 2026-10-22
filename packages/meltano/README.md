@@ -1,4 +1,4 @@
-# Arcmira for Meltano
+# Arcmira: YouTube Mentions and Recommendations for Meltano
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
