@@ -4,6 +4,8 @@
 
 Find up to three spoken passages in indexed YouTube videos and export a source shortlist for editorial review. This manual flow uses only built-in Node-RED nodes. It writes a CSV and a JSON sidecar with dates and search coverage; it does not download or edit video.
 
+The flow is published in the [Node-RED Flow Library](https://flows.nodered.org/flow/522e11603a9e9b901e1e65df57d029eb). Import it from that listing or use the JSON file below.
+
 ## Run it
 
 1. Use Node-RED 5.0.7 on Node.js 22.9 or later. Before starting Node-RED, set `ARCMIRA_API_KEY` privately in its process environment using your [Arcmira account key](https://arcmira.com/docs/authentication). Never put the key in a flow field or export. Set `ARCMIRA_OUTPUT_DIR` to an existing writable local directory.

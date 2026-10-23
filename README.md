@@ -16,7 +16,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | n8n | [Setup and node](packages/n8n) | Source preview; native editor search and entity resolution verified. npm publication and n8n review pending |
 | n8n CSV workflow | [YouTube clip shortlist](examples/n8n-clip-shortlist) | Native n8n 2.41.3 fixture and live CSV export verified; importable example |
 | n8n built-in workflow | [Transcript source shortlist](examples/n8n-source-shortlist) | One bounded Free-account execution verified; importable example, not a catalog listing |
-| Node-RED built-in flow | [Transcript source shortlist CSV](examples/node-red-source-shortlist) | Native fixture checks and one bounded Free-account execution passed; importable example, not a catalog listing |
+| Node-RED built-in flow | [Transcript source shortlist CSV](examples/node-red-source-shortlist) | [Node-RED Flow Library](https://flows.nodered.org/flow/522e11603a9e9b901e1e65df57d029eb); native fixture checks and one bounded Free-account execution passed |
 | dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Local fixture tests and one live Free-account search export passed; no dlt catalog listing |
 | Meltano / Singer | [Scoped mentions and recommendations](packages/meltano) | Source preview with native DuckDB fixture checks; authenticated export and Hub publication pending |
 | Airbyte | [Scoped source and validation](packages/airbyte) | Local Airbyte 2.3.0 fixture checks and one live channel-video export passed; broader live validation and catalog acceptance pending |
