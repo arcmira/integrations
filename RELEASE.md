@@ -28,7 +28,7 @@ Published October 13, 2026 with Arcmira SDK 0.6.0. Third-party dependencies are 
 | @arcmira/ai-sdk | ai 7.0.127 | 0.6.0 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
 | @arcmira/piece-arcmira | Activepieces host 0.92.0; pieces-framework 0.32.0 | Direct HTTP | TypeScript, 13 action tests, isolated bundle check, live native-host search |
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
-| Arcmira for Dify | dify-plugin 0.10.2; plugin 0.1.2; Community Edition 1.17.1 | Direct HTTP | 18 SDK tests, local SDK research, native Community Edition resolution and bounded search; Cloud installation at 0.1.1 |
+| Arcmira for Dify | dify-plugin 0.10.2; plugin 0.1.3 candidate; Community Edition 1.17.1 | Direct HTTP | 18 SDK tests, local SDK research, native Community Edition resolution and bounded search; Cloud installation at 0.1.1 |
 
 Direct third-party dependencies met a seven-day release-age policy when selected on October 5, 2026. The first-party SDK uses the current released contract. AI SDK 7.0.127 passed the age policy and source/packed compatibility checks on October 8, 2026 after 19:20 UTC. Recheck newer releases before publishing.
 
@@ -60,7 +60,7 @@ Activepieces publishes the self-contained `bundle/` artifact, not its source dep
 
 n8n has no runtime dependencies beyond its host peer. Its frozen pnpm lock includes build and test tools. The package remains private with a publication guard. Native editor search and resolution passed with n8n 2.41.3. GitHub Actions publication with npm provenance and Creator Portal review remain. The manual n8n release workflow rebuilds the package with frozen dependencies and compares every packaged file and its mode against the approved, locally tested archive before publishing. A difference stops publication. Tests remain local. See the [current n8n verification requirements](https://docs.n8n.io/connect/create-nodes/build-your-node/reference/verification-guidelines).
 
-Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `uv.lock`. Its requirements export is pinned. The Marketplace artifact must exclude tests, local environments and credentials. Native Community Edition entity resolution and bounded transcript search passed with plugin 0.1.2. Authenticated Cloud workflow testing, publisher agreement and Marketplace review remain. See [Dify submission requirements](https://github.com/langgenius/dify-plugins/blob/main/docs/plugin-submission-requirements.md).
+Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `uv.lock`, except certifi, whose October 21 cutoff permits the 2026.10.19 security update. Its requirements export is pinned. The Marketplace artifact must exclude tests, local environments and credentials. Native Community Edition entity resolution and bounded transcript search passed with plugin 0.1.2. Version 0.1.2 is published in the Marketplace. The 0.1.3 security update requires a new Marketplace submission; authenticated Cloud workflow execution remains unverified. See [Dify submission requirements](https://github.com/langgenius/dify-plugins/blob/main/docs/plugin-submission-requirements.md).
 
 ## Python LangChain publication
 
