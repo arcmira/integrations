@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import httpx
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -43,7 +44,7 @@ class PluginTests(unittest.TestCase):
     def test_sdk_registration_loads_both_tools(self):
         reg = PluginRegistration(DifyPluginEnv())
         self.assertEqual(set(reg.tools_mapping['arcmira'][2]), {'search', 'resolve'})
-        self.assertEqual(json.loads((ROOT / 'manifest.yaml').read_text())['privacy'], 'PRIVACY.md')
+        self.assertEqual(yaml.safe_load((ROOT / 'manifest.yaml').read_text())['privacy'], 'PRIVACY.md')
         self.assertTrue((ROOT / 'PRIVACY.md').is_file())
 
     def test_full_search_result_preserved(self):
