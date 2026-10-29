@@ -4,7 +4,7 @@ Search indexed YouTube transcripts for timestamped passages, speaker appearances
 
 [Arcmira](https://arcmira.com) · [API documentation](https://arcmira.com/docs) · [Source](https://github.com/arcmira/integrations/tree/master/packages/dify)
 
-Install the published adapter from the [Dify Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). The 0.1.3 release candidate updates the certificate bundle to certifi 2026.10.19, addressing [GHSA-6q48-6c7w-9gw2](https://github.com/advisories/GHSA-6q48-6c7w-9gw2).
+Install the published adapter from the [Dify Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.3 updates the certificate bundle to certifi 2026.10.19, addressing [GHSA-6q48-6c7w-9gw2](https://github.com/advisories/GHSA-6q48-6c7w-9gw2).
 
 ## Setup
 
@@ -27,7 +27,7 @@ To restrict results to one transcript source, set `source` to `arcmira_premium`,
 - Search parameters: https://arcmira.com/docs/search
 - OpenAPI reference: https://api.arcmira.com/v1/openapi.json
 - MCP connection: https://arcmira.com/docs/mcp-server
-- Plugin privacy: [PRIVACY.md](PRIVACY.md)
+- Plugin privacy: [Privacy policy](https://github.com/arcmira/integrations/blob/master/packages/dify/PRIVACY.md)
 - Support: zeal@arcmira.com
 
 ## Development
