@@ -10,7 +10,7 @@ Serve this folder locally:
 python3 -m http.server 8080 --bind 127.0.0.1
 ```
 
-Open <http://127.0.0.1:8080>. No credentials or Arcmira API calls are needed. Playback loads the original video through YouTube’s embedded player. Selecting another source destroys the previous player. If an embed fails, use the YouTube timestamp link. Clipboard failures expose selectable text.
+Open <http://127.0.0.1:8080>. No credentials or Arcmira API calls are needed. Playback loads the original video through YouTube’s embedded player. Selecting another source destroys the previous player. If an embed fails or does not become ready within 15 seconds, click **Retry source** or use the YouTube timestamp link. If the player API cannot load, the timestamp link remains available. Clipboard failures expose selectable text.
 
 `fixture.js` preserves the quote text, source metadata, date window and selection notes. Punctuation and line breaks are formatted for reading; repetitions remain. Playback pins use caption cues near sentence starts, not word-level alignment. This is a partial editorial selection, not an exhaustive search or ranking. The former MTS video became private; a different MTS video replaces it. The corrected Columbia quote remains in the source notes.
 
