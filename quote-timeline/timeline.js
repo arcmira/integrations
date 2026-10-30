@@ -6,6 +6,9 @@ let active = 0;
 let player;
 let ready = false;
 let apiReady = false;
+let loadId = 0;
+let sourceTimeout;
+const loadTimeoutMs = 15000;
 
 function clock(seconds) {
   const total = Math.floor(seconds);
@@ -67,7 +70,17 @@ function render(index) {
   );
 }
 
+function sourceUnavailable(message) {
+  clearTimeout(sourceTimeout);
+  ready = false;
+  $("play").disabled = false;
+  $("play").textContent = "Retry source";
+  $("playback-status").textContent = `${message} Retry or open the YouTube timestamp link to watch the source.`;
+}
+
 function loadSource() {
+  const currentLoad = ++loadId;
+  clearTimeout(sourceTimeout);
   ready = false;
   $("play").disabled = true;
   $("play").textContent = "Loading source…";
@@ -78,12 +91,17 @@ function loadSource() {
     mount.id = "player";
     document.querySelector(".source-player").append(mount);
   }
+  sourceTimeout = setTimeout(() => {
+    if (currentLoad === loadId) sourceUnavailable("YouTube did not finish loading.");
+  }, loadTimeoutMs);
   const item = fixture.quotes[active];
   player = new YT.Player("player", {
     width: "640", height: "360", videoId: item.videoId,
     playerVars: { start: item.passageStartSeconds, playsinline: 1, origin: location.origin, rel: 0 },
     events: {
       onReady: () => {
+        if (currentLoad !== loadId) return;
+        clearTimeout(sourceTimeout);
         ready = true;
         const selected = fixture.quotes[active];
         $("play").disabled = false;
@@ -91,24 +109,45 @@ function loadSource() {
         $("playback-status").textContent = `Ready at ${clock(selected.passageStartSeconds)}. Play to hear the original source.`;
       },
       onStateChange: ({ data }) => {
+        if (currentLoad !== loadId || !ready) return;
         $("play").disabled = false;
         if (data === YT.PlayerState.CUED) $("playback-status").textContent = `Ready at ${clock(fixture.quotes[active].passageStartSeconds)}.`;
         $("play").textContent = data === YT.PlayerState.PLAYING ? "Pause source" : "Play source";
         if (data === YT.PlayerState.PLAYING) $("playback-status").textContent = "Playing original YouTube source. Volume is controlled in the player.";
         if (data === YT.PlayerState.PAUSED) $("playback-status").textContent = "Source paused.";
       },
-      onAutoplayBlocked: () => { $("playback-status").textContent = "Press Play inside the YouTube player to start with sound."; },
-      onError: () => { $("play").disabled = true; $("play").textContent = "Source unavailable"; $("playback-status").textContent = "YouTube could not play this embed. Open the YouTube timestamp link to watch the source."; },
+      onAutoplayBlocked: () => {
+        if (currentLoad !== loadId) return;
+        $("playback-status").textContent = "Press Play inside the YouTube player to start with sound.";
+      },
+      onError: () => {
+        if (currentLoad !== loadId) return;
+        sourceUnavailable("YouTube could not play this embed.");
+      },
     },
   });
 }
-window.onYouTubeIframeAPIReady = () => { apiReady = true; loadSource(); };
+function apiUnavailable() {
+  if (apiReady) return;
+  $("playback-status").textContent = "YouTube could not load. Open the YouTube timestamp link to watch the source.";
+  $("play").disabled = true;
+  $("play").textContent = "Player unavailable";
+}
+const apiTimeout = setTimeout(apiUnavailable, loadTimeoutMs);
+window.onYouTubeIframeAPIReady = () => {
+  clearTimeout(apiTimeout);
+  apiReady = true;
+  loadSource();
+};
 const youtubeAPI = document.createElement("script");
 youtubeAPI.src = "https://www.youtube.com/iframe_api";
-youtubeAPI.onerror = () => { $("playback-status").textContent = "YouTube could not load. Open the YouTube timestamp link to watch the source."; $("play").textContent = "Player unavailable"; };
+youtubeAPI.onerror = () => { clearTimeout(apiTimeout); apiUnavailable(); };
 document.head.append(youtubeAPI);
 $("play").addEventListener("click", () => {
-  if (!ready) return;
+  if (!ready) {
+    if (apiReady) loadSource();
+    return;
+  }
   if (player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo();
   else {
     player.unMute();
