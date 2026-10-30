@@ -106,6 +106,7 @@ fi
   pnpm install --frozen-lockfile --ignore-scripts ${install_args[@]+"${install_args[@]}"}
   pnpm check
 )
+python3 -m unittest discover -s examples/resumable-channel-index -p 'test_*.py' -v
 node examples/n8n-clip-shortlist/check.mjs
 python3 scripts/test-python-release.py
 python3 scripts/test-n8n-release.py
