@@ -14,7 +14,7 @@ nix run github:arcmira/integrations -- search --help
 
 This displays the transcript search options without an API key. Nix downloads and builds the package as needed. To use the same source on another machine, append the integrations commit to the flake reference.
 
-The flake exposes a package for ARM Linux, x86-64 Linux and Apple Silicon macOS. The command was tested on ARM Linux. The other two package definitions passed evaluation. The pinned Nixpkgs revision does not support Intel macOS.
+The default package and the named package `github:arcmira/integrations#arcmira` run the same CLI on ARM Linux, x86-64 Linux and Apple Silicon macOS. The command was tested on ARM Linux. The other two package definitions passed evaluation. The pinned Nixpkgs revision does not support Intel macOS.
 
 ## Install
 
