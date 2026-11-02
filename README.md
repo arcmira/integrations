@@ -7,6 +7,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Integration | Source | Status |
 | --- | --- | --- |
 | Cursor, VS Code, Kiro and Zed | [Connect your editor](guides/editor-mcp) | Search YouTube and podcast transcripts from your editor and open the recording at the quoted passage. |
+| Composio | [Connect Arcmira with Custom MCP](guides/composio) | Add transcript search to your project and connect each user through OAuth. |
 | Replit Agent | [Add Arcmira to Replit](https://replit.com/integrations?mcp=eyJkaXNwbGF5TmFtZSI6IkFyY21pcmE6IFlvdVR1YmUgVHJhbnNjcmlwdCBTZWFyY2giLCJiYXNlVXJsIjoiaHR0cHM6Ly9tY3AuYXJjbWlyYS5jb20vbWNwIn0%3D) · [MCP setup](https://arcmira.com/docs/mcp-server) | Connect a custom MCP server, sign in with Arcmira, and ask Replit Agent to find timestamped passages in YouTube and podcast transcripts. |
 | Nix CLI | [Package and installation](nix) | Run once with `nix run github:arcmira/integrations -- search --help`. |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.6.2 |
