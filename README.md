@@ -24,7 +24,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 | Airbyte | [Scoped source and validation](packages/airbyte) | Local Airbyte 2.3.0 fixture checks and one live channel-video export passed; broader live validation and catalog acceptance pending |
 | Pipedream Connect / MCP | [Native actions and validation](packages/pipedream) | Locally tested source preview; app registration and hosted validation pending |
 | Dify | [Setup and plugin](packages/dify) | [Plugin 0.1.3 is live in Dify Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira); native Cloud research and [importable search workflow](examples/dify-transcript-search) verified |
-| Appmixer | [Setup and connector](packages/appmixer) | [Connector 1.0.5](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.5) published; 1.0.4 installed privately with native entity resolution verified; public catalog acceptance pending |
+| Appmixer | [Appmixer setup guide](https://docs.appmixer.com/connector-configuration/arcmira) · [First-party source](packages/appmixer) | [Catalog connector 1.0.0](https://connectors.appmixer.com/connector/appmixer.arcmira/1.0.0) includes Find Transcripts, Resolve Entity and Make API Call. Arcmira also publishes a [custom connector 1.0.5](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.5). |
 
 For DSH, the [API documentation preset](examples/dsh) searches documentation without an API key. Its native session check passes; it does not provide YouTube research.
 

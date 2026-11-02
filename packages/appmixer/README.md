@@ -4,7 +4,9 @@
 
 Search indexed YouTube videos and livestreams for timestamped passages. Resolve people, organizations, products, topics and channels before filtering your research.
 
-This is Arcmira's first-party source for Appmixer connector 1.0.5. See [release status](../../RELEASE.md#appmixer-connector) for hosted verification and downloadable packages. Public Appmixer catalog acceptance is pending.
+For the hosted connector, open [Arcmira in the Appmixer catalog](https://connectors.appmixer.com/connector/appmixer.arcmira/1.0.0) and follow [Appmixer’s setup guide](https://docs.appmixer.com/connector-configuration/arcmira). Catalog version 1.0.0 includes Find Transcripts, Resolve Entity and Make API Call.
+
+This directory contains Arcmira’s separately versioned custom connector 1.0.5. See [release status](../../RELEASE.md#appmixer-connector) for the downloadable ZIP and hosted test results.
 
 ## Build and install
 
@@ -49,9 +51,9 @@ Private hosted connector 1.0.3 passed these checks on October 6, 2026:
 
 These checks used an isolated Free account. The test flow remained inactive. They did not test Premium reads, writes, timeouts, rate limits, team-account selection or a fresh account label in the native picker. No before/after usage ledger was captured for the 1.0.3 checks.
 
-Local tests exercise the actual component modules with synthetic HTTP responses. They cover filters, output routing, ambiguity, managed authentication, account-label fallbacks, request restrictions and error retention. They do not certify Appmixer marketplace acceptance.
+Local tests exercise the actual component modules with synthetic HTTP responses. They cover filters, output routing, ambiguity, managed authentication, account-label fallbacks, request restrictions and error retention.
 
-Request behavior is unchanged from the privately tested 1.0.3 source. Version 1.0.5 describes paid reads as credits from your plan, then your on-demand budget. Its changes are limited to usage descriptions, version metadata and documentation. Version 1.0.5 has not been tested in the Appmixer host. Upstream E2E templates and the copied publisher manifest schema are not included in this first-party package. The existing [Appmixer proposal](https://github.com/Appmixer-ai/appmixer-connectors/issues/1369) tracks the separate catalog process.
+Request behavior is unchanged from the privately tested 1.0.3 source. Version 1.0.5 describes paid reads as credits from your plan, then your on-demand budget. Its changes are limited to usage descriptions, version metadata and documentation. Appmixer Backoffice confirmed installation of 1.0.5 on October 12. See the release status for hosted action tests on earlier versions. Upstream E2E templates and the copied publisher manifest schema are not included in this first-party package.
 
 ## Feedback
 
