@@ -1,3 +1,11 @@
+/**
+ * Search indexed YouTube and podcast transcripts for timestamped passages with the Vercel AI SDK.
+ * Pass the object returned by `createArcmiraTools` as the AI SDK tools option.
+ *
+ * @see {@link https://arcmira.com/docs | Arcmira API documentation}
+ * @see {@link https://arcmira.com/docs/authentication | API keys and sign-in}
+ * @packageDocumentation
+ */
 import { tool, type Tool } from "ai";
 import { ArcmiraClient } from "arcmira";
 import { z } from "zod";
