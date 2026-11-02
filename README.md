@@ -41,6 +41,8 @@ For editors and researchers, [build a source-linked brief](guides/source-checkin
 
 [Open the quote research notebook in Colab](https://colab.research.google.com/github/arcmira/integrations/blob/master/examples/quote-research-notebook/youtube-transcript-search.ipynb) to check timestamped passages and export a CSV. The [Jupyter notebook](examples/quote-research-notebook/youtube-transcript-search.ipynb) starts with five saved examples and can also search the API.
 
+[Explore datacenter coverage in Datasette](examples/datacenter-coverage) to compare daily counts from two 30-day windows in Arcmira’s September research edition.
+
 For podcast publishers, [export a saved transcript as WebVTT](examples/transcript-webvtt) with its cue times and available speaker labels.
 
 ## Install the Python package
