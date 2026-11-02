@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Convert a YouTube or Podcast Transcript to WebVTT | Arcmira</title>
-  <meta name="description" content="Export a timestamped YouTube or podcast transcript as WebVTT subtitles. Download a working JSON example, play the matching caption track and convert your own transcript with Python.">
+  <meta name="description" content="Convert a YouTube transcript to WebVTT with Python, check the captions against your podcast audio and publish the file in your RSS feed or Spotify for Creators.">
   <link rel="canonical" href="https://arcmira.github.io/integrations/youtube-transcript-to-webvtt/">
   <meta property="og:title" content="Convert a YouTube or Podcast Transcript to WebVTT | Arcmira">
-  <meta property="og:description" content="Export a timestamped YouTube or podcast transcript as WebVTT subtitles. Download a working JSON example, play the matching caption track and convert your own transcript with Python.">
+  <meta property="og:description" content="Convert a YouTube transcript to WebVTT with Python, check the captions against your podcast audio and publish the file in your RSS feed or Spotify for Creators.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://arcmira.github.io/integrations/youtube-transcript-to-webvtt/">
   <meta property="og:image" content="https://arcmira.github.io/integrations/remotion-quote-cards/poster.png">
@@ -52,6 +52,19 @@
       <div><h2>Use your own transcript</h2>
         <p>Save a ready response from the <a href="https://arcmira.com/docs/transcripts">Arcmira transcript API</a> with <code>timestamps=true</code>. Replace <code>quote-cards.json</code> in the command with your filename. A source excerpt keeps its original timestamps. If you cut or reorder the recording, adjust the cue times to match.</p>
         <p>When a line has a speaker ID, the converter looks up the returned name and writes a WebVTT voice tag such as <code>&lt;v Speaker 1&gt;</code>. Lines without a speaker ID get plain text. Check the words and names against the recording before publishing.</p>
+      </div>
+    </section>
+    <section class="step">
+      <span class="number" aria-hidden="true">04</span>
+      <div><h2>Publish a WebVTT transcript with your podcast</h2>
+        <p>Check a cue near the beginning and end of the published episode, and after each ad break. A different intro, cut or ad can shift later captions. Upload the VTT that matches the final audio to your podcast host.</p>
+        <p>If your host manages transcripts, use its episode transcript field. If you edit the RSS yourself, declare <code>xmlns:podcast="https://podcastindex.org/namespace/1.0"</code> on the <code>rss</code> element. Add the following element inside the episode’s <code>item</code>, replacing the sample clip URL and language with your own.</p>
+        <pre><code>&lt;podcast:transcript
+  url="https://arcmira.github.io/integrations/youtube-transcript-to-webvtt/quote-cards.vtt"
+  type="text/vtt"
+  language="en" /&gt;</code></pre>
+        <p><strong>Apple Podcasts.</strong> For an RSS episode, select “Display transcripts I provide” in Apple Podcasts Connect. Apple checks the linked file when it refreshes the feed. <a href="https://podcasters.apple.com/support/5316-transcripts-on-apple-podcasts">Apple’s transcript settings</a></p>
+        <p><strong>Spotify for Creators.</strong> If your episode has transcript editing enabled, open its details on the web, edit the transcript, upload the timestamped VTT and save. Spotify also accepts SRT and sets a 5 MB limit. <a href="https://support.spotify.com/us/creators/article/managing-episode-transcripts-on-spotify/">Spotify’s upload instructions</a></p>
       </div>
     </section>
     <footer><a href="../">More transcript examples</a> · <a href="https://github.com/arcmira/integrations/tree/master/examples/transcript-webvtt">Converter source</a> · <a href="https://arcmira.com/docs">API docs</a></footer>
