@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Convert a YouTube or Podcast Transcript to WebVTT | Arcmira</title>
+  <meta name="description" content="Export a timestamped YouTube or podcast transcript as WebVTT subtitles. Download a working JSON example, play the matching caption track and convert your own transcript with Python.">
+  <link rel="canonical" href="https://arcmira.github.io/integrations/youtube-transcript-to-webvtt/">
+  <meta property="og:title" content="Convert a YouTube or Podcast Transcript to WebVTT | Arcmira">
+  <meta property="og:description" content="Export a timestamped YouTube or podcast transcript as WebVTT subtitles. Download a working JSON example, play the matching caption track and convert your own transcript with Python.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://arcmira.github.io/integrations/youtube-transcript-to-webvtt/">
+  <meta property="og:image" content="https://arcmira.github.io/integrations/remotion-quote-cards/poster.png">
+  <meta property="og:image:alt" content="A quote card with its source video and timestamp.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="../ai-sdk/style.css">
+  <style>.caption-preview{display:block;width:100%;max-width:38rem;height:auto;margin:1rem 0;background:#10121a}.step>div{min-width:0}.step pre{white-space:pre-wrap;overflow-wrap:anywhere}</style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the caption example</a>
+  <header>
+    <a class="brand" href="https://arcmira.com/" aria-label="Arcmira home"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCAA4ADgDASIAAhEBAxEB/8QAGwABAAIDAQEAAAAAAAAAAAAAAAcIAQYJAwT/xAA3EAAABQMCBAMFBQkAAAAAAAAAAQIDBAUGEQcSCBMhMRUicRYjMoGRFEFRYYIYUlNVlKKjsdP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AqoAAAAJS4e9JYmrN3SYFUcls0uFFU++5GUSVmozJKEkZkZFkzM+3ZJixH7F+nX8wuT+qa/5AKSgJG150wY0qvtyjQHJLtNfjtyYjkgyUs0nlKiMyIiMyWlX3dsCOQAAAAGRgfVSqdIq9SiU6IjmSZbyGGk/vLUokpL6mQC6HB1aHgenEivPN7X63JNaVGWD5LWUI/u5h/Mhu0biE01l3MVuM3PHVNU7yEr5ayYW5nG0ncbD6/fnB/iNjhWfHp1hN2jDeVHZapvhyHkF5k+72by/PPX1HPqmaeT52paLD+3Q25viB05Ukl5aJSVGRqI+5/CeC7meCAWb40bP8Ss6l3Qy3l2lSTYeUX8F3pk/RaUl+oxTYdMb3tJq7rEqtsuqNZTYSo6HFnkyc2+RZ/mSiSfyHNOTHdiSHY77am3mlmhaFd0qI8GR/MB5AAAAmbhOs/wBpdV4s51vdForKpyzPtzPgbL13K3foEMibdANcrc0fpVVbnUSoTqhUX0KU8wtskk0hPlT5jznKlmfqQC69wVhm3qDUavIMuTAjOSV5PHRCTUf+hzUptyzIF1xrl3mqazOTPNRH1U4Tm8/qeRP+qnFjSr3sKrW5SqHUoUqoNpZ577iDSlG8jX0SeeqSMvmK0Z65AdTIE1mpQY82MvexIaS82r8UqIjI/oYoRxOWf7I6t1U2m9kWq7akzgsF7zO//Ilf1ISZp3xeUm1bJo1BqlCqkyXToyYynmnG9q0o6Jxk8/CSSGhcQOtFvavtUh6n0WfT51PU4hTr60GlxpeDx5T7kpOS9TAQ0AAAAAAAAADORgAAAAAH/9k=" width="25" height="25" alt="" /><span class="logo-text">Arcmira</span></a>
+    <nav aria-label="Resources"><a href="https://arcmira.com/docs">API docs</a><a href="https://github.com/arcmira/integrations">GitHub</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <p class="eyebrow">Python caption export</p>
+      <h1>Convert a transcript <span>to WebVTT subtitles.</span></h1>
+      <p class="lead">Turn a saved YouTube or podcast transcript into a <code>.vtt</code> file with start times, end times and any speaker names in the response. Try the example with Python 3. The conversion runs locally.</p>
+    </section>
+    <section class="step">
+      <span class="number" aria-hidden="true">01</span>
+      <div><h2>Play the caption track</h2>
+        <p>Each card in this silent video lasts six seconds. The English subtitles follow the edit. The timestamp printed on each card takes you to the passage in the original recording.</p>
+        <video class="caption-preview" controls playsinline preload="metadata" poster="../remotion-quote-cards/poster.png" aria-label="Three silent quote cards with English subtitles">
+          <source src="../remotion-quote-cards/quote-cards.mp4" type="video/mp4">
+          <track kind="subtitles" srclang="en" label="English" src="quote-cards.vtt" default>
+        </video>
+        <p><a href="quote-cards.vtt" download>Download the WebVTT subtitles</a> or <a href="../remotion-quote-cards/">see the original video sources</a>.</p>
+      </div>
+    </section>
+    <section class="step">
+      <span class="number" aria-hidden="true">02</span>
+      <div><h2>Reproduce the export</h2>
+        <p>Download the <a href="quote-cards.json" download>sample transcript JSON</a> and the <a href="https://raw.githubusercontent.com/arcmira/integrations/master/examples/transcript-webvtt/export_vtt.py">Python converter</a>. Save both in the same folder and run this command there.</p>
+        <pre><code>python3 export_vtt.py quote-cards.json &gt; quote-cards.vtt</code></pre>
+        <p>The sample contains three lines timed to the edited video. For example, the second card starts at 6 seconds in the edit and <a href="https://www.youtube.com/watch?v=mD1F-yy_D8E&amp;t=823s">13:43 in the original recording</a>.</p>
+      </div>
+    </section>
+    <section class="step">
+      <span class="number" aria-hidden="true">03</span>
+      <div><h2>Use your own transcript</h2>
+        <p>Save a ready response from the <a href="https://arcmira.com/docs/transcripts">Arcmira transcript API</a> with <code>timestamps=true</code>. Replace <code>quote-cards.json</code> in the command with your filename. A source excerpt keeps its original timestamps. If you cut or reorder the recording, adjust the cue times to match.</p>
+        <p>When a line has a speaker ID, the converter looks up the returned name and writes a WebVTT voice tag such as <code>&lt;v Speaker 1&gt;</code>. Lines without a speaker ID get plain text. Check the words and names against the recording before publishing.</p>
+      </div>
+    </section>
+    <footer><a href="../">More transcript examples</a> · <a href="https://github.com/arcmira/integrations/tree/master/examples/transcript-webvtt">Converter source</a> · <a href="https://arcmira.com/docs">API docs</a></footer>
+  </main>
+</body>
+</html>

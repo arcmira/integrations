@@ -1,0 +1,20 @@
+{
+  "state": "ready",
+  "lines": [
+    {
+      "start": 0,
+      "end": 6,
+      "text": "building software without writing code."
+    },
+    {
+      "start": 6,
+      "end": 12,
+      "text": "using an AI chatbot to bring your ideas to life."
+    },
+    {
+      "start": 12,
+      "end": 18,
+      "text": "their agents can be vibe coding for them and generating the right experiences for them"
+    }
+  ]
+}
