@@ -33,6 +33,6 @@ A paid read uses credits from your plan, then your on-demand budget. Each action
 
 ## Snapshot and dependencies
 
-`test/fixtures/openapi.json` is the public API schema 1.0.0 fetched on October 21, 2026 from [the deployed OpenAPI endpoint](https://api.arcmira.com/v1/openapi.json). Schema versions are separate from SDK and MCP versions. Its SHA-256 is `d5b15c4bc70d86f025cff687d01a08cba4e05ae1cd07023d2519004ca80975da`.
+`test/fixtures/openapi.json` is the public API schema 1.0.0 fetched on November 2, 2026 from [the deployed OpenAPI endpoint](https://api.arcmira.com/v1/openapi.json). Schema versions are separate from SDK and MCP versions. Its SHA-256 is `4709c554299c4f43d8c443c894af1292ed6919dd6c698c476c021b53b4001466`.
 
 `package-lock.json` pins `@pipedream/platform` 3.1.1 and all transitive dependencies. All 34 package versions met the seven-day release-age policy on October 5, 2026. Runtime modules use direct HTTP rather than an Arcmira SDK. Both package manifests remain private; no npm release is proposed. Source is Apache-2.0 licensed.
