@@ -88,3 +88,19 @@ test('API loading failure and timeout leave a usable timestamp route', () => {
     assert.equal(p.get('play').textContent, 'Play source');
   }
 });
+
+test('the HTML cites each saved excerpt and both timestamp links before scripts run', () => {
+  const context = vm.createContext({ window: {} });
+  vm.runInContext(readFileSync(`${__dirname}/fixture.js`, 'utf8'), context);
+  const html = readFileSync(`${__dirname}/index.html`, 'utf8');
+  const sources = html.match(/<details[^>]+id="saved-sources"[^>]*>([\s\S]*?)<\/details>/)[1];
+  const entries = [...sources.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(match => match[1]);
+  const { quotes } = context.window.QUOTE_FIXTURE;
+  assert.equal(entries.length, quotes.length);
+  const escape = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+  for (const [index, item] of quotes.entries()) {
+    const entry = entries[index];
+    for (const text of [item.channel, item.title, item.quote]) assert.ok(entry.includes(escape(text)), text);
+    for (const url of [item.youtubeUrl, item.sourceUrl]) assert.ok(entry.includes(`href="${escape(url)}"`), url);
+  }
+});
