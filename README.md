@@ -6,6 +6,7 @@ Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n
 
 | Integration | Source | Status |
 | --- | --- | --- |
+| Replit Agent | [Add Arcmira to Replit](https://replit.com/integrations?mcp=eyJkaXNwbGF5TmFtZSI6IkFyY21pcmE6IFlvdVR1YmUgVHJhbnNjcmlwdCBTZWFyY2giLCJiYXNlVXJsIjoiaHR0cHM6Ly9tY3AuYXJjbWlyYS5jb20vbWNwIn0%3D) · [MCP setup](https://arcmira.com/docs/mcp-server) | Connect a custom MCP server, sign in with Arcmira, and ask Replit Agent to find timestamped passages in YouTube and podcast transcripts. |
 | Nix CLI | [Package and installation](nix) | First-party source package; CLI 0.6.2 |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.6.2 |
 | mise CLI | [npm backend](https://mise.jdx.dev/dev-tools/backends/npm.html) | With Node.js 18 or later on your PATH, run `mise exec npm:arcmira@0.6.2 -- arcmira search --help` for transcript search options. |
