@@ -4,6 +4,18 @@
 
 Build the Arcmira CLI from its published 0.6.2 source release with Nix. This is Arcmira's own package definition. It is not listed in Nixpkgs.
 
+## Run the CLI without installing it
+
+With flakes enabled, run the CLI from the first-party integrations repository:
+
+```sh
+nix run github:arcmira/integrations -- search --help
+```
+
+This displays the transcript search options without an API key. Nix downloads and builds the package as needed. To use the same source on another machine, append the integrations commit to the flake reference.
+
+The flake exposes a package for ARM Linux, x86-64 Linux and Apple Silicon macOS. The command was tested on ARM Linux. The other two package definitions passed evaluation. The pinned Nixpkgs revision does not support Intel macOS.
+
 ## Install
 
 With Nix already installed:
