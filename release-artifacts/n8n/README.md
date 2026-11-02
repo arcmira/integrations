@@ -1,16 +1,17 @@
-# n8n publication
+# Publish the Arcmira n8n node
 
-The workflow publishes a locally built archive. It does not build or test packages on GitHub.
+The [0.1.0 release](https://github.com/arcmira/integrations/releases/tag/n8n-v0.1.0) includes the locally tested package. Its filename, SHA-256 checksum, source tree and tag are in [current.json](current.json).
 
-Before the first dispatch:
+## Prepare a release
 
-1. Finish release setup and remove the package's private flag for the reviewed release.
-2. Run the local build, lint, routing tests, contract check and authenticated n8n editor check.
-3. Commit the package changes, pack locally, and inspect the archive contents.
-4. Add `current.json` here with `version`, `tag`, `package_tree` from `git rev-parse HEAD:packages/n8n`, and a `files` mapping from the archive filename to its SHA-256 checksum.
-5. Create the release tag at the verified package source and upload that exact archive as a GitHub release asset.
-6. Configure npm trusted publishing for `arcmira/integrations`, workflow `publish-n8n.yml`, environment `npm`. First-publication authentication must be resolved separately; do not approve a locally staged package as the verified release.
-7. Run `python3 scripts/verify-n8n-release.py ARCHIVE_DIRECTORY --tag RELEASE_TAG`, then dispatch the workflow from master.
-8. Verify registry contents and provenance before submitting the package to the n8n Creator Portal.
+1. Build the package in `packages/n8n`. Run the lint, routing tests, contract check and authenticated n8n editor check.
+2. Commit the tested source and pack it locally. Inspect the archive contents.
+3. Record the version, tag, package tree from `git rev-parse HEAD:packages/n8n`, archive filename and SHA-256 in `current.json`.
+4. Tag the tested source and attach the archive to its GitHub release.
 
-There is deliberately no `current.json` until a release archive is ready. Dispatching early fails before publication. A GitHub workflow result is not evidence of n8n review or marketplace approval.
+## Publish and verify
+
+1. Confirm npm publishing access for `n8n-nodes-arcmira`. The trusted publisher is `arcmira/integrations`, workflow `publish-n8n.yml`, environment `npm`. First publication also requires npm authorization.
+2. Run `python3 scripts/verify-n8n-release.py ARCHIVE_DIRECTORY --tag RELEASE_TAG` from the repository root.
+3. Dispatch the [release workflow](../../.github/workflows/publish-n8n.yml) from master. It verifies the tagged archive and rebuilds the package on the runner. It compares every file’s contents and mode with the tested archive before publishing the rebuilt package with npm provenance.
+4. Verify the published version, package contents and provenance on npm before submitting the node for n8n review.
