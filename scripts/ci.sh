@@ -106,6 +106,7 @@ fi
   pnpm install --frozen-lockfile --ignore-scripts ${install_args[@]+"${install_args[@]}"}
   pnpm check
 )
+python3 -m unittest discover -s examples/transcript-webvtt -p 'test_*.py' -v
 python3 -m unittest discover -s examples/resumable-channel-index -p 'test_*.py' -v
 node --test examples/quote-timeline/timeline.test.cjs
 node examples/n8n-clip-shortlist/check.mjs

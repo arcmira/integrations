@@ -37,6 +37,8 @@ Try the [interactive quote timeline](https://arcmira.github.io/integrations/quot
 
 For editors and researchers, [build a source-linked brief](guides/source-checking) with a copyable research prompt, a timestamped example, and checks for attribution, context and source availability.
 
+For podcast publishers, [export a saved transcript as WebVTT](examples/transcript-webvtt) with its cue times and available speaker labels.
+
 ## Install the Python package
 
 ```sh
