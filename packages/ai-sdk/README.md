@@ -2,7 +2,7 @@
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
-[Available on npm as @arcmira/ai-sdk 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk) for the Vercel AI SDK.
+[Available on npm as @arcmira/ai-sdk](https://www.npmjs.com/package/@arcmira/ai-sdk) for the Vercel AI SDK.
 
 [Open the AI SDK setup guide](https://arcmira.github.io/integrations/ai-sdk/) for a copyable setup prompt and examples.
 
@@ -13,7 +13,7 @@ Search indexed YouTube transcripts for timestamped passages. Resolve names to ID
 Install the published package:
 
 ```sh
-npm install @arcmira/ai-sdk@0.1.0 ai zod
+npm install @arcmira/ai-sdk ai@7 zod@4
 ```
 
 Set `ARCMIRA_API_KEY` and your model provider's credentials in the server environment.
@@ -55,6 +55,6 @@ The tools accept the AI SDK cancellation signal. This adapter exposes search and
 
 ## Verification
 
-The next release, 0.1.1, uses Arcmira SDK 0.6.2, AI SDK 7.0.127 and Zod 4.6.5. Published 0.1.0 uses SDK 0.6.0. AI SDK 7.0.127 and its changed dependencies passed the repository's seven-day package hold on October 8, 2026. `npm run build` checks types. `npm test` runs the AI SDK tool-execution loop with simulated model and API responses. An earlier live check with SDK 0.4.3 ran search and entity resolution against Arcmira with existing smoke-test access. Both return real results through the AI SDK execution loop, using simulated model decisions. Timestamped evidence reaches the next model step. No paid model inference is included.
+The tool execution tests use AI SDK 7.0.127 and Zod 4.6.5. AI SDK 7.0.127 and its changed dependencies passed the repository's seven-day package hold on October 8, 2026. `npm run build` checks types. `npm test` runs the AI SDK tool-execution loop with simulated model and API responses. An earlier live check with SDK 0.4.3 ran search and entity resolution against Arcmira with existing smoke-test access. Both return real results through the AI SDK execution loop, using simulated model decisions. Timestamped evidence reaches the next model step. No paid model inference is included.
 
 Publication and tools-registry inclusion are separate steps. Recheck the registry's current-SDK compatibility requirement before submitting the tools-registry pull request; the newest npm release can be newer than this repository's eligible test version.
