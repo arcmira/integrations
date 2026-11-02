@@ -4,7 +4,7 @@
 
 Search indexed YouTube videos and livestreams for timestamped passages. Resolve people, organizations, products, topics and channels before filtering your research.
 
-For the hosted connector, open [Arcmira in the Appmixer catalog](https://connectors.appmixer.com/connector/appmixer.arcmira/1.0.0) and follow [Appmixer’s setup guide](https://docs.appmixer.com/connector-configuration/arcmira). Catalog version 1.0.0 includes Find Transcripts, Resolve Entity and Make API Call.
+For the hosted connector, open [Arcmira in the Appmixer catalog](https://connectors.appmixer.com/connector/appmixer.arcmira) and follow [Appmixer’s setup guide](https://docs.appmixer.com/connector-configuration/arcmira). The hosted connector includes Find Transcripts, Resolve Entity and Make API Call.
 
 This directory contains Arcmira’s separately versioned custom connector 1.0.5. See [release status](../../RELEASE.md#appmixer-connector) for the downloadable ZIP and hosted test results.
 
