@@ -37,6 +37,8 @@ Try the [interactive quote timeline](https://arcmira.github.io/integrations/quot
 
 For editors and researchers, [build a source-linked brief](guides/source-checking) with a copyable research prompt, a timestamped example, and checks for attribution, context and source availability.
 
+[Open the quote research notebook in Colab](https://colab.research.google.com/github/arcmira/integrations/blob/master/examples/quote-research-notebook/youtube-transcript-search.ipynb) to check timestamped passages and export a CSV. The [Jupyter notebook](examples/quote-research-notebook/youtube-transcript-search.ipynb) starts with five saved examples and can also search the API.
+
 For podcast publishers, [export a saved transcript as WebVTT](examples/transcript-webvtt) with its cue times and available speaker labels.
 
 ## Install the Python package
