@@ -5,7 +5,7 @@
 Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
-The TypeScript LangChain, AI SDK and Activepieces packages are published on npm at 0.1.0. n8n remains an unpublished preview at 0.1.0 with `private: true`. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify 0.1.3 is [published in the Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.2 was tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+The TypeScript LangChain, AI SDK and Activepieces packages are published on npm at 0.1.0. The [n8n 0.1.0 release archive](https://github.com/arcmira/integrations/releases/tag/n8n-v0.1.0) is available on GitHub. Its first npm publication is pending. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify 0.1.3 is [published in the Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.2 was tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
 
 ## Python LangChain 0.1.7
 
@@ -43,8 +43,8 @@ Registry archives retain the README shipped at publication. These guides describ
 
 ## Before remaining npm and catalog publication
 
-1. Configure npm first publication and trusted publishing for these new packages, under the Arcmira organization.
-2. Set package publication metadata and remove `private: true` only as part of the reviewed release.
+1. Verify npm publishing access for the exact package name. The n8n package is `n8n-nodes-arcmira`.
+2. For n8n, verify the release archive against its [recorded checksum and package tree](release-artifacts/n8n/current.json).
 3. Rerun local build, tests, package-content and credential checks on the exact release commit.
 4. Publish dedicated integration guides with the tested examples.
 5. Publish packages with provenance, then submit each catalog's required listing request.
@@ -58,7 +58,7 @@ The repository includes a public OpenAPI subset for schema parity tests. It cont
 
 Activepieces publishes the self-contained `bundle/` artifact, not its source dependency tree. Its bundle includes third-party license notices. The published 0.1.0 archive matches the locally tested artifact, and a fresh installation passed all 13 action tests. Earlier native-host search passed in Activepieces 0.92.0. Public npm installation is separate from global catalog inclusion; upstream contributions are currently paused.
 
-n8n has no runtime dependencies beyond its host peer. Its frozen pnpm lock includes build and test tools. The package remains private with a publication guard. Native editor search and resolution passed with n8n 2.41.3. GitHub Actions publication with npm provenance and Creator Portal review remain. The manual n8n release workflow rebuilds the package with frozen dependencies and compares every packaged file and its mode against the approved, locally tested archive before publishing. A difference stops publication. Tests remain local. See the [current n8n verification requirements](https://docs.n8n.io/connect/create-nodes/build-your-node/reference/verification-guidelines).
+n8n has no runtime dependencies beyond its host peer. Its frozen pnpm lock includes build and test tools. Native editor search and resolution passed with n8n 2.41.3. GitHub Actions publication with npm provenance and Creator Portal review remain. The manual n8n release workflow rebuilds the package with frozen dependencies and compares every packaged file and its mode against the approved, locally tested archive before publishing. A difference stops publication. Tests remain local. See the [current n8n verification requirements](https://docs.n8n.io/connect/create-nodes/build-your-node/reference/verification-guidelines).
 
 Dify dependencies retain the September 28, 2026 cutoff in `pyproject.toml` and `uv.lock`, except certifi, whose October 21 cutoff permits the 2026.10.19 security update. Its requirements export is pinned. The Marketplace artifact must exclude tests, local environments and credentials. Native Community Edition entity resolution and bounded transcript search passed with plugin 0.1.2. Version 0.1.3 is published in the Marketplace; its [submission was merged on October 29, 2026](https://github.com/langgenius/dify-plugins/pull/3543). Native Cloud search and entity resolution passed with 0.1.3 on October 29, 2026. The [importable search workflow](examples/dify-transcript-search) also completed three steps and returned three timestamped passages with zero model tokens. The Marketplace archive retains its earlier README until the next plugin release. See [Dify submission requirements](https://github.com/langgenius/dify-plugins/blob/main/docs/plugin-submission-requirements.md).
 
