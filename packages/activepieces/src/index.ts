@@ -41,8 +41,8 @@ const auth = PieceAuth.SecretText({
 const search = createAction({
   name: 'search_transcripts',
   auth,
-  displayName: 'Search YouTube transcripts',
-  description: 'Find timestamped passages across indexed videos. Uses your account search allowance. Returns evidence and coverage metadata.',
+  displayName: 'Search YouTube and podcast transcripts',
+  description: 'Find timestamped passages across indexed videos and podcasts. Uses your account search allowance. Returns evidence and coverage metadata.',
   props: {
     query: Property.ShortText({ displayName: 'Topic or phrase', required: true, description: 'Search one topic at a time. At least two characters.' }),
     limit: Property.Number({ displayName: 'Maximum passages', required: true, defaultValue: 5, description: 'An integer from 1 to 20.' }),
@@ -74,7 +74,7 @@ const search = createAction({
 
 export const arcmira = createPiece({
   displayName: 'Arcmira: YouTube Transcript Search',
-  description: 'Search YouTube transcripts for timestamped evidence in your workflows. API documentation: https://arcmira.com/docs',
+  description: 'Search indexed YouTube and podcast transcripts for timestamped evidence in your workflows. API documentation: https://arcmira.com/docs',
   logoUrl: 'https://arcmira.com/apple-touch-icon.png',
   authors: ['zealous1'],
   minimumSupportedRelease: '0.92.0',

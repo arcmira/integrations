@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search
 
-Search indexed YouTube transcripts from Activepieces workflows. Get timestamped passages, source links, and coverage metadata.
+Search indexed YouTube and podcast transcripts from Activepieces workflows. Get timestamped passages, source links, and coverage metadata.
 
 [Arcmira](https://arcmira.com) · [API documentation](https://arcmira.com/docs) · [OpenAPI specification](https://api.arcmira.com/v1/openapi.json) · [Authentication](https://arcmira.com/docs/authentication)
 
@@ -13,7 +13,7 @@ For installation from npm:
 1. In Activepieces, open **Settings → My Pieces → Install Piece** and enter `@arcmira/piece-arcmira`.
 2. Add **Arcmira: YouTube Transcript Search** to your flow.
 3. Create a connection with an [Arcmira API key](https://arcmira.com/dashboard/api). Validation reads your account details without running a search.
-4. Choose **Search YouTube transcripts** and enter one topic or phrase.
+4. Choose **Search YouTube and podcast transcripts** and enter one topic or phrase.
 5. Set a result limit from 1 to 20. Optionally filter by channel IDs, publication dates, or transcript source.
 6. Pass the returned JSON to the next step. Keep the source links and coverage fields with each result.
 

@@ -1,7 +1,7 @@
 {
   "name": "@arcmira/piece-arcmira",
   "version": "0.1.0",
-  "description": "YouTube transcript search with timestamped evidence for Activepieces workflows.",
+  "description": "YouTube transcript search for Activepieces. Find timestamped passages across indexed videos and podcasts in a workflow.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -14,6 +14,8 @@
   "keywords": [
     "activepieces",
     "piece",
+    "youtube-transcript-search",
+    "podcast-transcript-search",
     "arcmira",
     "youtube",
     "transcript",

@@ -1,6 +1,6 @@
 # Arcmira: YouTube Transcript Search for LangChain
 
-Native LangChain tools for searching indexed YouTube transcripts and resolving people, organizations, products, topics and channels with Arcmira.
+Native LangChain tools for searching indexed YouTube and podcast transcripts and resolving people, organizations, products, topics and channels with Arcmira.
 
 [Install @arcmira/langchain from npm](https://www.npmjs.com/package/@arcmira/langchain). Framework catalog inclusion is tracked separately in [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md).
 

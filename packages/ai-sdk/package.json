@@ -2,7 +2,7 @@
   "name": "@arcmira/ai-sdk",
   "version": "0.1.1",
   "type": "module",
-  "description": "YouTube transcript search tools for the AI SDK, powered by Arcmira.",
+  "description": "YouTube transcript search for the AI SDK. Find timestamped passages across indexed videos and podcasts and return source links.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -47,6 +47,8 @@
   "keywords": [
     "youtube",
     "transcript-search",
+    "youtube-transcript-search",
+    "podcast-transcript-search",
     "arcmira",
     "ai-sdk",
     "tools"

@@ -2,7 +2,7 @@
   "name": "@arcmira/langchain",
   "version": "0.1.1",
   "type": "module",
-  "description": "YouTube transcript search and entity resolution tools for LangChain, powered by Arcmira.",
+  "description": "YouTube transcript search for LangChain and LangGraph. Find timestamped passages across indexed videos and podcasts, and resolve names to IDs.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -49,6 +49,7 @@
     "youtube-transcript-search",
     "youtube",
     "transcript-search",
+    "podcast-transcript-search",
     "arcmira",
     "langchain",
     "langgraph",

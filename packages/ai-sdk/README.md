@@ -6,7 +6,7 @@
 
 [Open the AI SDK setup guide](https://arcmira.github.io/integrations/ai-sdk/) for a copyable setup prompt and examples.
 
-Search indexed YouTube transcripts for timestamped passages. Resolve names to IDs, then filter by channel, speaker, topic, transcript source, or sponsored and organic passages.
+Search indexed YouTube and podcast transcripts for timestamped passages. Resolve names to IDs, then filter by channel, speaker, topic, transcript source, or sponsored and organic passages.
 
 ## Quick start
 
