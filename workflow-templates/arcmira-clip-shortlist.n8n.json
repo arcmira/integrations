@@ -1,0 +1,163 @@
+{
+  "name": "Find YouTube clips by topic and export a research shortlist with Arcmira",
+  "nodes": [
+    {
+      "id": "run-clip-research",
+      "name": "Run clip research",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "set-research-topic",
+      "name": "Set research topic",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "topic",
+              "name": "topic",
+              "value": "vibe coding",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "search-transcripts",
+      "name": "Search transcripts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "url": "https://api.arcmira.com/v1/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json.topic }}"
+            },
+            {
+              "name": "limit",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "keep-source-linked-passages",
+      "name": "Keep source-linked passages",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ],
+      "parameters": {
+        "jsCode": "const output = [];\nfor (const item of $input.all()) {\n  const response = item.json;\n  if (!Array.isArray(response.chunks)) throw new Error('Expected transcript search results. Inspect the search response.');\n  for (const chunk of response.chunks) {\n    if (typeof chunk.text !== 'string' || !chunk.video_id || !Number.isFinite(chunk.start_seconds)) throw new Error('A passage is missing its text, video ID or timestamp.');\n    const watch = chunk.watch_url;\n    if (typeof watch !== 'string' || !(/^\\/watch\\?/.test(watch) || /^https:\\/\\/arcmira\\.com\\/watch\\?/.test(watch))) throw new Error('Unexpected source link. Inspect the search response.');\n    output.push({json: {\n      passage_id: chunk.id,\n      topic: response.query,\n      video_title: chunk.video_title,\n      channel: chunk.channel_name,\n      published_at: chunk.published_at,\n      passage: chunk.text,\n      start_seconds: chunk.start_seconds,\n      youtube_url: 'https://www.youtube.com/watch?v=' + encodeURIComponent(chunk.video_id) + '&t=' + Math.floor(chunk.start_seconds) + 's',\n      arcmira_url: watch.startsWith('/') ? 'https://arcmira.com' + watch : watch,\n      speakers: (chunk.speakers || []).join('; '),\n      transcript_source: chunk.source_label || chunk.source,\n      coverage_note: response.note || '',\n      search_index: JSON.stringify(response.search_index || {}),\n      publication_window: JSON.stringify(response.window || {}),\n      freshness: JSON.stringify(response.freshness || {}),\n      checked_at: response.as_of || '',\n      review_status: 'Needs review'\n    }});\n  }\n}\nif (!output.length) throw new Error('No passages matched. Review the search response and its coverage note before changing the topic or filters.');\nreturn output;\n"
+      }
+    },
+    {
+      "id": "export-clip-shortlist",
+      "name": "Export clip shortlist",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        300
+      ],
+      "parameters": {
+        "operation": "csv",
+        "options": {
+          "fileName": "arcmira-clip-shortlist.csv",
+          "headerRow": true
+        }
+      }
+    },
+    {
+      "id": "read-before-running",
+      "name": "Read before running",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -30,
+        -460
+      ],
+      "parameters": {
+        "content": "## Find YouTube clips by topic with Arcmira\n\nFor video editors and researchers building a source-linked shortlist. Enter one topic, search indexed YouTube transcripts, and download a CSV containing complete returned passages, channel and video titles, publication dates and timestamped source links. No LLM or Google account is required.\n\n### Setup\n1. Create an Arcmira API key at https://arcmira.com.\n2. In Search transcripts, select an HTTP Header Auth credential with header name Authorization and value Bearer followed by your key. Store the key in credentials, never in this workflow.\n3. Edit the topic in Set research topic. The workflow requests at most five passages and runs manually.\n4. Execute the workflow, review the search output, and download the CSV from Export clip shortlist.\n\n### Review the results\nCoverage depends on the indexed catalog and your account. Coverage and freshness notes are retained in each row. Speaker labels may be unavailable. Timestamps locate passages, not precise edit boundaries. Watch each source before choosing clip boundaries. The workflow does not download footage or publish clips.\n\nRequests use your account allowance. Errors stop execution; the workflow never substitutes a lower-quality transcript source. API documentation: https://arcmira.com/docs.\n\nUse the CSV as a review sheet, or replace the export node with your Google Sheets destination.",
+        "width": 570,
+        "height": 720
+      }
+    }
+  ],
+  "connections": {
+    "Run clip research": {
+      "main": [
+        [
+          {
+            "node": "Set research topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set research topic": {
+      "main": [
+        [
+          {
+            "node": "Search transcripts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search transcripts": {
+      "main": [
+        [
+          {
+            "node": "Keep source-linked passages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep source-linked passages": {
+      "main": [
+        [
+          {
+            "node": "Export clip shortlist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

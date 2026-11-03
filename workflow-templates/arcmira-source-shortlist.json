@@ -1,0 +1,226 @@
+[
+  {
+    "id": "arcmira-tab",
+    "type": "tab",
+    "label": "Arcmira: YouTube Transcript Search",
+    "disabled": false,
+    "info": "One manual bounded search; CSV plus JSON coverage sidecar. Set private process environment ARCMIRA_API_KEY and ARCMIRA_OUTPUT_DIR. See README.",
+    "env": []
+  },
+  {
+    "id": "arcmira-guide",
+    "type": "comment",
+    "z": "arcmira-tab",
+    "name": "Set private environment, edit dates, then click once",
+    "info": "Homepage: https://arcmira.com\nAPI docs: https://arcmira.com/docs\nSet ARCMIRA_API_KEY privately in the runtime environment, not this flow. Set an existing ARCMIRA_OUTPUT_DIR. Edit Search input topic/after/before. Files with the same name are overwritten on each run. JSON keeps coverage even with empty results. Errors clear CSV candidates. No scheduling/retries/Premium/writes/downloads.",
+    "x": 310,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "arcmira-input",
+    "type": "inject",
+    "z": "arcmira-tab",
+    "name": "Search input (manual)",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"topic\": \"creator economy\", \"after\": \"2026-08-01\", \"before\": \"2026-09-01\"}",
+    "payloadType": "json",
+    "x": 160,
+    "y": 140,
+    "wires": [
+      [
+        "arcmira-request"
+      ]
+    ]
+  },
+  {
+    "id": "arcmira-request",
+    "type": "function",
+    "z": "arcmira-tab",
+    "name": "Validate and prepare one GET",
+    "func": "const input = msg.payload || {};\nconst requested = { q: typeof input.topic === \"string\" ? input.topic.trim() : \"\", after: input.after, before: input.before, limit: 3 };\nconst outputDir = env.get(\"ARCMIRA_OUTPUT_DIR\");\nfunction invalid(code) {\n    return [null, { requested, outputDir, failure: { code, message: \"Check the input and local environment; no request was sent.\" } }];\n}\nif (typeof outputDir !== \"string\" || !outputDir.trim()) return invalid(\"missing_output_directory\");\nconst key = env.get(\"ARCMIRA_API_KEY\");\nif (typeof key !== \"string\" || !key.trim()) return invalid(\"missing_api_key\");\nfunction validDate(value) {\n    if (typeof value !== \"string\" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;\n    const date = new Date(value + \"T00:00:00Z\");\n    return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;\n}\nif (requested.q.length < 2 || !validDate(requested.after) || !validDate(requested.before) || requested.after >= requested.before) return invalid(\"invalid_search_input\");\nconst query = Object.entries(requested).map(([name, value]) => encodeURIComponent(name) + \"=\" + encodeURIComponent(value)).join(\"&\");\nreturn [{\n    requested, outputDir,\n    url: \"https://api.arcmira.com/v1/search?\" + query,\n    headers: { Authorization: \"Bearer \" + key.trim(), Accept: \"application/json\" },\n    followRedirects: false,\n    requestTimeout: 15000\n}, null];",
+    "outputs": 2,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 140,
+    "wires": [
+      [
+        "arcmira-http"
+      ],
+      [
+        "arcmira-build"
+      ]
+    ]
+  },
+  {
+    "id": "arcmira-http",
+    "type": "http request",
+    "z": "arcmira-tab",
+    "name": "Search Arcmira (limit 3)",
+    "method": "GET",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": true,
+    "headers": [],
+    "x": 700,
+    "y": 140,
+    "wires": [
+      [
+        "arcmira-build"
+      ]
+    ]
+  },
+  {
+    "id": "arcmira-catch",
+    "type": "catch",
+    "z": "arcmira-tab",
+    "name": "Handle transport failure",
+    "scope": [
+      "arcmira-http"
+    ],
+    "uncaught": false,
+    "x": 690,
+    "y": 220,
+    "wires": [
+      [
+        "arcmira-build"
+      ]
+    ]
+  },
+  {
+    "id": "arcmira-build",
+    "type": "function",
+    "z": "arcmira-tab",
+    "name": "Build safe CSV and source packet",
+    "func": "const requested = msg.requested || null;\nconst response = msg.payload;\nlet failure = msg.failure || null;\nconst statusCode = Number(msg.statusCode);\nif (!failure && (msg.error || !Number.isFinite(statusCode))) {\n    failure = { code: \"transport_error\", message: \"The request did not complete. No retry was attempted.\" };\n}\nif (!failure && statusCode !== 200) {\n    const code = response && response.error && response.error.code;\n    failure = { code: typeof code === \"string\" && /^[a-z_]{1,80}$/.test(code) ? code : \"http_error\", http_status: statusCode, message: \"Arcmira refused the request. Check API error documentation; no retry or query change was attempted.\" };\n}\nif (!failure && (!response || !Array.isArray(response.chunks) || response.chunks.length > 3)) {\n    failure = { code: \"invalid_response\", message: \"Expected at most three passages; no source sheet was produced.\" };\n}\nif (!failure && response.chunks.some(c => !c || typeof c.video_id !== \"string\" || typeof c.text !== \"string\" || typeof c.watch_url !== \"string\" || (c.start_seconds !== null && (!Number.isFinite(c.start_seconds) || c.start_seconds < 0)))) {\n    failure = { code: \"invalid_passage\", message: \"A passage lacks required source fields; no source sheet was produced.\" };\n}\nconst packet = {\n    status: failure ? \"error\" : response.chunks.length ? \"ok\" : \"empty\",\n    query: requested ? requested.q : null,\n    requested_window: requested ? { after: requested.after, before: requested.before } : null,\n    applied_window: failure ? null : response.window ?? null,\n    partial: failure ? null : response.partial ?? null,\n    failed_batches: failure ? null : response.failed_batches ?? null,\n    as_of: failure ? null : response.as_of ?? null,\n    search_index: failure ? null : response.search_index ?? null,\n    note: failure ? null : response.note ?? null,\n    filters: failure ? null : response.filters ?? null,\n    access: failure ? null : response.access ?? null,\n    returned: failure ? 0 : response.chunks.length,\n    error: failure,\n    candidates: failure ? [] : response.chunks.map((c, i) => ({\n        ordinal: i + 1, video_id: c.video_id, title: c.video_title ?? null,\n        channel: c.channel_name ?? null, published_at: c.published_at ?? null,\n        passage: c.text, passage_start_seconds: c.start_seconds,\n        source_watch_url: c.watch_url,\n        arcmira_url: c.watch_url.startsWith(\"/\") && !c.watch_url.startsWith(\"//\") ? \"https://arcmira.com\" + c.watch_url : c.watch_url,\n        original_source_url: \"https://www.youtube.com/watch?v=\" + encodeURIComponent(c.video_id) + (c.start_seconds === null ? \"\" : \"&t=\" + c.start_seconds + \"s\"),\n        transcript_source: c.source ?? null, transcript_source_label: c.source_label ?? null,\n        speaker_names: c.speakers ?? [], speaker_entities: c.speakers_by ?? [],\n        cut_start_seconds: null, cut_end_seconds: null, playback_verified: false,\n        speaker_identity_verified: false, reuse_permission: \"not established\"\n    }))\n};\nconst columns = [\"ordinal\", \"video_id\", \"title\", \"channel\", \"published_at\", \"passage\", \"passage_start_seconds\", \"source_watch_url\", \"arcmira_url\", \"original_source_url\", \"transcript_source\", \"transcript_source_label\", \"speaker_names\", \"speaker_entities\", \"requested_window\", \"applied_window\", \"partial\", \"search_index\", \"note\", \"cut_start_seconds\", \"cut_end_seconds\", \"playback_verified\", \"speaker_identity_verified\", \"reuse_permission\"];\nfunction cell(value) {\n    let text = value == null ? \"\" : typeof value === \"object\" ? JSON.stringify(value) : String(value);\n    // Quote every cell; prefix spreadsheet formula starters, including hidden whitespace.\n    if (/^[\\s\\u0000-\\u001f\\u007f]*[=+@-]/u.test(text)) text = \"'\" + text;\n    return '\"' + text.replace(/\"/g, '\"\"') + '\"';\n}\nconst csv = [columns.map(cell).join(\",\"), ...packet.candidates.map(candidate => columns.map(name => cell(Object.prototype.hasOwnProperty.call(candidate, name) ? candidate[name] : packet[name])).join(\",\"))].join(\"\\r\\n\") + \"\\r\\n\";\nconst summary = { payload: { status: packet.status, returned: packet.returned, error: failure, instruction: \"Use the JSON sidecar for date window and coverage. Verify sources and rights before editing.\" } };\nif (typeof msg.outputDir !== \"string\" || !msg.outputDir.trim()) return [null, null, summary];\nconst prefix = msg.outputDir.replace(/[\\\\/]$/, \"\") + \"/arcmira-source-shortlist\";\nreturn [\n    { payload: csv, filename: prefix + \".csv\" },\n    { payload: JSON.stringify(packet, null, 2) + \"\\n\", filename: prefix + \".json\" },\n    summary\n];",
+    "outputs": 3,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1000,
+    "y": 140,
+    "wires": [
+      [
+        "arcmira-csv"
+      ],
+      [
+        "arcmira-json"
+      ],
+      [
+        "arcmira-status"
+      ]
+    ]
+  },
+  {
+    "id": "arcmira-csv",
+    "type": "file",
+    "z": "arcmira-tab",
+    "name": "Save CSV (overwrite)",
+    "filename": "filename",
+    "filenameType": "msg",
+    "appendNewline": false,
+    "createDir": false,
+    "overwriteFile": "true",
+    "encoding": "utf8",
+    "x": 1320,
+    "y": 100,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "arcmira-json",
+    "type": "file",
+    "z": "arcmira-tab",
+    "name": "Save JSON sidecar (overwrite)",
+    "filename": "filename",
+    "filenameType": "msg",
+    "appendNewline": false,
+    "createDir": false,
+    "overwriteFile": "true",
+    "encoding": "utf8",
+    "x": 1350,
+    "y": 160,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "arcmira-status",
+    "type": "debug",
+    "z": "arcmira-tab",
+    "name": "Result summary (not raw request)",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1370,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "arcmira-write-catch",
+    "type": "catch",
+    "z": "arcmira-tab",
+    "name": "Report file or flow failure",
+    "scope": [
+      "arcmira-request",
+      "arcmira-build",
+      "arcmira-csv",
+      "arcmira-json"
+    ],
+    "uncaught": false,
+    "x": 990,
+    "y": 320,
+    "wires": [
+      [
+        "arcmira-safe-error"
+      ]
+    ]
+  },
+  {
+    "id": "arcmira-safe-error",
+    "type": "function",
+    "z": "arcmira-tab",
+    "name": "Safe local error",
+    "func": "return { payload: { status: \"error\", code: \"local_flow_or_file_error\", message: \"No retry was attempted. Check your local output directory and flow configuration; discard incomplete output files.\" } };",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1270,
+    "y": 320,
+    "wires": [
+      [
+        "arcmira-status"
+      ]
+    ]
+  }
+]

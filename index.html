@@ -47,7 +47,7 @@
     <section class="hero">
       <p class="eyebrow">Developer examples</p>
       <h1>YouTube transcript search <span>in practice.</span></h1>
-      <p class="lead">Use <a href="https://arcmira.com/mcp">Arcmira MCP</a> to find spoken passages across indexed YouTube and podcast transcripts. Open a timestamp to hear the original recording, or use the passage in a video.</p>
+      <p class="lead">Use <a href="https://arcmira.com/mcp">Arcmira MCP</a> to find spoken passages across indexed YouTube and podcast transcripts. Open a timestamp to hear the original recording, or use the passage in a video. For a repeatable search, <a href="#workflow-templates">get a workflow template</a>.</p>
     </section>
     <section class="step">
       <span class="number" aria-hidden="true">01</span>
@@ -86,6 +86,21 @@
       <div><h2 id="offline-docs">Search the API reference offline</h2>
         <p>Look up a transcript endpoint, request parameter or response schema in Dash or Zeal. Search by HTTP path or operation ID, such as <code>get_transcript</code>.</p>
         <p><a href="dash-feed://https%3A%2F%2Farcmira.github.io%2Fintegrations%2Fdocsets%2FArcmira_API.xml">Add the reference to Dash</a>. In Zeal, open Docsets, choose Add Feed and paste the <a href="docsets/Arcmira_API.xml">docset feed URL</a>. You can also <a href="docsets/Arcmira_API-6b0b37c4fc76.tgz" download>download the docset archive</a>.</p>
+      </div>
+    </section>
+    <section class="step" id="workflow-templates">
+      <span class="number" aria-hidden="true">07</span>
+      <div>
+        <h2>YouTube transcript search workflows for n8n, Dify and Node-RED</h2>
+        <p>Start with a topic and get a shortlist of spoken passages with timestamps and source links. Choose the output you need, import the template, then connect your <a href="https://arcmira.com/docs/authentication">Arcmira API key</a> in your workflow tool.</p>
+        <h3>n8n: Make a clip shortlist in CSV</h3>
+        <p>Search for a phrase such as “vibe coding” and export up to five passages. Open each timestamp to hear the speaker before choosing a clip. <a href="workflow-templates/arcmira-clip-shortlist.n8n.json" download>Download the n8n clip workflow</a> · <a href="https://github.com/arcmira/integrations/tree/master/examples/n8n-clip-shortlist">Import and run in n8n</a></p>
+        <h3>n8n: Collect sources in JSON</h3>
+        <p>Choose a date range and return up to three passages. Each result keeps the video title, source URL and timestamp. The output also records the date window the search covered. <a href="workflow-templates/arcmira-source-shortlist.n8n.json" download>Download the n8n source workflow</a> · <a href="https://github.com/arcmira/integrations/tree/master/examples/n8n-source-shortlist">Set up the source search</a></p>
+        <h3>Dify: Pass transcript results to another step</h3>
+        <p>Import the workflow into Dify Studio and connect the Arcmira plugin. It returns the search response as JSON, including available speaker labels and coverage notes. <a href="workflow-templates/arcmira-transcript-search.yml" download>Download the Dify workflow</a> · <a href="https://github.com/arcmira/integrations/tree/master/examples/dify-transcript-search">Set up the Dify plugin</a></p>
+        <h3>Node-RED: Save a CSV and its source data</h3>
+        <p>Run a topic search manually and write the passages to a local CSV with a companion JSON file. Each run replaces those two output files. <a href="workflow-templates/arcmira-source-shortlist.json" download>Download the Node-RED flow</a> · <a href="https://github.com/arcmira/integrations/tree/master/examples/node-red-source-shortlist">Configure the output directory</a></p>
       </div>
     </section>
     <footer><a href="https://arcmira.com/docs">Read the API documentation</a> · <a href="https://arcmira.com/docs/mcp-server">Connect your AI assistant with MCP</a> · <a href="sitemap.xml">Sitemap</a></footer>
