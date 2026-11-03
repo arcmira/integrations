@@ -1,3 +1,11 @@
+/**
+ * Search indexed YouTube and podcast transcripts for timestamped passages with LangChain.
+ * The first tool returned by `createArcmiraTools` searches transcripts and the second resolves names to IDs.
+ *
+ * @see {@link https://arcmira.com/docs | Arcmira API documentation}
+ * @see {@link https://arcmira.com/docs/authentication | API keys and sign-in}
+ * @packageDocumentation
+ */
 import { tool, type DynamicStructuredTool } from "@langchain/core/tools";
 import { ArcmiraClient } from "arcmira";
 import { z } from "zod";
