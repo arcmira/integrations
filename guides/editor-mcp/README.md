@@ -6,6 +6,21 @@ Connect your editor to Arcmira to find what someone said across indexed YouTube 
 
 Open the link for your editor, review the server URL and sign in with Arcmira when prompted. The links configure the hosted MCP endpoint, `https://mcp.arcmira.com/mcp`.
 
+## Research skills in VS Code
+
+With the [Agent Skills extension](https://marketplace.visualstudio.com/items?itemName=formulahendry.agent-skills), you can add Arcmira’s workflows for finding quotes, comparing shows and researching sponsors. In VS Code settings, append this entry to the `agentSkills.skillRepositories` array:
+
+```json
+{
+  "owner": "arcmira",
+  "repo": "mcp",
+  "path": "plugins/arcmira/skills",
+  "branch": "master"
+}
+```
+
+Open **Agent Skills → Marketplace**, expand **arcmira/mcp** and select a skill to install. For transcript-based clip search, choose **find-quotes**. The extension saves the instructions in your workspace under `.github/skills/`. Use the **Add to VS Code** link above to connect the research tools.
+
 ## Zed
 
 Merge this entry into the `context_servers` object in your Zed settings. Keep any other servers already configured there.
