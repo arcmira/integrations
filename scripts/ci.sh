@@ -12,6 +12,7 @@ case "${1:-}" in
   *) echo "Usage: $0 [--offline]" >&2; exit 2 ;;
 esac
 if (( $# > 1 )); then echo "Usage: $0 [--offline]" >&2; exit 2; fi
+python3 scripts/adapter-contract.py --check
 for package in langchain ai-sdk; do
   (
     cd "packages/$package"

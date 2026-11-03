@@ -9,6 +9,11 @@
       "url": "https://arcmira.com"
     }
   },
+  "servers": [
+    {
+      "url": "https://api.arcmira.com"
+    }
+  ],
   "paths": {
     "/v1/search": {
       "get": {
@@ -17,7 +22,7 @@
         ],
         "operationId": "search",
         "summary": "Retrieve spoken transcript slices for one topic",
-        "description": "Search indexed YouTube and podcast transcripts for short spoken slices. Each result includes spoken text, a watch URL, and a publish date. Scope with channel_ids (or channel) and entity_ids (a person id filters to that person's appearances); narrow to passages about entities with about, to a speaker with by, and to sponsored, organic or mention passages with kind. Every filter takes ids, never names: resolve a name first with GET /v1/entities/resolve, or the call answers 400 id_required naming the parameter. Results carry names beside ids (filters.about, filters.by, chunk about and speakers_by). Use one topic per call. Search results include text on every plan within the plan's publication-date window. Explicitly requesting source=arcmira_premium on a plan without Premium transcripts is refused with filter_requires_paid. An after later than the plan's freshness gate is refused with freshness_requires_paid rather than widened. Uses 4 credits per chunk returned past the first 5. Every gate is a typed error whose error.unlock.url names the plan that lifts it; pass src=mcp-tool only from the Arcmira MCP server.",
+        "description": "Search indexed YouTube and podcast transcripts for passages matching a word or phrase. Returns passage text, source metadata, publication dates, and timestamped watch links. Narrow to passages about an entity with `about`, or passages where a person speaks with `by`. Scope with `channel_ids` (or `channel`) and `entity_ids` (a person id filters to that person's appearances). Filter to sponsored, organic or mention passages with `kind`. Every filter takes ids, never names: resolve a name first with GET /v1/entities/resolve, or the call answers 400 id_required naming the parameter. Results carry names beside ids (filters.about, filters.by, chunk about and speakers_by). Use one topic per call. Search results include text on every plan within the plan's publication-date window. Explicitly requesting source=arcmira_premium on a plan without Premium transcripts is refused with filter_requires_paid. An after later than the plan's freshness gate is refused with freshness_requires_paid rather than widened. A window the gate cut carries freshness (delay_days, served_through), unlock, and a note that says where results on this plan stop. Uses 4 credits per chunk returned past the first 5. Every gate is a typed error whose error.unlock.url names the plan that lifts it; pass src=mcp-tool only from the Arcmira MCP server.",
         "security": [
           {
             "bearerAuth": []
@@ -78,10 +83,10 @@
           {
             "schema": {
               "type": "string",
-              "description": "Comma-separated person ids (ent_{n}), at most 8. Only passages where one of these people says the query words (each line of a chunk is labeled with its speaker); a non-person id is refused with invalid_query naming its type. Speaker labels cover a minority of shows; an empty result carries a note saying whether the person is labeled anywhere. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve."
+              "description": "Comma-separated person ids (ent_{n}), at most 8. Only passages where one of these people speaks the query words. A passage can include other speakers' lines; each line with a known speaker starts with that speaker's name. A non-person id is refused with invalid_query naming its type. Speaker labels cover a minority of shows; an empty result carries a note saying whether the person is labeled anywhere. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve."
             },
             "required": false,
-            "description": "Comma-separated person ids (ent_{n}), at most 8. Only passages where one of these people says the query words (each line of a chunk is labeled with its speaker); a non-person id is refused with invalid_query naming its type. Speaker labels cover a minority of shows; an empty result carries a note saying whether the person is labeled anywhere. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve.",
+            "description": "Comma-separated person ids (ent_{n}), at most 8. Only passages where one of these people speaks the query words. A passage can include other speakers' lines; each line with a known speaker starts with that speaker's name. A non-person id is refused with invalid_query naming its type. Speaker labels cover a minority of shows; an empty result carries a note saying whether the person is labeled anywhere. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve.",
             "name": "by",
             "in": "query"
           },
@@ -358,6 +363,1962 @@
             "$ref": "#/components/responses/ServerError"
           }
         }
+      }
+    }
+  },
+  "components": {
+    "headers": {
+      "X-Request-Id": {
+        "description": "The request id, echoed from an X-Request-Id request header or minted as req_<uuid>. error.request_id carries the same value. Quote it when reporting a problem.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-Arcmira-Version": {
+        "description": "The API version that answered. Always v1.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "v1"
+          ]
+        }
+      },
+      "RateLimit-Limit": {
+        "description": "Requests allowed per 60-second window for this credential, as GET /v1/me rate_limit reports.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "RateLimit-Remaining": {
+        "description": "An estimate of the requests left in the current window. Limits are counted at each Cloudflare location, so it can read high; a 429 is the final word.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "RateLimit-Reset": {
+        "description": "Unix time in seconds when the current window ends.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "Retry-After": {
+        "description": "Seconds to wait before retrying. error.retry_after_seconds carries the same value on an error.",
+        "schema": {
+          "type": "integer"
+        }
+      }
+    },
+    "schemas": {
+      "TranscriptSearchResponse": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The q parameter echoed back."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "The limit applied."
+          },
+          "returned": {
+            "type": "integer",
+            "description": "Chunks returned."
+          },
+          "filters": {
+            "type": "object",
+            "properties": {
+              "channel_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Channel ids the search was scoped to, after entity_ids were expanded."
+              },
+              "entity_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Exact explicit entity_ids accepted for this search. Every id was resolved; an unknown id is refused."
+              },
+              "about": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/NamedEntityRef"
+                },
+                "description": "The about ids, each with its name and type."
+              },
+              "by": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/NamedEntityRef"
+                },
+                "description": "The by ids, each with its name and type."
+              },
+              "kind": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sponsored",
+                    "organic",
+                    "mention"
+                  ]
+                },
+                "description": "The passage classes applied."
+              }
+            },
+            "required": [
+              "channel_ids",
+              "entity_ids",
+              "about",
+              "by",
+              "kind"
+            ]
+          },
+          "window": {
+            "$ref": "#/components/schemas/PublicationWindow"
+          },
+          "chunks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TranscriptSearchChunk"
+            },
+            "description": "Ranked slices. Empty means no hit in the shows we index; say so, never search the open web."
+          },
+          "as_of": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Newest published_at among the chunks. Null when there are none."
+          },
+          "search_index": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string",
+                "enum": [
+                  "live",
+                  "catching_up",
+                  "unknown"
+                ],
+                "description": "Whether every indexed transcript is searchable. catching_up means older transcripts are still being added; note says so when the asked window reaches them."
+              },
+              "missing_before": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "While catching up, transcripts published before this date may be missing from search."
+              }
+            },
+            "required": [
+              "state",
+              "missing_before"
+            ],
+            "description": "Health of the search index behind these results. Catalog routes are unaffected by it."
+          },
+          "access": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "invalid_request_error",
+                  "authentication_error",
+                  "permission_error",
+                  "quota_exceeded",
+                  "rate_limit_error",
+                  "not_found",
+                  "conflict_error",
+                  "server_error"
+                ],
+                "description": "The error class. It fixes the HTTP status: invalid_request_error 400, authentication_error 401, quota_exceeded 402, permission_error 403, not_found 404, conflict_error 409, rate_limit_error 429, server_error 500. Switch on it for retry and gate handling."
+              },
+              "code": {
+                "type": "string",
+                "description": "The specific condition, stable and snake_case; doc_url anchors on it. x-arcmira-codes on this schema lists every code with its type, gate and meaning. The list is open: new codes may appear inside an existing type, so switch on type and gate first."
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "no_credential",
+                  "invalid",
+                  "revoked"
+                ],
+                "description": "Only on invalid_api_key. no_credential: nothing was sent. invalid: a credential was sent and is unknown or malformed. revoked: the key exists and is no longer usable."
+              },
+              "message": {
+                "type": "string",
+                "description": "One plain line. Names the fix or the unlock."
+              },
+              "param": {
+                "type": "string",
+                "description": "The query or body parameter the gate refused, when one did."
+              },
+              "gate": {
+                "type": "string",
+                "enum": [
+                  "rows",
+                  "key",
+                  "plan",
+                  "freshness",
+                  "exposure_law",
+                  "rate",
+                  "pagination"
+                ],
+                "description": "Which boundary refused. Present on every gate error; switch on it without parsing the message."
+              },
+              "resource": {
+                "$ref": "#/components/schemas/ErrorResource"
+              },
+              "unlock": {
+                "type": "object",
+                "properties": {
+                  "tier": {
+                    "type": "string",
+                    "description": "The plan that lifts the gate."
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Absolute upgrade or sign-up URL carrying its ?src= attribution. Use it verbatim."
+                  },
+                  "offer": {
+                    "type": "null",
+                    "description": "Reserved for the agent-discount offer. Always null today."
+                  },
+                  "action": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "description": "What the call does. send_signup_code sends a verification code to an address for an account key."
+                      },
+                      "method": {
+                        "type": "string",
+                        "description": "HTTP method to use."
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "Absolute endpoint carrying its ?src= attribution. Call it verbatim."
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "method",
+                      "url"
+                    ],
+                    "description": "The request that lifts the gate with no human, present when the caller can fix this itself. A key gate carries the signup send here; a plan or quota gate has no action and its url is a page a person opens."
+                  }
+                },
+                "required": [
+                  "tier",
+                  "url",
+                  "offer"
+                ],
+                "description": "How to lift the gate. Present when the gate has an unlock."
+              },
+              "retry_after_seconds": {
+                "type": "integer",
+                "description": "Present on rate gates. Mirrors the Retry-After header."
+              },
+              "details": {
+                "type": "object",
+                "properties": {
+                  "quote": {
+                    "$ref": "#/components/schemas/RefusedQuote"
+                  },
+                  "limit": {
+                    "$ref": "#/components/schemas/Limit"
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "On terms_acceptance_required: the page where the person accepts the updated Terms of Service. On terms_updated: the Terms of Service page."
+                  }
+                },
+                "description": "Machine data the refusal carries for you to act on. Present only on the codes that name a field here."
+              },
+              "doc_url": {
+                "type": "string"
+              },
+              "request_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "code",
+              "message",
+              "doc_url",
+              "request_id"
+            ],
+            "description": "The gate that reduced this response. Present only when something was withheld; carries the same code, gate, and unlock an outright refusal would."
+          },
+          "freshness": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Freshness"
+              },
+              {
+                "description": "Present when your plan's freshness gate cut the window: where results on this plan stop. unlock names the plan that reads past it."
+              }
+            ]
+          },
+          "unlock": {
+            "type": "object",
+            "properties": {
+              "tier": {
+                "type": "string",
+                "description": "The plan that lifts the freshness gate."
+              },
+              "url": {
+                "type": "string",
+                "description": "Where to start that plan."
+              }
+            },
+            "required": [
+              "tier",
+              "url"
+            ],
+            "description": "Present with freshness when your plan's freshness gate cut the window; note says so."
+          },
+          "note": {
+            "type": "string",
+            "description": "One steering sentence for the agent reading this."
+          }
+        },
+        "required": [
+          "query",
+          "limit",
+          "returned",
+          "filters",
+          "window",
+          "chunks",
+          "as_of",
+          "search_index",
+          "note"
+        ],
+        "example": {
+          "query": "Ramp corporate cards",
+          "limit": 5,
+          "returned": 1,
+          "filters": {
+            "channel_ids": [
+              "UC-DRzaGnL_vtBUpCFH5M0tg"
+            ],
+            "entity_ids": [],
+            "about": [
+              {
+                "id": "ent_14",
+                "name": "Ramp",
+                "type": "organization"
+              }
+            ],
+            "by": [],
+            "kind": [
+              "sponsored"
+            ]
+          },
+          "window": {
+            "after": "2026-08-01T00:00:00Z",
+            "before": null
+          },
+          "chunks": [
+            {
+              "id": "UC-DRzaGnL_vtBUpCFH5M0tg/2026-08-04/dQw4w9WgXcQ.md#12",
+              "video_id": "dQw4w9WgXcQ",
+              "channel_id": "UC-DRzaGnL_vtBUpCFH5M0tg",
+              "channel_name": "TBPN",
+              "video_title": "TBPN | Tuesday, August 4",
+              "speakers": [
+                "John Coogan"
+              ],
+              "source": "creator_captions",
+              "source_label": "3rd Party (Video Creator)",
+              "published_at": "2026-08-04T17:00:00.000Z",
+              "text": "Ramp has been on the show for a while now and the pitch is still the same, spend less time on expenses.",
+              "start_seconds": 4787,
+              "watch_url": "/watch?v=dQw4w9WgXcQ&t=4787",
+              "cite_line": "[TBPN | Tuesday, August 4](/watch?v=dQw4w9WgXcQ&t=4787) · @1:19:47 · TBPN · Aug 4, 2026",
+              "score": 0.71,
+              "about": [
+                {
+                  "id": "ent_14",
+                  "name": "Ramp",
+                  "type": "organization"
+                }
+              ],
+              "speakers_by": [
+                {
+                  "id": "ent_27",
+                  "name": "John Coogan",
+                  "type": "person"
+                }
+              ]
+            }
+          ],
+          "as_of": "2026-08-04T17:00:00.000Z",
+          "search_index": {
+            "state": "live",
+            "missing_before": null
+          },
+          "note": "Quote text as a spoken beat of a few sentences and cite watch_url with published_at. State the window from window.after when you passed one."
+        }
+      },
+      "NamedEntityRef": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Public entity id, ent_{n}."
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The entity name. Null when the id no longer resolves."
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Entity type. Values: person (an individual), organization (a company or institution; legacy entities may read company or brand), product (a product or service), topic (a subject or theme), channel (a media source such as a YouTube channel), unknown (type was never classified)."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ]
+      },
+      "PublicationWindow": {
+        "type": "object",
+        "properties": {
+          "after": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Inclusive start as an ISO instant. Null when the window has no start."
+          },
+          "before": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exclusive end as an ISO instant. Null when the window has no end. Earlier than the before you sent when your plan's freshness gate cut the window."
+          }
+        },
+        "required": [
+          "after",
+          "before"
+        ],
+        "description": "The publication window the answer covers, [after, before) in UTC, normalized from after and before."
+      },
+      "TranscriptSearchChunk": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Search index chunk id. Opaque."
+          },
+          "video_id": {
+            "type": "string",
+            "description": "YouTube video id (11 characters)."
+          },
+          "channel_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "YouTube channel id of the source channel."
+          },
+          "channel_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Source channel name."
+          },
+          "channel_page": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The channel's page on arcmira.com, absolute. Null when no channel is known."
+          },
+          "video_title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Video title."
+          },
+          "speakers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Speaker names identified on this slice, when known."
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Transcript source class: arcmira_premium, creator_captions, or third_party_quick."
+          },
+          "source_label": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Human label for source."
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Video publish timestamp. Cite it as the date of the quote."
+          },
+          "text": {
+            "type": "string",
+            "description": "The spoken slice. Search results include text on every plan within the permitted publication-date window."
+          },
+          "start_seconds": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Offset of the slice in the video, in seconds."
+          },
+          "watch_url": {
+            "type": "string",
+            "description": "Absolute watch URL on arcmira.com with the timestamp, e.g. https://arcmira.com/watch?v=...&t=4787."
+          },
+          "cite_line": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A ready citation line: title, clock, channel, date."
+          },
+          "score": {
+            "type": "number",
+            "description": "Retrieval score. Higher is a closer match. Not comparable across calls."
+          },
+          "about": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NamedEntityRef"
+            },
+            "description": "Entities the passage is tagged about (excerpt pins, exact-name mentions, ad verdicts). Present on passages served from the spoken index."
+          },
+          "speakers_by": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NamedEntityRef"
+            },
+            "description": "The people speaking in the passage, as ids with names. Present on passages served from the spoken index."
+          }
+        },
+        "required": [
+          "id",
+          "video_id",
+          "channel_id",
+          "source",
+          "published_at",
+          "text",
+          "start_seconds",
+          "watch_url",
+          "score"
+        ]
+      },
+      "ErrorResource": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "media_rows"
+                ]
+              },
+              "beyond_row": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "beyond_row"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "fresh_media"
+                ]
+              },
+              "window_days": {
+                "type": "integer"
+              },
+              "cutoff": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "window_days",
+              "cutoff"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "sidebar_rows"
+                ]
+              },
+              "section": {
+                "type": "string",
+                "enum": [
+                  "topics",
+                  "entities"
+                ]
+              },
+              "beyond_row": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "section",
+              "beyond_row"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "counts"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "chart"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "pagination"
+                ]
+              },
+              "param": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "offset",
+                  "cursor",
+                  null
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "param"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "premium_transcript"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "filter"
+                ]
+              },
+              "param": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "param"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "commercial"
+                ]
+              },
+              "what": {
+                "type": "string",
+                "enum": [
+                  "sponsors",
+                  "recommendations",
+                  "mention_details",
+                  "community_review",
+                  "paid_split"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "what"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "feature"
+                ]
+              },
+              "feature": {
+                "type": "string",
+                "enum": [
+                  "api",
+                  "export"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "feature"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "rows"
+                ]
+              },
+              "requested": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "remaining": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "requested",
+              "remaining"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "key"
+                ]
+              },
+              "scope": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "read",
+                  "monitors:write",
+                  "trackers:write",
+                  "recommendations:read",
+                  null
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "scope"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "requests"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          }
+        ],
+        "description": "The value the boundary withheld, not the reason it refused. kind is a closed vocabulary and the fields beside it are fixed per kind; see https://arcmira.com/docs/errors#resource-kinds."
+      },
+      "RefusedQuote": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TranscriptQuote"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "charge": {
+                "type": "object",
+                "properties": {
+                  "unit": {
+                    "type": "string",
+                    "enum": [
+                      "rows",
+                      "credits"
+                    ]
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "from": {
+                    "type": "string",
+                    "enum": [
+                      "included",
+                      "on_demand",
+                      "mixed"
+                    ],
+                    "description": "Where the charge would come from at the current balance."
+                  }
+                },
+                "required": [
+                  "unit",
+                  "amount",
+                  "from"
+                ],
+                "description": "What the request would charge at the current balance. Absent when no current price could be read."
+              },
+              "max_on_demand_cents": {
+                "type": "integer",
+                "description": "The on-demand usage, in whole cents, this request needs beyond the plan's credits at the current balance."
+              }
+            }
+          }
+        ],
+        "description": "The refused price, on a priced refusal: quota_exceeded, spend_limit_exceeded and paid_plan_required."
+      },
+      "TranscriptQuote": {
+        "type": "object",
+        "properties": {
+          "quarters": {
+            "type": "integer",
+            "description": "Number of 15-minute blocks in the video, ceiling'd, minimum 1."
+          },
+          "rows": {
+            "type": "integer",
+            "description": "Credits the whole video uses, in rows: 300 credits per 15-minute block (75 rows; a row is 4 credits)."
+          }
+        },
+        "required": [
+          "quarters",
+          "rows"
+        ]
+      },
+      "Limit": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "plan_credits"
+                ]
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "credits"
+                ]
+              },
+              "amount": {
+                "type": "number",
+                "description": "The plan credits a month. Carried by quota_exceeded when on-demand usage is off."
+              },
+              "used": {
+                "type": "number",
+                "description": "How much of amount is used this month, in credits."
+              },
+              "resets_at": {
+                "type": "string",
+                "description": "YYYY-MM-DD, the first day of next month (UTC), when used returns to 0."
+              }
+            },
+            "required": [
+              "kind",
+              "unit",
+              "amount",
+              "used",
+              "resets_at"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "on_demand_budget"
+                ]
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "credits"
+                ]
+              },
+              "amount": {
+                "type": "number",
+                "description": "The on-demand budget a month, in credits ($0.002 a credit). Carried by quota_exceeded and spend_limit_exceeded when on-demand usage is on."
+              },
+              "used": {
+                "type": "number",
+                "description": "How much of amount is used this month, in credits."
+              },
+              "resets_at": {
+                "type": "string",
+                "description": "YYYY-MM-DD, the first day of next month (UTC), when used returns to 0."
+              }
+            },
+            "required": [
+              "kind",
+              "unit",
+              "amount",
+              "used",
+              "resets_at"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "member_on_demand"
+                ]
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "cents"
+                ]
+              },
+              "amount": {
+                "type": "number",
+                "description": "The monthly on-demand limit an admin set for the person the key or token acts for, in US cents. Carried by member_limit."
+              },
+              "used": {
+                "type": "number",
+                "description": "How much of amount is used this month, in cents."
+              },
+              "resets_at": {
+                "type": "string",
+                "description": "YYYY-MM-DD, the first day of next month (UTC), when used returns to 0."
+              }
+            },
+            "required": [
+              "kind",
+              "unit",
+              "amount",
+              "used",
+              "resets_at"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "premium_hours"
+                ]
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "hours"
+                ]
+              },
+              "amount": {
+                "type": "number",
+                "description": "The Premium transcript hours Ultra plan credits cover a month. Carried by fair_use_cap."
+              },
+              "used": {
+                "type": "number",
+                "description": "How much of amount is used this month, in hours."
+              },
+              "resets_at": {
+                "type": "string",
+                "description": "YYYY-MM-DD, the first day of next month (UTC), when used returns to 0."
+              }
+            },
+            "required": [
+              "kind",
+              "unit",
+              "amount",
+              "used",
+              "resets_at"
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Freshness"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "freshness"
+                    ]
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            ],
+            "description": "Where results stop on a plan that reads media after a delay."
+          }
+        ],
+        "description": "On quota_exceeded, spend_limit_exceeded, member_limit, fair_use_cap and freshness_requires_paid: the limit the refusal met. Absent when the server holds no figure for it."
+      },
+      "Freshness": {
+        "type": "object",
+        "properties": {
+          "delay_days": {
+            "type": "integer",
+            "description": "Days after publication before this plan reads a video."
+          },
+          "served_through": {
+            "type": "string",
+            "description": "YYYY-MM-DD (UTC). Results on this plan stop at this publish date; media published after it is not read."
+          }
+        },
+        "required": [
+          "delay_days",
+          "served_through"
+        ],
+        "description": "Where results stop on a plan that reads media after a delay."
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "invalid_request_error",
+                  "authentication_error",
+                  "permission_error",
+                  "quota_exceeded",
+                  "rate_limit_error",
+                  "not_found",
+                  "conflict_error",
+                  "server_error"
+                ],
+                "description": "The error class. It fixes the HTTP status: invalid_request_error 400, authentication_error 401, quota_exceeded 402, permission_error 403, not_found 404, conflict_error 409, rate_limit_error 429, server_error 500. Switch on it for retry and gate handling."
+              },
+              "code": {
+                "type": "string",
+                "description": "The specific condition, stable and snake_case; doc_url anchors on it. x-arcmira-codes on this schema lists every code with its type, gate and meaning. The list is open: new codes may appear inside an existing type, so switch on type and gate first."
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "no_credential",
+                  "invalid",
+                  "revoked"
+                ],
+                "description": "Only on invalid_api_key. no_credential: nothing was sent. invalid: a credential was sent and is unknown or malformed. revoked: the key exists and is no longer usable."
+              },
+              "message": {
+                "type": "string",
+                "description": "One plain line. Names the fix or the unlock."
+              },
+              "param": {
+                "type": "string",
+                "description": "The query or body parameter the gate refused, when one did."
+              },
+              "gate": {
+                "type": "string",
+                "enum": [
+                  "rows",
+                  "key",
+                  "plan",
+                  "freshness",
+                  "exposure_law",
+                  "rate",
+                  "pagination"
+                ],
+                "description": "Which boundary refused. Present on every gate error; switch on it without parsing the message."
+              },
+              "resource": {
+                "$ref": "#/components/schemas/ErrorResource"
+              },
+              "unlock": {
+                "type": "object",
+                "properties": {
+                  "tier": {
+                    "type": "string",
+                    "description": "The plan that lifts the gate."
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Absolute upgrade or sign-up URL carrying its ?src= attribution. Use it verbatim."
+                  },
+                  "offer": {
+                    "type": "null",
+                    "description": "Reserved for the agent-discount offer. Always null today."
+                  },
+                  "action": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "description": "What the call does. send_signup_code sends a verification code to an address for an account key."
+                      },
+                      "method": {
+                        "type": "string",
+                        "description": "HTTP method to use."
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "Absolute endpoint carrying its ?src= attribution. Call it verbatim."
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "method",
+                      "url"
+                    ],
+                    "description": "The request that lifts the gate with no human, present when the caller can fix this itself. A key gate carries the signup send here; a plan or quota gate has no action and its url is a page a person opens."
+                  }
+                },
+                "required": [
+                  "tier",
+                  "url",
+                  "offer"
+                ],
+                "description": "How to lift the gate. Present when the gate has an unlock."
+              },
+              "retry_after_seconds": {
+                "type": "integer",
+                "description": "Present on rate gates. Mirrors the Retry-After header."
+              },
+              "details": {
+                "type": "object",
+                "properties": {
+                  "quote": {
+                    "$ref": "#/components/schemas/RefusedQuote"
+                  },
+                  "limit": {
+                    "$ref": "#/components/schemas/Limit"
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "On terms_acceptance_required: the page where the person accepts the updated Terms of Service. On terms_updated: the Terms of Service page."
+                  }
+                },
+                "description": "Machine data the refusal carries for you to act on. Present only on the codes that name a field here."
+              },
+              "doc_url": {
+                "type": "string"
+              },
+              "request_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "code",
+              "message",
+              "doc_url",
+              "request_id"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "x-arcmira-codes": [
+          {
+            "code": "alert_not_found",
+            "type": "not_found",
+            "description": "A referenced alert does not exist or belongs to another account."
+          },
+          {
+            "code": "api_not_enabled",
+            "type": "permission_error",
+            "gate": "plan",
+            "description": "The plan does not include API access. unlock.url names the plan that does."
+          },
+          {
+            "code": "appearances_person_only",
+            "type": "invalid_request_error",
+            "description": "Appearance filtering applies to person entities only."
+          },
+          {
+            "code": "channel_not_found",
+            "type": "not_found",
+            "description": "No channel matches the id or slug."
+          },
+          {
+            "code": "email_verification_required",
+            "type": "permission_error",
+            "description": "Verify the account email before adding recipients."
+          },
+          {
+            "code": "entity_not_found",
+            "type": "not_found",
+            "description": "No entity matches the id, slug, or name."
+          },
+          {
+            "code": "fair_use_cap",
+            "type": "quota_exceeded",
+            "description": "A fair-use cap on the plan's credits is reached for this use this month, and the account has no granted or on-demand credits to use instead. Nothing was charged. details.limit carries the cap and what is used. An admin turns on on-demand usage or raises its budget, or the cap resets with the month."
+          },
+          {
+            "code": "feature_not_available",
+            "type": "permission_error",
+            "gate": "plan",
+            "description": "The plan does not include this feature. unlock.url names the plan that does."
+          },
+          {
+            "code": "feedback_not_found",
+            "type": "not_found",
+            "description": "No feedback submission with this id for this account."
+          },
+          {
+            "code": "filter_requires_paid",
+            "type": "permission_error",
+            "gate": "plan",
+            "description": "The parameter in param needs a paid plan; omit it for the free answer."
+          },
+          {
+            "code": "forbidden",
+            "type": "permission_error",
+            "description": "The caller may not perform this operation on this resource."
+          },
+          {
+            "code": "freshness_requires_paid",
+            "type": "permission_error",
+            "gate": "freshness",
+            "description": "The date window starts after results on this plan stop. details.limit carries delay_days and served_through; move the window to served_through or earlier, or open unlock.url for the plan that reads newer media."
+          },
+          {
+            "code": "id_required",
+            "type": "invalid_request_error",
+            "description": "A filter in param received a name where it takes an id (ent_{n} or UC...). Resolve the name first with GET /v1/entities/resolve and pass best.id or best.youtube_channel_id."
+          },
+          {
+            "code": "idempotency_conflict",
+            "type": "conflict_error",
+            "description": "The Idempotency-Key was sent before with a different request body. Send a new key for a new request."
+          },
+          {
+            "code": "idempotency_result_expired",
+            "type": "conflict_error",
+            "description": "The original one-time signing secret is no longer valid. Use a new request key for a new rotation."
+          },
+          {
+            "code": "insufficient_scope",
+            "type": "permission_error",
+            "gate": "key",
+            "description": "The key lacks the scope this route needs."
+          },
+          {
+            "code": "invalid_api_key",
+            "type": "authentication_error",
+            "gate": "key",
+            "description": "No usable credential. reason says whether none was sent, it is unknown, or it was revoked."
+          },
+          {
+            "code": "invalid_body",
+            "type": "invalid_request_error",
+            "description": "The JSON body failed validation; message names the field."
+          },
+          {
+            "code": "invalid_cursor",
+            "type": "invalid_request_error",
+            "description": "The continuation is invalid, expired, or belongs to another query. Restart without cursor."
+          },
+          {
+            "code": "invalid_email_recipients",
+            "type": "invalid_request_error",
+            "description": "Email recipients failed validation."
+          },
+          {
+            "code": "invalid_feedback_request",
+            "type": "invalid_request_error",
+            "description": "The feedback query or corrections do not fit the feedback type."
+          },
+          {
+            "code": "invalid_idempotency_key",
+            "type": "invalid_request_error",
+            "description": "Idempotency-Key must be 1 to 255 printable ASCII characters (0x21 to 0x7E). param is Idempotency-Key."
+          },
+          {
+            "code": "invalid_query",
+            "type": "invalid_request_error",
+            "description": "A query parameter failed validation; message names it."
+          },
+          {
+            "code": "invalid_slack_integration",
+            "type": "invalid_request_error",
+            "description": "Choose an active Slack integration owned by the account."
+          },
+          {
+            "code": "invalid_video_id",
+            "type": "invalid_request_error",
+            "description": "The video_id path segment is not an 11-character YouTube id."
+          },
+          {
+            "code": "job_requires_account",
+            "type": "authentication_error",
+            "gate": "key",
+            "description": "Transcription jobs belong to an account; sign up for a key."
+          },
+          {
+            "code": "member_limit",
+            "type": "quota_exceeded",
+            "gate": "rows",
+            "description": "The account's included credits are used up and the person the key or token acts for has reached their monthly on-demand limit in it. Nothing was charged, and there is no unlock. details.limit carries the limit and what is used, in US cents. An admin raises the limit on the Team page (https://arcmira.com/dashboard/members), or it resets with the month."
+          },
+          {
+            "code": "monitor_creation_unavailable",
+            "type": "server_error",
+            "description": "Monitor creation is temporarily unavailable. Retry the same request with the same key."
+          },
+          {
+            "code": "monitor_creation_unconfirmed",
+            "type": "server_error",
+            "description": "Monitor creation could not be confirmed. Retry the same request with the same key."
+          },
+          {
+            "code": "monitor_not_found",
+            "type": "not_found",
+            "description": "No monitor with this id on the account."
+          },
+          {
+            "code": "not_found",
+            "type": "not_found",
+            "description": "No route or resource at this path."
+          },
+          {
+            "code": "on_demand_paused",
+            "type": "quota_exceeded",
+            "gate": "rows",
+            "description": "The account's included credits are used up and its on-demand usage is paused, because a payment for an on-demand invoice was declined. Nothing was charged, and there is no unlock. On-demand resumes once the invoice is paid. An admin updates the card on the Billing & Invoices page (https://arcmira.com/dashboard/billing), which retries the payment."
+          },
+          {
+            "code": "owner_only",
+            "type": "permission_error",
+            "description": "Only an admin of the account may do this. Everyone in a team can create, edit, pause, delete and restore monitors."
+          },
+          {
+            "code": "owner_plan_required",
+            "type": "permission_error",
+            "description": "A team account follows its owner's plan, which does not include this. An admin can upgrade; a member's own plan does not apply."
+          },
+          {
+            "code": "pagination_gated",
+            "type": "permission_error",
+            "gate": "pagination",
+            "description": "Results past the free window need a paid plan."
+          },
+          {
+            "code": "paid_plan_required",
+            "type": "permission_error",
+            "description": "The operation needs a paid plan. unlock.url names the plan that does."
+          },
+          {
+            "code": "premium_transcript_requested",
+            "type": "permission_error",
+            "gate": "exposure_law",
+            "description": "Premium transcript text needs a plan with Premium transcripts."
+          },
+          {
+            "code": "quota_exceeded",
+            "type": "quota_exceeded",
+            "gate": "rows",
+            "description": "The read needs more credits than the plan, then the on-demand budget, have left. Nothing was charged. details.limit carries the plan credits or the on-demand budget the read met, with what is used and when it resets. unlock.url upgrades the plan or raises the budget."
+          },
+          {
+            "code": "rate_limited",
+            "type": "rate_limit_error",
+            "gate": "rate",
+            "description": "Too many requests in the window. Retry-After carries the wait."
+          },
+          {
+            "code": "recipient_upgrade_required",
+            "type": "permission_error",
+            "description": "The requested email recipient count exceeds the plan allowance."
+          },
+          {
+            "code": "recommendations_not_enabled",
+            "type": "permission_error",
+            "gate": "plan",
+            "description": "Commercial data needs a Pro+ plan."
+          },
+          {
+            "code": "resource_conflict",
+            "type": "conflict_error",
+            "description": "The operation conflicts with existing resource state."
+          },
+          {
+            "code": "scope_too_broad",
+            "type": "invalid_request_error",
+            "description": "The requested exact video scope exceeds the search filename cap; narrow by channel or date."
+          },
+          {
+            "code": "search_unavailable",
+            "type": "server_error",
+            "description": "Transcript search is unavailable (HTTP 503). Retry-After carries the wait."
+          },
+          {
+            "code": "server_error",
+            "type": "server_error",
+            "description": "Unexpected failure. Retry with backoff and quote request_id if it persists."
+          },
+          {
+            "code": "signup_code_invalid",
+            "type": "invalid_request_error",
+            "description": "The signup code is wrong, expired, or spent; message names the attempts left."
+          },
+          {
+            "code": "signup_send_limited",
+            "type": "rate_limit_error",
+            "description": "Verification code sends hit a per-address, per-IP, or per-client cap. Retry-After carries the wait."
+          },
+          {
+            "code": "spend_limit_exceeded",
+            "type": "quota_exceeded",
+            "description": "The request would take on-demand usage past the account's on-demand budget this month. Nothing was charged. details.limit carries the budget and what is used. Raise the budget on the Spending page or wait for the month to reset; then read again, or send a POST /v1/transcriptions request again with a new Idempotency-Key."
+          },
+          {
+            "code": "team_id_retired",
+            "type": "invalid_request_error",
+            "description": "team_id is retired: a monitor belongs to the account the key acts in. Omit team_id or send null."
+          },
+          {
+            "code": "terms_acceptance_required",
+            "type": "permission_error",
+            "description": "The person the key or token acts for has not accepted the updated Terms of Service. details.url is the page where they accept; the key or token works again as soon as they do."
+          },
+          {
+            "code": "terms_updated",
+            "type": "permission_error",
+            "description": "The Terms of Service changed since the person the key or token acts for last accepted them. This call was not run. Continuing to use the API accepts the updated terms, so the same call succeeds when sent again. details.url is the terms page. Sent once per person."
+          },
+          {
+            "code": "tracker_create_retired",
+            "type": "invalid_request_error",
+            "description": "POST /v1/trackers is retired (HTTP 410): a tracker lives inside a monitor. Follow an entity id or an exact name with POST /v1/monitors/{id}/entities, which creates the tracker in that monitor."
+          },
+          {
+            "code": "tracker_delivery_retired",
+            "type": "invalid_request_error",
+            "description": "Trackers have no delivery of their own: a tracker alerts through its monitor. Omit notify_email, notify_webhook, notify_slack, webhook_url, slack_channel_id and slack_integration_id, or send the value that means the monitor's delivery (true for notify_email, false or null for the rest), and set delivery with PATCH /v1/monitors/{id}. param names the field."
+          },
+          {
+            "code": "tracker_not_found",
+            "type": "not_found",
+            "description": "No tracker with this id on the account."
+          },
+          {
+            "code": "transcript_fetching",
+            "type": "server_error",
+            "description": "The caption track is being fetched, or the transcript translated, now (HTTP 503). Retry-After carries the wait; nothing was charged."
+          },
+          {
+            "code": "transcript_requires_account",
+            "type": "authentication_error",
+            "gate": "key",
+            "description": "Full transcripts need an account key; unlock.action sends a signup code."
+          },
+          {
+            "code": "transcript_unavailable",
+            "type": "not_found",
+            "description": "The video has no transcript in the requested lane or language; languages lists what exists."
+          },
+          {
+            "code": "unknown_entity",
+            "type": "invalid_request_error",
+            "description": "An explicit entity_ids value does not resolve to a searchable entity."
+          },
+          {
+            "code": "webhook_not_configured",
+            "type": "conflict_error",
+            "description": "The monitor has no webhook to rotate a secret for. Set webhook_url first."
+          }
+        ]
+      },
+      "EntityResolveResponse": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The q parameter echoed back."
+          },
+          "context": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The context parameter echoed back."
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "single_fuzzy",
+              "ambiguous",
+              "fuzzy",
+              "none"
+            ],
+            "description": "exact: one entity is named q (or the handle, id or alias), and no better-known person carries the name. single_fuzzy: the only entity returned, not an exact name. ambiguous: several exact matches, or an exact match next to a better-known person sharing the name (Jordan the brand vs Michael Jordan). fuzzy: only loose matches. none: no match."
+          },
+          "best": {
+            "$ref": "#/components/schemas/ResolveCandidate"
+          },
+          "suggested": {
+            "$ref": "#/components/schemas/ResolveSuggestion"
+          },
+          "ask": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string",
+                      "description": "One line to show the user: name, type, description, appearance count."
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "label"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "question",
+              "options"
+            ],
+            "description": "Set when best and suggested are both null and several entities fit: show the options to the user, or check every option id against the data and answer per entity."
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResolveCandidate"
+            },
+            "description": "Entities considered: exact names first, then initials, whole-word, spelling and substring matches, each by appearance count."
+          },
+          "note": {
+            "type": "string",
+            "description": "One steering sentence for the agent reading this."
+          }
+        },
+        "required": [
+          "query",
+          "context",
+          "confidence",
+          "best",
+          "suggested",
+          "ask",
+          "candidates",
+          "note"
+        ],
+        "example": {
+          "query": "Sam",
+          "context": null,
+          "confidence": "ambiguous",
+          "best": null,
+          "suggested": {
+            "id": "ent_124463",
+            "name": "Sam Altman",
+            "slug": "sam-altman",
+            "type": "person",
+            "appearance_count": 4399,
+            "youtube_channel_id": null,
+            "description": "CEO of OpenAI and former president of Y Combinator.",
+            "page": "https://arcmira.com/person/sam-altman",
+            "match": "word",
+            "reason": "dominant",
+            "evidence": "it has 4,399 appearances, 11x the next match (Sam Dunning, 397)",
+            "assumed": true
+          },
+          "ask": null,
+          "candidates": [
+            {
+              "id": "ent_123696",
+              "name": "Sam",
+              "slug": "sam",
+              "type": "person",
+              "appearance_count": 265,
+              "youtube_channel_id": null,
+              "description": "Common gender-neutral given name or nickname",
+              "page": "https://arcmira.com/person/sam",
+              "match": "exact"
+            }
+          ],
+          "note": "No row is certain. suggested is Sam Altman (person) because it has 4,399 appearances, 11x the next match (Sam Dunning, 397). Use it and tell the user you assumed it."
+        }
+      },
+      "ResolveCandidate": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Public entity id in the form \"ent_{n}\"."
+          },
+          "name": {
+            "type": "string",
+            "description": "Entity name."
+          },
+          "slug": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "URL slug. Null when the entity has never been slugged."
+          },
+          "type": {
+            "type": "string",
+            "description": "Entity type. Values: person (an individual), organization (a company or institution; legacy entities may read company or brand), product (a product or service), topic (a subject or theme), channel (a media source such as a YouTube channel), unknown (type was never classified)."
+          },
+          "appearance_count": {
+            "type": "integer",
+            "default": 0,
+            "description": "Number of indexed appearances and mentions. Results are ordered by this, descending."
+          },
+          "youtube_channel_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "YouTube channel id for channel entities. Null for every other type."
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "One catalog sentence that tells entities with the same name apart, for example \"Common gender-neutral given name or nickname\". Null when the catalog has none."
+          },
+          "page": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The entity's page on arcmira.com, absolute. Link the name to it when you write the entity into an answer. Null for a type the site has no page for."
+          },
+          "match": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "word",
+              "substring",
+              "acronym",
+              "spelling"
+            ],
+            "description": "How the entity's name relates to q: the whole name, a run of its words (Michael Jordan for Jordan), characters inside a word, the show's initials (My First Million for MFM), or a near spelling."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "type",
+          "youtube_channel_id",
+          "description",
+          "page",
+          "match"
+        ],
+        "description": "The one entity q means. Set on exact and single_fuzzy only. Name it in the answer."
+      },
+      "ResolveSuggestion": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ResolveCandidate"
+          },
+          {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "dominant",
+                  "only_word_match",
+                  "context",
+                  "acronym",
+                  "spelling"
+                ],
+                "description": "Why this entity stands out: dominant (10x the appearances of the next match), only_word_match, context (the context parameter points at it), acronym, spelling."
+              },
+              "evidence": {
+                "type": "string",
+                "description": "The numbers or words behind the reason, to repeat to the user."
+              },
+              "assumed": {
+                "type": "boolean",
+                "enum": [
+                  true
+                ],
+                "description": "Always true: this is an assumption the answer must state."
+              }
+            },
+            "required": [
+              "reason",
+              "evidence",
+              "assumed"
+            ]
+          }
+        ],
+        "description": "Set when best is null but one entity stands out, with the reason and evidence. Use it and tell the user you assumed it."
+      }
+    },
+    "responses": {
+      "InvalidRequest": {
+        "description": "Invalid request",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          },
+          "X-Arcmira-Version": {
+            "$ref": "#/components/headers/X-Arcmira-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "AuthenticationError": {
+        "description": "Authentication error",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          },
+          "X-Arcmira-Version": {
+            "$ref": "#/components/headers/X-Arcmira-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "QuotaExceeded": {
+        "description": "Quota exceeded",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          },
+          "X-Arcmira-Version": {
+            "$ref": "#/components/headers/X-Arcmira-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "PermissionError": {
+        "description": "Permission error",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          },
+          "X-Arcmira-Version": {
+            "$ref": "#/components/headers/X-Arcmira-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not found",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          },
+          "X-Arcmira-Version": {
+            "$ref": "#/components/headers/X-Arcmira-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "Rate limit exceeded. Retry-After carries the wait.",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          },
+          "X-Arcmira-Version": {
+            "$ref": "#/components/headers/X-Arcmira-Version"
+          },
+          "RateLimit-Limit": {
+            "$ref": "#/components/headers/RateLimit-Limit"
+          },
+          "RateLimit-Remaining": {
+            "$ref": "#/components/headers/RateLimit-Remaining"
+          },
+          "RateLimit-Reset": {
+            "$ref": "#/components/headers/RateLimit-Reset"
+          },
+          "Retry-After": {
+            "$ref": "#/components/headers/Retry-After"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Server error",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          },
+          "X-Arcmira-Version": {
+            "$ref": "#/components/headers/X-Arcmira-Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "arc_sk_*"
       }
     }
   }
