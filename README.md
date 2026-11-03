@@ -4,6 +4,8 @@
 
 Add YouTube transcript search to your agents and workflows. LangChain, AI SDK, n8n and Dify also resolve people, organizations, products, topics and channels. Results retain timestamped source links and coverage notes.
 
+Try the [YouTube Transcript Search API starter in Postman](https://www.postman.com/arcmira/youtube-transcript-search-api-by-arcmira/collection/684zx4q/youtube-transcript-search-api-by-arcmira-start-here) for a health check, authenticated transcript search and entity resolution. To explore all endpoints, [open the live API specification in Swagger Editor](https://editor.swagger.io/?url=https%3A%2F%2Fapi.arcmira.com%2Fv1%2Fopenapi.json). You can run `GET /v1/health` without an API key.
+
 | Integration | Source | Status |
 | --- | --- | --- |
 | Cursor, VS Code, Kiro and Zed | [Connect your editor](guides/editor-mcp) | Search YouTube and podcast transcripts from your editor and open the recording at the quoted passage. |
