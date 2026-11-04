@@ -6,32 +6,38 @@ Connect Arcmira to your own Composio project to find timestamped passages in ind
 
 ## Register the toolkit once per project
 
-Install `composio==0.30.0` and set `COMPOSIO_API_KEY` to your project key. Run this in your backend or a private terminal. The request includes Arcmira’s official icon so users can recognize the toolkit when connecting.
+Install `composio==0.30.0` and set `COMPOSIO_API_KEY` to your project key. If your project already has an Arcmira toolkit, keep its slug and skip to the connection step.
+
+For a new project, run this in your backend or a private terminal. It uses the [Composio v3.1 create endpoint](https://docs.composio.dev/reference/api-reference/toolkits/postCustomToolkits). The `all` setting makes the toolkit available to users in this project. Each user connects their own Arcmira account.
 
 ```python
+import os
 from base64 import b64encode
-from urllib.request import urlopen
 
-from composio import Composio
+import httpx
 
-composio = Composio()
-with urlopen("https://mcp.arcmira.com/icon.png", timeout=15) as icon:
-    logo = b64encode(icon.read()).decode("ascii")
-
-toolkit = composio.experimental.custom_toolkits.upsert(
-    slug="ARCMIRA",
-    toolkit_config={
+icon = httpx.get("https://mcp.arcmira.com/icon.png", timeout=15)
+icon.raise_for_status()
+response = httpx.post(
+    "https://backend.composio.dev/api/v3.1/custom/toolkits",
+    headers={"x-api-key": os.environ["COMPOSIO_API_KEY"]},
+    json={
         "name": "Arcmira: YouTube Transcript Search",
         "app_url": "https://mcp.arcmira.com/mcp",
-        "logo_file": {"mime_type": "image/png", "content": logo},
+        "user_id": "all",
+        "logo_file": {"mime_type": "image/png", "content": b64encode(icon.content).decode("ascii")},
         "auth_schemes": [{
             "mode": "DCR_OAUTH",
             "discovery_url": "https://api.arcmira.com/.well-known/oauth-authorization-server",
         }],
     },
+    timeout=30,
 )
-print(toolkit.slug)  # CUSTOM_ARCMIRA
+response.raise_for_status()
+print(response.json()["slug"])
 ```
+
+Set `COMPOSIO_TOOLKIT_SLUG` to the slug printed above or the slug of your existing toolkit.
 
 ## Connect an Arcmira account
 
@@ -43,11 +49,12 @@ import os
 from composio import Composio
 
 composio = Composio()
+slug = os.environ["COMPOSIO_TOOLKIT_SLUG"]
 session = composio.sessions.create(
     user_id=os.environ["COMPOSIO_USER_ID"],
-    toolkits=["CUSTOM_ARCMIRA"],
+    toolkits=[slug],
 )
-connection = session.authorize("CUSTOM_ARCMIRA")
+connection = session.authorize(slug)
 print(connection.redirect_url)
 account = connection.wait_for_connection(timeout=180)
 print(account.status)
@@ -58,14 +65,16 @@ print(account.status)
 Composio starts its initial sync when the account becomes active. This lists the discovered tool definitions without reading a transcript.
 
 ```python
+import os
+
 from composio import Composio
 
 composio = Composio()
-tools = composio.tools.get_raw_composio_tools(toolkits=["CUSTOM_ARCMIRA"])
+tools = composio.tools.get_raw_composio_tools(toolkits=[os.environ["COMPOSIO_TOOLKIT_SLUG"]])
 for tool in tools:
     print(tool.slug)
 ```
 
-If the list is empty immediately after sign-in, let the initial sync finish and run the discovery check again. For a failed sync or a change to Arcmira’s tool definitions, use [Composio’s resync instructions](https://docs.composio.dev/docs/extending-sessions/custom-mcp#sync-and-resync-tools) with the active connected account ID.
+If the list is empty immediately after sign-in, let the initial sync finish and run the discovery check again. For a failed sync or a change to Arcmira’s tool definitions, use [Composio’s resync instructions](https://docs.composio.dev/docs/extending-sessions/custom-mcp#connect-and-sync) with the active connected account ID.
 
 For later sessions, use the same user ID and toolkit slug. Try asking your agent to find three clips about a topic, quote each speaker in context, and link to the original recording at the timestamp. Paid reads use credits from your plan, then your on-demand budget. [Usage and billing](https://arcmira.com/docs/usage-and-billing)
