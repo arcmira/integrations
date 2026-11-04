@@ -6,8 +6,8 @@ Turn a topic into up to five timestamped passages for a video or research projec
 
 ## Run it
 
-1. Download [the workflow JSON](arcmira-clip-shortlist.n8n.json) and import it into n8n using **Import from File**.
-2. In **Search transcripts**, select an **HTTP Header Auth** credential. Set the header name to `Authorization` and its value to `Bearer YOUR_ARCMIRA_API_KEY`. Create your key in [Arcmira](https://arcmira.com); keep it in n8n credentials, never in the exported workflow.
+1. In the n8n workflow menu, choose **Import from URL** and paste the [raw workflow JSON URL](https://raw.githubusercontent.com/arcmira/integrations/master/examples/n8n-clip-shortlist/arcmira-clip-shortlist.n8n.json). For **Import from File**, save the JSON from the same link.
+2. In **Search transcripts**, select an **HTTP Header Auth** credential. Set the header name to `Authorization` and its value to `Bearer YOUR_ARCMIRA_API_KEY`. Follow the [Arcmira API key instructions](https://arcmira.com/docs/authentication) and save the key in n8n credentials.
 3. Set your topic in **Set research topic**. The example uses `vibe coding`.
 4. Execute the workflow and inspect the search response. Download `arcmira-clip-shortlist.csv` from **Export clip shortlist**.
 5. Watch each source and mark the passages you want to use. Timestamps locate passages; choose exact edit boundaries after playback.

@@ -2,13 +2,13 @@
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Dify plugin](https://marketplace.dify.ai/plugin/arcmira/arcmira)
 
-Find timestamped passages for a research brief or clip shortlist. This three-node workflow takes a topic and publication-date window, searches with the Arcmira plugin, and returns the complete JSON response. It uses no language model and contains no credentials.
+Search indexed YouTube and podcast transcripts for timestamped quotes to use in a research brief or clip shortlist. This three-node workflow takes a topic and publication-date window, searches with the Arcmira plugin, and returns the complete JSON response. It uses no language model and contains no credentials.
 
 ## Import and run
 
 1. Install the [Arcmira plugin](https://marketplace.dify.ai/plugin/arcmira/arcmira) in your Dify workspace. The template was tested with version 0.1.3. The DSL does not install a plugin automatically.
 2. Configure your own [Arcmira API key](https://arcmira.com/docs/authentication) in the plugin's secret credential field.
-3. Download [arcmira-transcript-search.yml](arcmira-transcript-search.yml). In Dify Studio, choose **Create → Import App**, select the file, and create the workflow.
+3. In Dify Studio, open **Import App**, select the URL option and paste the [raw workflow URL](https://raw.githubusercontent.com/arcmira/integrations/master/examples/dify-transcript-search/arcmira-transcript-search.yml). For a file import, save the YAML from that link and select it in the import dialog.
 4. Open **YouTube transcript search** and select your saved authorization. The imported node uses your workspace default when one exists.
 5. Choose **Test Run** and enter a topic, an inclusive start date and an exclusive end date.
 
