@@ -51,7 +51,11 @@ buildNpmPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Search YouTube and podcast transcripts for timestamped quotes, mentions, sponsors and recommendations";
+    description = "YouTube transcript search and podcast transcript search with timestamped quotes";
+    longDescription = ''
+      Search YouTube transcripts and podcast transcripts for timestamped quotes,
+      speaker appearances, mentions, sponsors and recommendations.
+    '';
     homepage = "https://arcmira.com";
     changelog = "https://github.com/arcmira/arcmira/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

@@ -1,5 +1,5 @@
 {
-  description = "Arcmira CLI for YouTube and podcast transcript search";
+  description = "Arcmira CLI for YouTube transcript search and podcast transcript search";
 
   outputs = { self }: {
     packages = builtins.listToAttrs (map (system: {
