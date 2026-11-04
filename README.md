@@ -14,7 +14,7 @@ Try the [YouTube Transcript Search API starter in Postman](https://www.postman.c
 | Nix CLI | [Package and installation](nix) | Run once with `nix run github:arcmira/integrations -- search --help`. |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.6.2 |
 | mise CLI | [npm backend](https://mise.jdx.dev/dev-tools/backends/npm.html) | With Node.js 18 or later on your PATH, run `mise exec npm:arcmira@0.6.2 -- arcmira search --help` for transcript search options. |
-| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/langchain); catalog update requested |
+| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/langchain); [LangChain providers](https://docs.langchain.com/oss/javascript/integrations/providers/all_providers) and [tools catalog](https://docs.langchain.com/oss/javascript/integrations/tools) |
 | LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Langflow | [Setup and components](packages/langflow) | [PyPI 0.1.0](https://pypi.org/project/lfx-arcmira/0.1.0/); authenticated editor search and entity resolution verified; catalog review pending |
 | Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk); catalog submission pending |

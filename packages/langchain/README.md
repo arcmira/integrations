@@ -2,7 +2,7 @@
 
 Native LangChain tools for searching indexed YouTube and podcast transcripts and resolving people, organizations, products, topics and channels with Arcmira.
 
-[Install @arcmira/langchain from npm](https://www.npmjs.com/package/@arcmira/langchain). Framework catalog inclusion is tracked separately in [release status](https://github.com/arcmira/integrations/blob/master/RELEASE.md).
+[Install @arcmira/langchain from npm](https://www.npmjs.com/package/@arcmira/langchain). Find Arcmira in the [LangChain JavaScript providers](https://docs.langchain.com/oss/javascript/integrations/providers/all_providers) and [tools catalog](https://docs.langchain.com/oss/javascript/integrations/tools).
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 

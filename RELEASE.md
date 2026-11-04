@@ -5,7 +5,7 @@
 Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
-The TypeScript LangChain, AI SDK and Activepieces packages are published on npm at 0.1.0. The [n8n 0.1.0 release archive](https://github.com/arcmira/integrations/releases/tag/n8n-v0.1.0) is available on GitHub. Its first npm publication is pending. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify 0.1.3 is [published in the Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.2 was tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/). The Python package is listed in the LangChain provider directory and tools catalog; the other framework catalog reviews remain separate.
+The TypeScript LangChain, AI SDK and Activepieces packages are published on npm at 0.1.0. The [n8n 0.1.0 release archive](https://github.com/arcmira/integrations/releases/tag/n8n-v0.1.0) is available on GitHub. Its first npm publication is pending. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify 0.1.3 is [published in the Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.2 was tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/). The Python and TypeScript packages are listed in their respective LangChain provider directories and tools catalogs. Other framework catalog reviews remain separate.
 
 ## Python LangChain 0.1.7
 
@@ -36,7 +36,7 @@ Direct third-party dependencies met a seven-day release-age policy when selected
 
 Published October 13, 2026. The downloaded npm archives match the tested release artifacts, and each downloaded package passed 14 integration tests. Both use Arcmira SDK 0.6.0.
 
-- [@arcmira/langchain](https://www.npmjs.com/package/@arcmira/langchain): [setup](packages/langchain). The TypeScript catalog update was requested in [the existing listing issue](https://github.com/langchain-ai/docs/issues/6442#issuecomment-6152249700).
+- [@arcmira/langchain](https://www.npmjs.com/package/@arcmira/langchain): [setup](packages/langchain). Listed in the [LangChain JavaScript providers](https://docs.langchain.com/oss/javascript/integrations/providers/all_providers) and [tools catalog](https://docs.langchain.com/oss/javascript/integrations/tools), verified November 4, 2026.
 - [@arcmira/ai-sdk](https://www.npmjs.com/package/@arcmira/ai-sdk): [setup guide](https://arcmira.github.io/integrations/ai-sdk/). Tools-registry inclusion remains pending; current-SDK compatibility is a separate admission check.
 
 Registry archives retain the README shipped at publication. These guides describe the current installation route.

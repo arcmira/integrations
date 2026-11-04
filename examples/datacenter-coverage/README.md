@@ -1,5 +1,7 @@
 # How often did indexed shows discuss datacenters?
 
+[Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Datacenter research](https://arcmira.com/research/datacenters)
+
 Arcmira’s September 2026 research edition counted **40 videos in the first 30 days and 193 in the next 30**. This table breaks those totals into 24-hour intervals so you can see whether coverage clustered on a few days. It covers videos in the edition’s saved topic search. Changes in the indexed catalog can also affect the comparison.
 
 [Explore the table in Datasette Lite](https://lite.datasette.io/?csv=https%3A%2F%2Fraw.githubusercontent.com%2Farcmira%2Fintegrations%2Fmaster%2Fexamples%2Fdatacenter-coverage%2Fcoverage.csv#/data/coverage) · [View the CSV](coverage.csv) · [Research methods and original data](https://arcmira.com/research/datacenters/2026-09/method#downloads)
