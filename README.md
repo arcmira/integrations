@@ -8,6 +8,7 @@ Try the [YouTube Transcript Search API starter in Postman](https://www.postman.c
 
 | Integration | Source | Status |
 | --- | --- | --- |
+| Hoppscotch | [OpenAPI specification](https://api.arcmira.com/v1/openapi.json) | In Collections, choose **Import → Import from OpenAPI → Import from URL** and paste the specification URL. Open **Meta → Health check** and select **Send**. For transcript search, open the request in **Search**, set `q`, disable unused filters and use a [secret environment variable](https://docs.hoppscotch.io/documentation/features/environments) for the bearer token. |
 | Cursor, VS Code, Kiro and Zed | [Connect your editor](guides/editor-mcp) | Search YouTube and podcast transcripts from your editor and open the recording at the quoted passage. |
 | Composio | [Connect Arcmira with Custom MCP](guides/composio) | Add transcript search to your project and connect each user through OAuth. |
 | Replit Agent | [Add Arcmira to Replit](https://replit.com/integrations?mcp=eyJkaXNwbGF5TmFtZSI6IkFyY21pcmE6IFlvdVR1YmUgVHJhbnNjcmlwdCBTZWFyY2giLCJiYXNlVXJsIjoiaHR0cHM6Ly9tY3AuYXJjbWlyYS5jb20vbWNwIn0%3D) · [MCP setup](https://arcmira.com/docs/mcp-server) | Connect a custom MCP server, sign in with Arcmira, and ask Replit Agent to find timestamped passages in YouTube and podcast transcripts. |
