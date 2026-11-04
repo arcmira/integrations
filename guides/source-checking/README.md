@@ -27,7 +27,7 @@ Set the dates and channels to match your question. The saved demo is an editoria
 
 ## Check a quote against its recording
 
-Open the [saved demo](https://arcmira.github.io/integrations/quote-timeline/) and select Masters of Scale. Its source record points to *What AI will do to work, according to 5 people building it*, published August 11, 2026, at 13:43:
+Open the [saved demo](https://arcmira.github.io/integrations/quote-timeline/) and select Masters of Scale. Its source record points to *60% of today's jobs didn't exist in 1940. 5 leaders on what's next.*, published August 11, 2026, at 13:43:
 
 > Vibe coding is is essentially using an AI chatbot to bring your ideas to life.
 
