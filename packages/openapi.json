@@ -737,11 +737,12 @@
               "source": "creator_captions",
               "source_label": "3rd Party (Video Creator)",
               "published_at": "2026-08-04T17:00:00.000Z",
-              "text": "Ramp has been on the show for a while now and the pitch is still the same, spend less time on expenses.",
+              "text": "Ramp corporate cards have been on the show for a while now, and the pitch is still the same: spend less time on expenses.",
               "start_seconds": 4787,
               "watch_url": "/watch?v=dQw4w9WgXcQ&t=4787",
               "cite_line": "[TBPN | Tuesday, August 4](/watch?v=dQw4w9WgXcQ&t=4787) · @1:19:47 · TBPN · Aug 4, 2026",
               "score": 0.71,
+              "match": "phrase",
               "about": [
                 {
                   "id": "ent_14",
@@ -911,6 +912,15 @@
             "type": "number",
             "description": "Retrieval score. Higher is a closer match. Not comparable across calls."
           },
+          "match": {
+            "type": "string",
+            "enum": [
+              "phrase",
+              "all_words",
+              "partial"
+            ],
+            "description": "How the passage holds q, ignoring case and punctuation: phrase holds every word of q in order, all_words holds each content word somewhere, partial holds only some. Passages holding the phrase or every word rank first. When no chunk is a phrase match, note says so."
+          },
           "about": {
             "type": "array",
             "items": {
@@ -935,7 +945,8 @@
           "text",
           "start_seconds",
           "watch_url",
-          "score"
+          "score",
+          "match"
         ]
       },
       "ErrorResource": {
@@ -1849,6 +1860,11 @@
             "code": "server_error",
             "type": "server_error",
             "description": "Unexpected failure. Retry with backoff and quote request_id if it persists."
+          },
+          {
+            "code": "service_unavailable",
+            "type": "server_error",
+            "description": "The database was briefly overloaded or restarting (HTTP 503). Retry-After carries the wait; send the same request again."
           },
           {
             "code": "signup_code_invalid",

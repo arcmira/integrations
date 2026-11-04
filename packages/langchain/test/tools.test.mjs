@@ -8,7 +8,7 @@ import { createArcmiraTools } from '../dist/index.js';
 import { searchInput, resolveInput } from '../dist/inputs.js';
 
 const input = {q:'AI agents',channel_ids:'UCfixture',entity_ids:'ent_1',about:'ent_2',by:'ent_3',kind:'organic',after:'2026-09-01',before:'2026-10-01',source:'arcmira_premium',limit:8};
-const result = {chunks:[{published_at:'2026-09-15T00:00:00Z',text:'Synthetic passage.',watch_url:'https://arcmira.com/watch?v=fixture&t=90',speakers_by:[{id:'ent_3',name:'Fixture speaker'}]}],window:{after:'2026-09-01',before:'2026-10-01'},search_index:{state:'live',missing_before:null},note:'Synthetic coverage note'};
+const result = {chunks:[{published_at:'2026-09-15T00:00:00Z',text:'Synthetic passage about AI agents.',match:'phrase',watch_url:'https://arcmira.com/watch?v=fixture&t=90',speakers_by:[{id:'ent_3',name:'Fixture speaker'}]}],window:{after:'2026-09-01',before:'2026-10-01'},search_index:{state:'live',missing_before:null},note:'Synthetic coverage note'};
 function graph(fetch) {
  const tools=createArcmiraTools({apiKey:'fixture-key',fetch});
  return new StateGraph(MessagesAnnotation).addNode('tools',new ToolNode(tools,{handleToolErrors:false})).addEdge(START,'tools').addEdge('tools',END).compile();
@@ -39,7 +39,7 @@ test('entity tool preserves ambiguity, source evidence and channel IDs',async()=
  assert.deepEqual(JSON.parse(message.content),resolved);
 });
 
-for(const [status,code] of [[401,'unauthorized'],[402,'quota_exceeded'],[403,'filter_requires_paid'],[429,'rate_limited'],[503,'search_unavailable']]){
+for(const [status,code] of [[401,'unauthorized'],[402,'quota_exceeded'],[403,'filter_requires_paid'],[429,'rate_limited'],[503,'search_unavailable'],[503,'service_unavailable']]){
  test(`graph preserves ${status} ${code}; no retry or fallback`,async()=>{
   let calls=0;const body={error:{code,message:'Synthetic API refusal',request_id:'fixture-request',details:{source:'arcmira_premium'}}};
   await assert.rejects(()=>run('arcmira_search',input,async()=>{calls++;return Response.json(body,{status,headers:{'x-request-id':'fixture-request'}})}),e=>{assert.equal(e.statusCode,status);assert.deepEqual(e.body,body);return true;});assert.equal(calls,1);

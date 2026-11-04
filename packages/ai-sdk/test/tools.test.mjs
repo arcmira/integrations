@@ -10,7 +10,7 @@ const usage = {inputTokens:{total:1,noCache:1,cacheRead:0,cacheWrite:0},outputTo
 const response = (content, reason='tool-calls') => ({content,finishReason:{unified:reason,raw:reason},usage,warnings:[]});
 const call = (toolName, input) => response([{type:'tool-call',toolCallId:'fixture-call',toolName,input:JSON.stringify(input)}]);
 const input = {q:'AI agents',channel_ids:'UCfixture',entity_ids:'ent_1',about:'ent_2',by:'ent_3',kind:'organic',after:'2026-09-01',before:'2026-10-01',source:'arcmira_premium',limit:8};
-const result = {chunks:[{published_at:'2026-09-15T00:00:00Z',text:'Synthetic passage.',watch_url:'https://arcmira.com/watch?v=fixture&t=90',speakers_by:[{id:'ent_3',name:'Fixture speaker'}]}],window:{after:'2026-09-01',before:'2026-10-01'},search_index:{state:'live',missing_before:null},note:'Synthetic coverage note'};
+const result = {chunks:[{published_at:'2026-09-15T00:00:00Z',text:'Synthetic passage about AI agents.',match:'phrase',watch_url:'https://arcmira.com/watch?v=fixture&t=90',speakers_by:[{id:'ent_3',name:'Fixture speaker'}]}],window:{after:'2026-09-01',before:'2026-10-01'},search_index:{state:'live',missing_before:null},note:'Synthetic coverage note'};
 
 async function run(toolName, args, fetch) {
  const model = new MockLanguageModelV4({doGenerate:[call(toolName,args),response([{type:'text',text:'Fixture complete.'}],'stop')]});
@@ -40,7 +40,7 @@ test('entity resolution preserves ambiguity and channel IDs',async()=>{
  assert.equal(calls,1);assert.deepEqual(output.steps[0].toolResults[0].output,resolved);
 });
 
-for(const [status,code] of [[401,'unauthorized'],[402,'quota_exceeded'],[403,'filter_requires_paid'],[429,'rate_limited'],[503,'search_unavailable']]) {
+for(const [status,code] of [[401,'unauthorized'],[402,'quota_exceeded'],[403,'filter_requires_paid'],[429,'rate_limited'],[503,'search_unavailable'],[503,'service_unavailable']]) {
  test(`AI SDK preserves ${status} ${code} without retry or source fallback`,async()=>{
   let calls=0;const body={error:{code,message:'Synthetic API refusal',request_id:'fixture-request',details:{source:'arcmira_premium'}}};
   const {output,model}=await run('arcmiraSearch',input,async()=>{calls++;return Response.json(body,{status,headers:{'x-request-id':'fixture-request'}})});
