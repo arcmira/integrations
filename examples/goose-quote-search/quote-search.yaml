@@ -1,0 +1,22 @@
+version: "1.0.0"
+title: Find timestamped quotes in YouTube and podcast transcripts
+description: Search one topic with Arcmira and build a shortlist of passages an editor can verify against the recording.
+parameters:
+  - key: topic
+    input_type: string
+    requirement: required
+    description: The topic or phrase to find in indexed transcripts.
+extensions:
+  - name: arcmira
+    type: streamable_http
+    uri: https://mcp.arcmira.com/mcp
+    description: Search indexed YouTube and podcast transcripts.
+    available_tools:
+      - arcmira_describe
+      - arcmira_execute_read
+prompt: |
+  Find up to five passages about this topic: {{ topic }}.
+  Read the Arcmira search reference first, then run a transcript search limited to five results.
+  For each relevant passage, give the channel, video title, verbatim excerpt and timestamped source link.
+  Include a speaker name only when the result identifies the speaker. Keep any coverage or truncation note.
+  If no passage matches, report that. Use the search results alone.
