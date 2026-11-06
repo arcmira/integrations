@@ -1,0 +1,14 @@
+{
+  "name": "arcmira-quote-timeline",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Explore timestamped YouTube quotes with Arcmira.",
+  "homepage": "https://arcmira.com",
+  "scripts": {
+    "dev": "serve . --listen 8080 --no-clipboard",
+    "test": "node --test timeline.test.cjs"
+  },
+  "devDependencies": {
+    "serve": "14.2.6"
+  }
+}
