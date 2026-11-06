@@ -12,6 +12,8 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 Open <http://127.0.0.1:8080>. No credentials or Arcmira API calls are needed. Playback loads the original video through YouTube’s embedded player. Selecting another source destroys the previous player. If an embed fails or does not become ready within 15 seconds, click **Retry source** or use the YouTube timestamp link. If the player API cannot load, the timestamp link remains available. Clipboard failures expose selectable text.
 
+For Node.js environments, including StackBlitz, run `npm ci --ignore-scripts` and `npm run dev`. The `dev` script serves the same files on port 8080. It does not run transcript searches or require credentials.
+
 `fixture.js` preserves the quote text, source metadata, date window and selection notes. Punctuation and line breaks are formatted for reading; repetitions remain. Playback pins use caption cues near sentence starts, not word-level alignment. This is a partial editorial selection, not an exhaustive search or ranking. The former MTS video became private; a different MTS video replaces it. The corrected Columbia quote remains in the source notes.
 
 The header uses the production Arcmira image and Helvetica Now Display cuts. Preserve the capitalized wordmark, 25px mark, 19px type, 600 weight, 28.5px line height, zero letter spacing and 10px gap. This demo uses the owner-approved black header with white text. Do not independently typeset or decorate the brand.
