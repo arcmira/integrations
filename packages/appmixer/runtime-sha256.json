@@ -1,17 +1,17 @@
 {
-  "version": "1.0.5",
-  "scope": "Reviewed 1.0.5 service source. Paid reads use credits from your plan, then your on-demand budget. Request handlers and shared request logic are unchanged from 1.0.4. See RELEASE.md for publication and hosted verification.",
+  "version": "1.0.6",
+  "scope": "Reviewed 1.0.6 service candidate. Speaker-filter help matches the API document of November 6, 2026. Request code is unchanged from 1.0.5. Publication and hosted verification are pending.",
   "files": {
     "auth.js": "509d28aee4696c79b0103a15822268d510956180ad6258f10e43e8766f0a5a16",
-    "bundle.json": "ed3204ddd4bc2d7d3eb92398b337ded12dd20947bc88d3a8422aadeeaffea577",
+    "bundle.json": "b37ca9df672cbedbaedc6713a341d170f96d170f01b708e5b1a2340a5b00d99c",
     "core/MakeApiCall/MakeApiCall.js": "92ffefa067d81d9b48c2f7e88662d022b35df2d0f1d0d66659469e0e22488713",
-    "core/MakeApiCall/component.json": "5dbed49f4f9097f7fccf74e0aa6c33dd3e4c70ee39e9644bcccab95480052fa8",
+    "core/MakeApiCall/component.json": "2cf2d4268d941241a612382fc9ffc184ffee2e8d4c6898750c619e07fe22e020",
     "core/ResolveEntities/ResolveEntities.js": "279a13a0b415b05883ed86c71cd77a4eb61b43a4b73507b6e1d16fc0b99d611c",
-    "core/ResolveEntities/component.json": "1a0ecae97c3f4d2342269826072dabf72db3c8d10092eb6c8d5ba4b8c45c41b2",
+    "core/ResolveEntities/component.json": "71eda7b942f66d09e5a60576ae01c98492d1b82d9021fd9becf9f706a50c0e49",
     "core/SearchTranscripts/SearchTranscripts.js": "af0ef58d4f287dc5ce9c50e146afd19ca352562f597b8962f27d0881dc676d23",
-    "core/SearchTranscripts/component.json": "eaa3c5f53ea89d55756e1d799d23222f67c590a0a1dc423485c6f6f3f0f4529e",
+    "core/SearchTranscripts/component.json": "802ae58c842abdf9705bafb49b5c8ce654bfb0badef5befc06f4f63dfaccdea0",
     "lib.js": "b989e4d2d4a34ce46d01ff005862616b2ddf71c03de83101df973b6fa5c8ad1e",
-    "package.json": "4c9b7c01210feb15e91a2f52f34d273fa1d36e2723ad9f9ac84ba941789c33c4",
-    "service.json": "ecae999753f613cf2c5faff89c19150362233a1656b18d4c3d0fe304078f7d10"
+    "package.json": "38bbd81802e36ebe516e3c6e9734f5a5ed5750fee7d72d897c7cd58c9b558bcc",
+    "service.json": "5ffbc195dba5bee57b813ec796ef20b0577f79bcf33ff9fc63e3f647bcbb80b2"
   }
 }

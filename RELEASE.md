@@ -180,6 +180,8 @@ The target is Connect/MCP; Workflows and String are being retired. App registrat
 
 ## Appmixer connector
 
+Custom connector 1.0.6 is a source candidate with corrected speaker-filter help and a current hosted catalog link. Request code is unchanged from 1.0.5. Publication and native installation of 1.0.6 remain pending.
+
 Appmixer publishes [hosted connector](https://connectors.appmixer.com/connector/appmixer.arcmira) with [setup instructions](https://docs.appmixer.com/connector-configuration/arcmira). The versions and test results below apply to Arcmira’s separate custom connector.
 
 [Appmixer 1.0.5](https://github.com/arcmira/integrations/releases/tag/appmixer-v1.0.5) is published with current plan-credit then on-demand-budget descriptions. The downloaded ZIP matches the locally verified archive and published checksum. All 160 behavior tests and full local CI pass. Only copy and version metadata differ from 1.0.4. Appmixer Backoffice confirmed installation of this ZIP on October 12. Hosted action execution has been verified on earlier versions.

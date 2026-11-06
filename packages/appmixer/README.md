@@ -6,7 +6,7 @@ Search indexed YouTube videos and livestreams for timestamped passages. Resolve 
 
 For the hosted connector, open [Arcmira in the Appmixer catalog](https://connectors.appmixer.com/connector/appmixer.arcmira) and follow [Appmixer’s setup guide](https://docs.appmixer.com/connector-configuration/arcmira). The hosted connector includes Find Transcripts, Resolve Entity and Make API Call.
 
-This directory contains Arcmira’s separately versioned custom connector 1.0.5. See [release status](../../RELEASE.md#appmixer-connector) for the downloadable ZIP and hosted test results.
+This directory contains Arcmira’s separately versioned custom connector 1.0.6 candidate. See [release status](../../RELEASE.md#appmixer-connector) for the downloadable ZIP and hosted test results.
 
 ## Build and install
 
@@ -38,6 +38,8 @@ Explicit `POST`, `PUT`, `PATCH` and `DELETE` requests can modify account data un
 
 A paid read uses credits from your plan, then your on-demand budget. Account access and indexed coverage vary. Preserve the API's error explanation and documentation link instead of silently changing the requested source or filters.
 
+Speaker filters select passages where the chosen person speaks the query words. A passage can include other speakers. Only lines with a known speaker receive a name.
+
 ## What has been verified
 
 Version 1.0.4 was installed in the private test tenant on October 7, 2026. Native entity resolution returned an exact OpenAI match through `resolved`. Fresh 1.0.4 transcript-search and advanced-action execution remain unverified; the host displayed repeated logs from the same entity-resolution execution. No before/after usage ledger was captured for that check.
@@ -54,6 +56,8 @@ These checks used an isolated Free account. The test flow remained inactive. The
 Local tests exercise the actual component modules with synthetic HTTP responses. They cover filters, output routing, ambiguity, managed authentication, account-label fallbacks, request restrictions and error retention.
 
 Request behavior is unchanged from the privately tested 1.0.3 source. Version 1.0.5 describes paid reads as credits from your plan, then your on-demand budget. Its changes are limited to usage descriptions, version metadata and documentation. Appmixer Backoffice confirmed installation of 1.0.5 on October 12. See the release status for hosted action tests on earlier versions. Upstream E2E templates and the copied publisher manifest schema are not included in this first-party package.
+
+Version 1.0.6 updates the speaker-filter help to match the API document of November 6, 2026. Request code is unchanged from 1.0.5. This candidate has not been installed or executed in an Appmixer host.
 
 ## Feedback
 

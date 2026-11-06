@@ -1,7 +1,10 @@
 {
     "name": "appmixer.arcmira",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "changelog": {
+        "1.0.6": [
+            "Clarify that speaker-filtered passages can include other speakers and only known speakers are labeled. Update the hosted connector link. Request behavior is unchanged."
+        ],
         "1.0.5": [
             "Paid reads use credits from your plan, then your on-demand budget. Request behavior is unchanged."
         ],

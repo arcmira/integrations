@@ -2,7 +2,7 @@
     "name": "appmixer.arcmira.core.SearchTranscripts",
     "description": "Search indexed YouTube videos and livestreams for timestamped passages. Returns one complete response envelope with up to 20 ranked results, not a catalog export. Limited coverage goes to the limited output. A paid read uses credits from your plan, then your on-demand budget. API docs: https://arcmira.com/docs.",
     "author": "Arcmira <zeal@arcmira.com>",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "auth": {
         "service": "appmixer:arcmira"
     },
@@ -94,7 +94,7 @@
                         "type": "text",
                         "label": "By",
                         "index": 5,
-                        "tooltip": "Comma-separated person ids (ent_{n}), at most 8. Only passages where one of these people says the query words (each line of a chunk is labeled with its speaker); a non-person id is refused with invalid_query naming its type. Speaker labels cover a minority of shows; an empty result carries a note saying whether the person is labeled anywhere. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve."
+                        "tooltip": "Comma-separated person ids (ent_{n}), at most 8. Only passages where one of these people speaks the query words. A passage can include other speakers' lines; each line with a known speaker starts with that speaker's name. A non-person id is refused with invalid_query naming its type. Speaker labels cover a minority of shows; an empty result carries a note saying whether the person is labeled anywhere. Ids only: a name answers 400 id_required. Resolve names first with GET /v1/entities/resolve."
                     },
                     "kind": {
                         "type": "text",
