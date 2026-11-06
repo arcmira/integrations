@@ -1,4 +1,4 @@
-# Build a source-linked brief from YouTube transcript search
+# Search YouTube transcripts with Arcmira for a source-linked brief
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Playable quote demo](https://arcmira.github.io/integrations/quote-timeline/)
 

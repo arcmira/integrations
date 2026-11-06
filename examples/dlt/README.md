@@ -1,4 +1,4 @@
-# YouTube transcript search snapshots with dlt
+# Search YouTube transcripts with Arcmira and save snapshots with dlt
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)
 
