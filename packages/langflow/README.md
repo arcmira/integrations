@@ -1,10 +1,10 @@
-# Arcmira: YouTube Transcript Search for Langflow
+# Search YouTube and podcast transcripts with Arcmira for Langflow
 
 [Arcmira](https://arcmira.com) · [API documentation](https://arcmira.com/docs) · [API schema](https://api.arcmira.com/v1/openapi.json)
 
 An opt-in Python extension with two native Langflow components:
 
-- **YouTube Transcript Search:** find timestamped passages, retaining source links, coverage and access metadata.
+- **YouTube Transcript Search:** find timestamped passages across indexed YouTube videos and podcasts, retaining source links, coverage and access metadata.
 - **Entity Resolve:** resolve names and handles without silently choosing among ambiguous candidates.
 
 A paid read uses credits from your plan, then your on-demand budget. Arcmira enforces the budget set in your dashboard, so no call takes a spending amount. API plan limits and refusals remain visible. Selecting Premium never triggers a caption fallback. This extension makes one API request per component execution; it does not retry automatically.
