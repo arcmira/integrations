@@ -1,4 +1,4 @@
-# YouTube transcript search with Pydantic AI
+# Search YouTube transcripts with Arcmira in Pydantic AI
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [MCP reference](https://arcmira.com/docs/mcp-server)
 

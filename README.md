@@ -37,7 +37,7 @@ For DSH, the [API documentation preset](examples/dsh) searches documentation wit
 
 For Mastra, the [API documentation guide](https://arcmira.com/docs/documentation-mcp) includes a tested keyless example in the Mastra tab. It searches API documentation; authenticated YouTube research is separate.
 
-For a standard MCP connection, use the authenticated [OpenAI Agents SDK](examples/openai-agents) or [Pydantic AI](examples/pydantic-ai) research example. Both retrieve a timestamped passage without an external model call.
+Search YouTube transcripts with Arcmira using the [OpenAI Agents SDK](examples/openai-agents) or [Pydantic AI](examples/pydantic-ai). These authenticated MCP examples each retrieve a timestamped passage without an external model call.
 
 For creators, the [reel workflow note](examples/reel-workflow) follows source discovery, human selection and a local JavaScript Canvas/ffmpeg edit. The [Remotion quote-card example](examples/remotion-quote-cards) renders saved search excerpts into an 18-second vertical video with source attribution.
 

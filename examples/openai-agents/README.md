@@ -1,4 +1,4 @@
-# YouTube transcript search with the OpenAI Agents SDK
+# Search YouTube transcripts with Arcmira in the OpenAI Agents SDK
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [MCP reference](https://arcmira.com/docs/mcp-server)
 
