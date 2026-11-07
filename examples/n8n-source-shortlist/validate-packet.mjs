@@ -23,4 +23,4 @@ assert.equal(w.nodes.filter(n => n.type === 'n8n-nodes-base.httpRequest').length
 assert.ok(!/(arc_sk_[A-Za-z0-9]+|resumeToken|executionData|\/Users\/|webhookId|instanceId|credentialId)/.test(bytes.toString()));
 assert.ok(w.nodes.every(n => !n.credentials || Object.keys(n.credentials).length === 0));
 assert.ok(!http.parameters.options.pagination);
-console.log('PASS: unchanged workflow digest, empty credential binding, one fixed-limit GET, no execution state or known credential patterns. No network requests.');
+console.log('PASS: current distributed workflow digest, empty credential binding, one fixed-limit GET, no execution state or known credential patterns. No network requests.');

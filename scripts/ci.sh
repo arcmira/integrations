@@ -111,6 +111,8 @@ python3 -m unittest discover -s examples/transcript-webvtt -p 'test_*.py' -v
 python3 -m unittest discover -s examples/resumable-channel-index -p 'test_*.py' -v
 node --test examples/quote-timeline/timeline.test.cjs
 node examples/n8n-clip-shortlist/check.mjs
+node scripts/test-search-timestamps.mjs
+python3 scripts/test-notebook-timestamps.py
 python3 scripts/test-python-release.py
 python3 scripts/test-n8n-release.py
 git diff --check

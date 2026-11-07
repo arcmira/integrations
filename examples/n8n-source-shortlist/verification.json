@@ -46,9 +46,9 @@
     "premium_transcript_requests": 0
   },
   "workflow_file": "arcmira-source-shortlist.n8n.json",
-  "distributed_workflow_sha256": "c776e6a8b642972dfc38da574486b3b0dabfb06c6d048447255e16f3b81d83d9",
+  "distributed_workflow_sha256": "ae60b3833015c416605aaa035fb06d5640585e810039ff444f42f27e9ec3949a",
   "tested_source_sha256": "a50d1815fbd8dd45aa0b64486d1e5f92e16612eb15d07f335c6effe5f9d008bc",
-  "packaging_changes": "Removed only local workflow id and empty pinData/tags. Nodes, parameters, code, connections, settings and inactive state match the live-tested source. No execution or account data included.",
+  "packaging_changes": "The November 7 revision prefers line_start_seconds for original-video links and retains both matched-line and excerpt-start metadata. Wiring and request settings are unchanged. The October 7 live evidence applies to the historical digest, not this revised mapping.",
   "live_execution_scope": "One actual authenticated workflow execution on n8n 2.41.3, with a Free account. Separate before/after account usage reads measured zero credit or on-demand change. No new execution performed while packaging.",
   "limits": [
     "Browser-editor import/run not exercised.",
@@ -56,5 +56,12 @@
     "No playback, speaker identity, attribution or reuse-rights verification.",
     "Not an n8n Cloud verification, WorkflowHub endorsement or publication receipt."
   ],
-  "license_scope": "Apache-2.0 applies to workflow code and documentation. It does not license third-party video or transcript content or hosted-service access."
+  "license_scope": "Apache-2.0 applies to workflow code and documentation. It does not license third-party video or transcript content or hosted-service access.",
+  "historical_distributed_workflow_sha256": "c776e6a8b642972dfc38da574486b3b0dabfb06c6d048447255e16f3b81d83d9",
+  "historical_packaging_changes": "Removed only local workflow id and empty pinData/tags. Nodes, parameters, code, connections, settings and inactive state match the live-tested source. No execution or account data included.",
+  "mapping_revision": {
+    "date": "2026-11-07",
+    "validation": "node scripts/test-search-timestamps.mjs; node examples/n8n-source-shortlist/validate-packet.mjs",
+    "scope": "Offline execution of the distributed mapping with synthetic matched-line, zero, null and older-response fixtures. No new live API or n8n editor execution."
+  }
 }

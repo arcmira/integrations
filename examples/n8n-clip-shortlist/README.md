@@ -20,7 +20,7 @@ The CSV preserves complete returned passages and available speaker labels, plus 
 
 The workflow was imported and executed in n8n 2.41.3 on October 13–14, 2026. A fixture execution produced a checked CSV, and one authenticated live execution exported five source-linked passage rows. These bounded checks do not establish results for every query or account. No credentials, execution records or live transcript excerpts are included.
 
-Packaging removes only the local workflow identifier and empty pinned-data object. Nodes and connections match the tested export. Run `node examples/n8n-clip-shortlist/check.mjs` from the repository root to check the mapping behavior and credential-free packaging.
+The original packaging removed the local workflow identifier and empty pinned-data object. The November 7 mapping revision prefers `line_start_seconds` for video links, falling back to `start_seconds`, and preserves both fields. Connections are unchanged. This revision has offline mapping coverage; the earlier live run does not verify the revised mapping. Run `node examples/n8n-clip-shortlist/check.mjs` from the repository root to check the mapping behavior and credential-free packaging.
 
 The [three-result JSON example](../n8n-source-shortlist) provides a different output format and explicit date inputs. This CSV example is an importable workflow; publication in n8n's template catalog is separate.
 
