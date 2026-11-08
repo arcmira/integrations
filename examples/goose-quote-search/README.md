@@ -1,6 +1,8 @@
-# Search YouTube and podcast transcripts with goose
+# Arcmira: YouTube Transcript Search
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [MCP setup](https://arcmira.com/docs/mcp-server) · [Download the recipe](https://raw.githubusercontent.com/arcmira/integrations/master/examples/goose-quote-search/quote-search.yaml)
+
+YouTube transcript search and monitoring for your AI: exact quotes, full transcripts and speakers.
 
 Give goose a topic to find up to five quoted passages across indexed videos and podcasts. Each result should include the channel, video title and a timestamped link so you can check the words against the recording.
 
