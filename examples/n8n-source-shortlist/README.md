@@ -25,7 +25,11 @@ A passage timestamp is a source-navigation hint, not a verified edit boundary. C
 
 On October 7, 2026, the actual workflow ran once with a Free account in isolated n8n 2.41.3. It returned three passages, retained the applied date window and source fields, and used zero measured credits with on-demand disabled. The response was not partial, but its search index reported `catching_up`. The live response, transcript excerpts, credential and raw execution state are not in this package.
 
-`verification.json` records bounded results and the container image digest. The original packaging removed the local workflow identifier and empty pin/tag metadata. The November 7 mapping revision prefers `line_start_seconds` for video links, falling back to `start_seconds`, and preserves both fields. Wiring and request settings are unchanged. Offline mapping checks cover the revision; no fresh live run is claimed. The historical live-tested digest remains in the verification record. Browser-editor validation, broader queries and WorkflowHub registration remain unverified. Results and the index can change on later executions.
+`verification.json` records bounded results and the container image digest. The original packaging removed the local workflow identifier and empty pin/tag metadata. The November 7 mapping revision prefers `line_start_seconds` for video links, falling back to `start_seconds`, and preserves both fields. Wiring and request settings are unchanged.
+
+On November 7, 2026 Pacific, the revised workflow also passed three native n8n 2.41.3 executions with synthetic HTTP responses and networking disabled. They cover matched-line timestamps, zero, null and missing timestamp fallback, preserved source links and coverage notes, and an empty result. The mapping nodes were unchanged. [Native verification](native-verification.json) records the tested workflow digest and scope; no fresh authenticated API run is claimed.
+
+The historical live-tested digest remains in the verification record. Browser-editor validation, broader queries and WorkflowHub registration remain unverified. Results and the index can change on later executions.
 
 Run `node validate-packet.mjs` to check the distributed workflow's digest, credential placeholders, fixed endpoint/limit and absence of execution state. This is a local packaging check, not a live API test.
 

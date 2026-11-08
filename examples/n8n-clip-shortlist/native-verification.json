@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-11-08T00:42:42.262969+00:00",
+  "host_version": "2.41.3",
+  "image": "n8nio/n8n@sha256:a92e49f8dee93d11a56574cafd98c78681bd9b839ead3b2e7268b2a22db18234",
+  "workflow_file": "arcmira-clip-shortlist.n8n.json",
+  "workflow_sha256": "75120d6995579fa034a3ceee50c27ab7d000b14a287150f83c175786a81cfaaf",
+  "execution_method": "Import the workflow, then execute its fixture-only identifier through the n8n CLI. The HTTP node is replaced with a Code node returning a synthetic response; original mapping nodes and connections are unchanged.",
+  "network": "Docker networking disabled",
+  "product_credentials_used": false,
+  "live_api_requests": 0,
+  "checks": [
+    {
+      "case": "clip-matched",
+      "result": "pass",
+      "rows": 3,
+      "source_sha256": "75120d6995579fa034a3ceee50c27ab7d000b14a287150f83c175786a81cfaaf"
+    },
+    {
+      "case": "clip-legacy",
+      "result": "pass",
+      "rows": 1,
+      "source_sha256": "75120d6995579fa034a3ceee50c27ab7d000b14a287150f83c175786a81cfaaf"
+    },
+    {
+      "case": "clip-empty",
+      "result": "pass",
+      "behavior": "Stops before CSV export with explicit no-passages error."
+    },
+    {
+      "case": "clip-matched-csv",
+      "result": "pass",
+      "rows": 3,
+      "behavior": "Actual exported CSV round-trips commas, quotes, timestamps and coverage fields."
+    },
+    {
+      "case": "clip-legacy-csv",
+      "result": "pass",
+      "rows": 1,
+      "behavior": "Actual exported CSV round-trips commas, quotes, timestamps and coverage fields."
+    }
+  ],
+  "limits": [
+    "Does not verify live API authentication or current live results.",
+    "Does not verify browser-editor import, n8n Cloud, catalog acceptance or npm publication."
+  ],
+  "csv_inspection": "Two additional executions append a diagnostic node after the unchanged CSV export node. The node reads the generated binary through getBinaryDataBuffer. Parsed CSV preserves commas, quotation marks, source links and coverage fields."
+}
