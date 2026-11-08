@@ -2,7 +2,7 @@
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [n8n setup](../../packages/n8n)
 
-The [0.1.0 release](https://github.com/arcmira/integrations/releases/tag/n8n-v0.1.0) includes the locally tested package. Its filename, SHA-256 checksum, source tree and tag are in [current.json](current.json).
+The [0.2.0 release](https://github.com/arcmira/integrations/releases/tag/n8n-v0.2.0) includes the locally tested package with the Arcmira Trigger. Its filename, SHA-256 checksum, source tree and tag are in [current.json](current.json).
 
 ## Prepare a release
 
