@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "langchain-arcmira"
 version = "0.1.7"
-description = "Search indexed YouTube and podcast transcripts for timestamped passages and resolve entities with LangChain and LangGraph."
+description = "YouTube transcript search for AI agents: the exact quote, often who said it, and a watch link cued to the second."
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]

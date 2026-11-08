@@ -1,1 +1,1 @@
-{"name":"@pipedream/arcmira", "version":"0.0.1", "description":"YouTube transcript search, entity resolution and channel sponsor evidence through the Arcmira API.", "type":"module", "private":true, "main":"arcmira.app.mjs", "dependencies":{"@pipedream/platform":"3.1.1"}}
+{"name":"@pipedream/arcmira", "version":"0.0.1", "description":"YouTube transcript search for Pipedream: the exact quote and its second, name lookup, and a channel's sponsors.", "type":"module", "private":true, "main":"arcmira.app.mjs", "dependencies":{"@pipedream/platform":"3.1.1"}}

@@ -78,5 +78,229 @@
       "candidates": [],
       "note": "Synthetic ambiguous response."
     }
+  },
+  "AlertListResponse": {
+    "example": {
+      "alerts": [
+        {
+          "id": "dlv_fixture0001",
+          "tracker_id": "trk_fixture",
+          "monitor_id": "mon_fixture",
+          "entity_id": "ent_14",
+          "mention_id": "men_101",
+          "video_id": "dQw4w9WgXcQ",
+          "excerpt_id": "exc_fixture",
+          "evidence_kind": "excerpt",
+          "channel": "email",
+          "status": "sent",
+          "final_status": "delivered",
+          "error_message": null,
+          "scheduled_at": null,
+          "sent_at": "2026-11-06T17:05:00.000Z",
+          "created_at": "2026-11-06T17:04:00.000Z",
+          "tracker": {
+            "id": "trk_fixture",
+            "entity_name": "Ramp",
+            "entity_type": "organization",
+            "display_name": null
+          },
+          "monitor": {
+            "id": "mon_fixture",
+            "name": "Synthetic monitor"
+          }
+        }
+      ],
+      "has_more": false,
+      "next_cursor": null
+    }
+  },
+  "MonitorListResponse": {
+    "example": {
+      "monitors": [
+        {
+          "id": "mon_instant",
+          "name": "Instant email",
+          "paused": false,
+          "notify_emails": [
+            "owner@example.com"
+          ],
+          "email_recipients": [
+            {
+              "email": "owner@example.com",
+              "role": "owner",
+              "user_id": "usr_fixture",
+              "status": "active"
+            }
+          ],
+          "notify_frequency": "realtime",
+          "digest_day": "monday",
+          "digest_time": "09:00",
+          "notify_webhook": false,
+          "webhook_url": null,
+          "webhook_secret_set": false,
+          "webhook_secret_hint": null,
+          "webhook_failures": 0,
+          "webhook_disabled_at": null,
+          "webhook_disabled_reason": null,
+          "notify_slack": false,
+          "slack_integration_id": null,
+          "slack_channel_id": null,
+          "created_at": "2026-11-01T12:00:00.000Z",
+          "updated_at": "2026-11-06T12:00:00.000Z",
+          "access": "account",
+          "tracker_count": 2,
+          "alerts_this_month": 4,
+          "slack_integration": null
+        },
+        {
+          "id": "mon_slack_digest",
+          "name": "Slack with a daily digest",
+          "paused": false,
+          "notify_emails": [
+            "owner@example.com"
+          ],
+          "email_recipients": [
+            {
+              "email": "owner@example.com",
+              "role": "owner",
+              "user_id": "usr_fixture",
+              "status": "active"
+            }
+          ],
+          "notify_frequency": "daily",
+          "digest_day": "monday",
+          "digest_time": "09:00",
+          "notify_webhook": false,
+          "webhook_url": null,
+          "webhook_secret_set": false,
+          "webhook_secret_hint": null,
+          "webhook_failures": 0,
+          "webhook_disabled_at": null,
+          "webhook_disabled_reason": null,
+          "notify_slack": true,
+          "slack_integration_id": "slk_fixture",
+          "slack_channel_id": "C0FIXTURE",
+          "created_at": "2026-11-01T12:00:00.000Z",
+          "updated_at": "2026-11-06T12:00:00.000Z",
+          "access": "account",
+          "tracker_count": 2,
+          "alerts_this_month": 4,
+          "slack_integration": {
+            "id": "slk_fixture",
+            "team_name": "Synthetic team",
+            "channel_name": "alerts"
+          }
+        },
+        {
+          "id": "mon_daily",
+          "name": "Daily digest only",
+          "paused": false,
+          "notify_emails": [
+            "owner@example.com"
+          ],
+          "email_recipients": [
+            {
+              "email": "owner@example.com",
+              "role": "owner",
+              "user_id": "usr_fixture",
+              "status": "active"
+            }
+          ],
+          "notify_frequency": "daily",
+          "digest_day": "monday",
+          "digest_time": "09:00",
+          "notify_webhook": false,
+          "webhook_url": null,
+          "webhook_secret_set": false,
+          "webhook_secret_hint": null,
+          "webhook_failures": 0,
+          "webhook_disabled_at": null,
+          "webhook_disabled_reason": null,
+          "notify_slack": false,
+          "slack_integration_id": null,
+          "slack_channel_id": null,
+          "created_at": "2026-11-01T12:00:00.000Z",
+          "updated_at": "2026-11-06T12:00:00.000Z",
+          "access": "account",
+          "tracker_count": 2,
+          "alerts_this_month": 0,
+          "slack_integration": null
+        },
+        {
+          "id": "mon_hourly_pending",
+          "name": "Hourly digest, pending recipient",
+          "paused": false,
+          "notify_emails": [
+            "guest@example.com"
+          ],
+          "email_recipients": [
+            {
+              "email": "guest@example.com",
+              "role": "external",
+              "user_id": null,
+              "status": "pending"
+            }
+          ],
+          "notify_frequency": "hourly",
+          "digest_day": "monday",
+          "digest_time": "09:00",
+          "notify_webhook": false,
+          "webhook_url": null,
+          "webhook_secret_set": false,
+          "webhook_secret_hint": null,
+          "webhook_failures": 0,
+          "webhook_disabled_at": null,
+          "webhook_disabled_reason": null,
+          "notify_slack": false,
+          "slack_integration_id": null,
+          "slack_channel_id": null,
+          "created_at": "2026-11-01T12:00:00.000Z",
+          "updated_at": "2026-11-06T12:00:00.000Z",
+          "access": "account",
+          "tracker_count": 2,
+          "alerts_this_month": 0,
+          "slack_integration": null
+        },
+        {
+          "id": "mon_paused",
+          "name": "Paused",
+          "paused": true,
+          "notify_emails": [
+            "owner@example.com"
+          ],
+          "email_recipients": [
+            {
+              "email": "owner@example.com",
+              "role": "owner",
+              "user_id": "usr_fixture",
+              "status": "active"
+            }
+          ],
+          "notify_frequency": "realtime",
+          "digest_day": "monday",
+          "digest_time": "09:00",
+          "notify_webhook": false,
+          "webhook_url": null,
+          "webhook_secret_set": false,
+          "webhook_secret_hint": null,
+          "webhook_failures": 0,
+          "webhook_disabled_at": null,
+          "webhook_disabled_reason": null,
+          "notify_slack": true,
+          "slack_integration_id": "slk_fixture",
+          "slack_channel_id": "C0FIXTURE",
+          "created_at": "2026-11-01T12:00:00.000Z",
+          "updated_at": "2026-11-06T12:00:00.000Z",
+          "access": "account",
+          "tracker_count": 2,
+          "alerts_this_month": 4,
+          "slack_integration": {
+            "id": "slk_fixture",
+            "team_name": "Synthetic team",
+            "channel_name": "alerts"
+          }
+        }
+      ]
+    }
   }
 }

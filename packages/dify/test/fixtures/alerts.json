@@ -1,0 +1,33 @@
+{
+  "alerts": [
+    {
+      "id": "dlv_fixture0002",
+      "tracker_id": "trk_fixture",
+      "monitor_id": "mon_fixture",
+      "entity_id": "ent_14",
+      "mention_id": "men_102",
+      "video_id": "dQw4w9WgXcQ",
+      "excerpt_id": "exc_fixture",
+      "evidence_kind": "excerpt",
+      "channel": "email",
+      "status": "sent",
+      "final_status": "delivered",
+      "error_message": null,
+      "scheduled_at": null,
+      "sent_at": "2026-11-06T17:05:00.000Z",
+      "created_at": "2026-11-06T17:04:00.000Z",
+      "tracker": {
+        "id": "trk_fixture",
+        "entity_name": "Ramp",
+        "entity_type": "organization",
+        "display_name": null
+      },
+      "monitor": {
+        "id": "mon_fixture",
+        "name": "Synthetic monitor"
+      }
+    }
+  ],
+  "has_more": true,
+  "next_cursor": null
+}

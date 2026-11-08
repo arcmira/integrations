@@ -60,9 +60,22 @@ test("entity ambiguity stays intact without selecting or following a suggestion"
 });
 test("sponsor defaults omit Pro+ filters and preserve withheld-result metadata", async () => {
   const data = { channel: { youtube_channel_id: CHANNEL }, sponsors: [], meta: { min_ad_reads: 3, count: 0, total: 12 }, access: { gate: "plan" } }, s = scenario(data);
-  assert.deepEqual(await s.run(sponsors, { channelId: CHANNEL }), data);
+  assert.deepEqual(await s.run(sponsors, { channelId: CHANNEL }), { ...data, note: "First 0 of 12 sponsors. The full list needs a paid plan: https://arcmira.com/pricing" });
   assert.deepEqual(s.calls[0].params, {});
   assert.equal(s.calls[0].url, `https://api.arcmira.com/v1/channels/${CHANNEL}/sponsors`);
+});
+test("a free key's cut sponsor list says so in its data and summary", async () => {
+  const data = fixture("sponsors-free"), s = scenario(data);
+  const note = "First 5 of 12 sponsors. The full list needs Pro+: https://arcmira.com/pricing?src=api-boundary";
+  assert.deepEqual(await s.run(sponsors, { channelId: CHANNEL }), { ...data, note });
+  assert.equal(s.exported.$summary, note);
+});
+test("a full sponsor list carries no cut note", async () => {
+  const data = { ...fixture("sponsors-free"), meta: { min_ad_reads: 3, count: 5, total: 5 } };
+  delete data.access;
+  const s = scenario(data);
+  assert.deepEqual(await s.run(sponsors, { channelId: CHANNEL }), data);
+  assert.match(s.exported.$summary, /^Returned 5 sponsor records/);
 });
 test("explicit sponsor filters are preserved", async () => {
   const s = scenario({ sponsors: [], meta: { total: 0, count: 0 } });

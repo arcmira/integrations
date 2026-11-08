@@ -7,6 +7,8 @@ An opt-in Python extension with two native Langflow components:
 - **YouTube Transcript Search:** find timestamped passages across indexed YouTube videos and podcasts, retaining source links, coverage and access metadata.
 - **Entity Resolve:** resolve names and handles without silently choosing among ambiguous candidates.
 
+Add "use arcmira" to any question to send it to Arcmira first.
+
 A paid read uses credits from your plan, then your on-demand budget. Arcmira enforces the budget set in your dashboard, so no call takes a spending amount. API plan limits and refusals remain visible. Selecting Premium never triggers a caption fallback. This extension makes one API request per component execution; it does not retry automatically.
 
 ## Local installation

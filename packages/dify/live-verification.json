@@ -1,0 +1,167 @@
+{
+  "checked_at": "2026-11-08T05:23:29+00:00",
+  "host": "Dify Community Edition, self-hosted with the official docker compose",
+  "host_version": "1.19.0",
+  "compose_source": "langgenius/dify tag 1.19.0, docker directory, default profiles weaviate, postgresql, collaboration",
+  "plugin_daemon_signature_check": "FORCE_VERIFYING_SIGNATURE=false (unsigned local package)",
+  "images": {
+    "busybox:latest": "busybox@sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4",
+    "cr.weaviate.io/semitechnologies/weaviate:1.39.13": "cr.weaviate.io/semitechnologies/weaviate@sha256:ad2b986bbe4666fbd5302a5ee0cc6c74a048c4c769198d46147ea232d46a2dd8",
+    "langgenius/dify-agent-backend:1.19.0": "langgenius/dify-agent-backend@sha256:005e04e83a54623fff131072000e76e99480aabc2773a08e848cc8aabf2eaf4c",
+    "langgenius/dify-agent-local-sandbox:1.19.0": "langgenius/dify-agent-local-sandbox@sha256:ae762c685009e5a7d036be3bd903724f697d92ca4c17256398c1a2caaa64140c",
+    "langgenius/dify-api:1.19.0": "langgenius/dify-api@sha256:0d67842aedcb9b5884f75b88c4a5dd812e637916bff1ca892831f7ace2f3204f",
+    "langgenius/dify-plugin-daemon:0.6.14-local": "langgenius/dify-plugin-daemon@sha256:17ee86306a35c2c7e5910016f72e441c0252f0416bb9a845862088e9f8efa873",
+    "langgenius/dify-sandbox:0.2.15": "langgenius/dify-sandbox@sha256:750e1111426ef31a9217b81c98cccfb750f17b182af3221102e420afa9f0928e",
+    "langgenius/dify-web:1.19.0": "langgenius/dify-web@sha256:f5f1ad000d6a268ae6b29b84c5095069fbd5994cbe43f937a3d32caa00038b4c",
+    "nginx:latest": "nginx@sha256:165ddde8751e75a1c907d24ef10d9f6deb08b57e0fe56caf67512486aff76d82",
+    "postgres:15-alpine": "postgres@sha256:aae6554de426ae1990f1a939ff183a0299146cf7142a6f4c379c3357af9cc2d8",
+    "redis:6-alpine": "redis@sha256:5e38c443bd83d7d5214648d5de0a7d47f72cbb5141c50dcabcfc40f191b5b369",
+    "ubuntu/squid:latest": "ubuntu/squid@sha256:6a097f68bae708cedbabd6188d68c7e2e7a38cedd05a176e1cc0ba29e3bbe029"
+  },
+  "plugin": {
+    "id": "arcmira/arcmira",
+    "version": "0.1.5",
+    "package_file": "arcmira-0.1.5.difypkg",
+    "package_sha256": "317a9af98e82a1394741af5ffc99bfb7fef6bdbc9cd77a96906bd1df4ec0c9b4",
+    "dify_unique_identifier": "arcmira/arcmira:0.1.5@3653e06508f0ec755512538bcf0af37fdbb24fa3886fc54c90714b5a523c240a",
+    "built_with": "dify-plugin CLI 0.6.15 (dify plugin package), as the package README describes",
+    "package_contents": "21 files; .difyignore excluded test/ and local environments",
+    "install_source": "package",
+    "verified": false,
+    "dependency_install": "plugin daemon ran uv sync --frozen from pyproject.toml and uv.lock",
+    "tools_registered": [
+      "search",
+      "resolve",
+      "list_alerts"
+    ],
+    "source_sha256": {
+      "tools/list_alerts.py": "6858be11603cd2b7e8dc30e9fc90211e03ebd80cd14e13911e7d6262163f7cc1",
+      "tools/list_alerts.yaml": "768d0c29e3e16bfe520195bd40ce9fddf99ecf8c43043013f65de1013f646459",
+      "arcmira_api.py": "a18f913b8f2642dfa1aee7476d8eefd1b0aac5cc6f4371c671fa119a684fc932",
+      "manifest.yaml": "940c6dfe9400090c33ef47df2f66ee77a8a9f5478a19eb242e7d20d1dcd7cfce"
+    }
+  },
+  "credential": {
+    "method": "Console API builtin tool provider credential, type api-key, set from an environment variable",
+    "validation": "pass (plugin validate_credentials, which reads GET /v1/me)"
+  },
+  "execution_method": "Imported a five-node workflow DSL (start, List monitor alerts, YouTube transcript search, Resolve an entity, end) through the console API and ran the draft through POST /console/api/apps/{app_id}/workflows/draft/run. Each tool node used the installed plugin and the saved workspace credential. No language-model node.",
+  "network": "Dify bound to 127.0.0.1 only; the plugin called https://api.arcmira.com",
+  "product_credentials_used": true,
+  "live_api_requests": 4,
+  "live_api_requests_note": "GET /v1/me for credential validation, then one GET each for /v1/monitors/{id}/alerts, /v1/search and /v1/entities/resolve. No writes.",
+  "workflow_run": {
+    "status": "succeeded",
+    "elapsed_seconds": 2.929,
+    "total_steps": 5,
+    "total_tokens": 0,
+    "error": null
+  },
+  "checks": [
+    {
+      "tool": "list_alerts",
+      "label": "List monitor alerts",
+      "inputs": {
+        "monitor_id": "a live monitor",
+        "limit": 5
+      },
+      "result": "pass",
+      "node_status": "succeeded",
+      "elapsed_seconds": 0.423,
+      "rows": 5,
+      "has_more": true,
+      "channels": [
+        "slack"
+      ],
+      "statuses": [
+        "sent/delivered"
+      ],
+      "samples": [
+        {
+          "mention_id": "men_4274084",
+          "video_id": "GE5V7yl9kzc",
+          "channel": "slack",
+          "status": "sent",
+          "final_status": "delivered",
+          "created_at": "2026-11-07T16:33:00.718Z",
+          "entity": "Vercel"
+        },
+        {
+          "mention_id": "men_4274083",
+          "video_id": "GE5V7yl9kzc",
+          "channel": "slack",
+          "status": "sent",
+          "final_status": "delivered",
+          "created_at": "2026-11-07T16:32:59.722Z",
+          "entity": "Cloudflare"
+        }
+      ]
+    },
+    {
+      "tool": "search",
+      "label": "YouTube transcript search",
+      "inputs": {
+        "q": "Cloudflare",
+        "limit": 3
+      },
+      "result": "pass",
+      "node_status": "succeeded",
+      "elapsed_seconds": 0.987,
+      "rows": 3,
+      "returned": 3,
+      "sources": [
+        "arcmira_premium",
+        "third_party_quick"
+      ],
+      "search_index": {
+        "missing_before": null,
+        "state": "live"
+      },
+      "samples": [
+        {
+          "video_id": "fiiQSmduHdE",
+          "start_seconds": 158,
+          "watch_url": "https://arcmira.com/watch?v=fiiQSmduHdE&t=158",
+          "source": "third_party_quick",
+          "published_at": "2025-11-20T18:00:58Z"
+        },
+        {
+          "video_id": "XxKdZcdn1AM",
+          "start_seconds": 4254,
+          "watch_url": "https://arcmira.com/watch?v=XxKdZcdn1AM&t=4254",
+          "source": "arcmira_premium",
+          "published_at": "2026-06-05T21:12:27Z"
+        }
+      ],
+      "watch_url_note": "Returned watch links also carry Arcmira attribution query parameters; they are omitted here."
+    },
+    {
+      "tool": "resolve",
+      "label": "Resolve an entity",
+      "inputs": {
+        "q": "Cloudflare"
+      },
+      "result": "pass",
+      "node_status": "succeeded",
+      "elapsed_seconds": 1.42,
+      "rows": 8,
+      "confidence": "exact",
+      "samples": [
+        {
+          "best_id": "ent_125721",
+          "best_name": "Cloudflare",
+          "best_type": "organization",
+          "match": "exact"
+        }
+      ],
+      "note": "No limit was set; 8 candidates came back, matching the tool's documented default of 8."
+    }
+  ],
+  "limits": [
+    "One run of each tool in one self-hosted Community Edition 1.19.0 host with plugin daemon 0.6.14-local on linux/arm64; not Dify Cloud, amd64 or other Dify versions.",
+    "The package was installed as an unsigned local package with signature checks off; it does not verify Marketplace review, signing or publication of 0.1.5.",
+    "Ran the workflow draft through the console API, not the browser editor, a published app, the service API or an agent app choosing tools through a model.",
+    "Used one internal test key on one monitor; it does not verify free or paid plan limits, credit accounting, error paths (403, 404, 429) or has_more paging past one page.",
+    "Live results reflect the index and alert history at checked_at; later runs return different rows."
+  ]
+}

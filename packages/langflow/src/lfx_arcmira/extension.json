@@ -3,7 +3,7 @@
   "id": "lfx-arcmira",
   "version": "0.1.0",
   "name": "Arcmira: YouTube Transcript Search",
-  "description": "Search indexed YouTube and podcast transcripts with Arcmira. Find timestamped passages and resolve entities while preserving coverage and ambiguity. https://arcmira.com/docs",
+  "description": "YouTube transcript search for AI agents: the exact quote, often who said it, and a watch link cued to the second.",
   "lfx": {
     "compat": [
       "1"

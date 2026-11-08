@@ -17,7 +17,7 @@ npm test
 npm run validate
 ```
 
-The 22 fixture tests exercise the real native action modules and Pipedream platform HTTP wrapper with synthetic Axios responses. A socket guard rejects any attempt to access the network. Tests cover complete response envelopes, ambiguous entities, source and filter preservation, bounded requests, structured refusals, malformed responses, redaction, redirects and connection permissions. They do not exercise Pipedream's managed authentication, hosted execution or registry discovery.
+The 24 fixture tests exercise the real native action modules and Pipedream platform HTTP wrapper with synthetic Axios responses. A socket guard rejects any attempt to access the network. Tests cover complete response envelopes, a sponsor list cut short by the plan, ambiguous entities, source and filter preservation, bounded requests, structured refusals, malformed responses, redaction, redirects and connection permissions. They do not exercise Pipedream's managed authentication, hosted execution or registry discovery.
 
 The local validator checks component shape, JavaScript syntax and parameter parity with the included public OpenAPI snapshot. Run `./scripts/ci.sh` from the repository root to check all integrations.
 

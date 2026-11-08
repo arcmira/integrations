@@ -85,6 +85,7 @@ def test_preview_fails_before_emitting_records(monkeypatch, updates):
     ({"error": {"code": "quota_exceeded"}}, 402, "quota_exceeded"),
     (["unexpected error shape"], 503, "http_error"),
     ({"error": {"code": "rate_limited"}}, 429, "rate_limited"),
+    ({"error": {"code": "insufficient_scope", "gate": "key"}}, 403, "insufficient_scope"),
     ({}, 302, "http_error"),
 ])
 def test_failures_preserve_status_and_do_not_retry(monkeypatch, body, status, expected):
@@ -148,3 +149,67 @@ def test_native_singer_cli_emits_schema_and_record(monkeypatch, tmp_path):
     assert records[0]["stream"] == "mentions"
     assert records[0]["record"] == MENTION
     assert any(m.get("type") == "SCHEMA" and m["key_properties"] == ["id"] for m in messages)
+
+
+UNLOCK = "https://arcmira.com/pricing?src=api-boundary"
+
+
+def plan_refusal(code, param=None, url=UNLOCK):
+    error = {"type": "permission_error", "code": code, "gate": "plan", "message": "Synthetic refusal.",
+             "unlock": {"tier": "pro_plus", "url": url, "offer": None},
+             "doc_url": f"https://arcmira.com/docs/errors#{code}", "request_id": "req_fixture"}
+    return response({"error": {**error, "param": param} if param else error}, 403)
+
+
+def sync(monkeypatch, tmp_path, by_stream, **updates):
+    monkeypatch.setattr(requests, "get", lambda url, **kwargs: by_stream[url.rsplit("/", 1)[1]])
+    config = tmp_path / "config.json"
+    config.write_text(json.dumps({**CONFIG, **updates}))
+    result = CliRunner().invoke(TapArcmira.cli, ["--config", str(config)])
+    messages = [json.loads(line) for line in result.stdout.splitlines() if line.startswith("{")]
+    return result, [m["stream"] for m in messages if m.get("type") == "RECORD"]
+
+
+def skipped(caplog):
+    return [r.getMessage() for r in caplog.records if r.levelname == "WARNING" and r.getMessage().startswith("Skipped")]
+
+
+@pytest.mark.parametrize("refused,refusal,exported,line", [
+    ("recommendations", plan_refusal("recommendations_not_enabled"), "mentions",
+     f"Skipped the recommendations stream: this Arcmira plan does not include the recommendations stream (recommendations_not_enabled). Unlock it at {UNLOCK}"),
+    ("mentions", plan_refusal("filter_requires_paid", "before"), "recommendations",
+     f"Skipped the mentions stream: this Arcmira plan does not include the before filter (filter_requires_paid). Unlock it at {UNLOCK}"),
+])
+def test_plan_refused_stream_is_skipped_and_the_rest_finish(monkeypatch, tmp_path, caplog, refused, refusal, exported, line):
+    ok = {"mentions": response(page()), "recommendations": response({"recommendations": [RECOMMENDATION], "has_more": False, "next_cursor": None})}
+    result, records = sync(monkeypatch, tmp_path, {**ok, refused: refusal}, include_recommendations=True)
+    assert result.exit_code == 0, result.output
+    assert records == [exported]
+    assert skipped(caplog) == [line]
+
+
+@pytest.mark.parametrize("include_recommendations", [False, True])
+def test_free_key_refused_on_every_stream_fails_with_the_unlock(monkeypatch, tmp_path, caplog, include_recommendations):
+    by_stream = {"mentions": plan_refusal("filter_requires_paid", "before"), "recommendations": plan_refusal("recommendations_not_enabled")}
+    result, records = sync(monkeypatch, tmp_path, by_stream, include_recommendations=include_recommendations)
+    assert result.exit_code != 0
+    assert records == []
+    assert len(skipped(caplog)) == (2 if include_recommendations else 1)
+    assert isinstance(result.exception, FatalAPIError)
+    assert f"does not include any selected stream. Unlock them at {UNLOCK}" in str(result.exception)
+
+
+def test_plan_refusal_after_records_fails_instead_of_skipping(monkeypatch):
+    responses = iter([response(page(has_more=True, next_cursor="signed-cursor")), plan_refusal("filter_requires_paid", "cursor")])
+    monkeypatch.setattr(requests, "get", lambda url, **kwargs: next(responses))
+    stream = tap().streams["mentions"].get_records(None)
+    assert next(stream) == MENTION
+    with pytest.raises(FatalAPIError, match="HTTP 403: filter_requires_paid"):
+        next(stream)
+
+
+def test_skip_line_prints_only_an_arcmira_unlock_url(monkeypatch, caplog):
+    monkeypatch.setattr(requests, "get", Mock(return_value=plan_refusal("recommendations_not_enabled", url="https://unrelated.example/\nfake")))
+    t = tap(include_recommendations=True)
+    assert list(t.streams["recommendations"].get_records(None)) == []
+    assert skipped(caplog)[0].endswith("Unlock it at https://arcmira.com/pricing")

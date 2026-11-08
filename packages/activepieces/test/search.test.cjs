@@ -12,7 +12,8 @@ const evidence = { chunks: [{ text: 'Synthetic passage for testing.', start_seco
 test('framework exposes the approved title, documentation and secret connection', () => {
   const meta = arcmira.metadata();
   assert.equal(meta.displayName, 'Arcmira: YouTube Transcript Search');
-  assert.match(meta.description, /https:\/\/arcmira.com\/docs/);
+  assert.equal(meta.description, require('../package.json').description, 'piece and npm descriptions match');
+  assert.match(meta.auth.description, /https:\/\/arcmira.com\/docs/);
   assert.equal(meta.auth.type, 'SECRET_TEXT');
   assert.deepEqual(Object.keys(arcmira.actions()), ['search_transcripts']);
   assert.deepEqual(arcmira.triggers(), {});

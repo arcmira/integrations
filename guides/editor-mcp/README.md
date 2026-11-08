@@ -50,6 +50,6 @@ To remove the power, run `kiro-cli powers uninstall arcmira`. [Kiro’s power in
 
 ## Try a search
 
-> Find three recent passages about datacenter power demand. For each one, give me the quote, channel, publication date and timestamped link so I can check it against the original recording.
+> Find three passages about datacenter power demand. For each one, give me the quote, channel, publication date and timestamped link so I can check it against the original recording.
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [MCP tools and account access](https://arcmira.com/docs/mcp-server)

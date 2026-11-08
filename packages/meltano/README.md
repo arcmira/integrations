@@ -4,7 +4,7 @@
 
 Export YouTube mentions and optional recommendation classifications for selected entities and a publication window. Records retain their source video, timestamps and analysis fields.
 
-This is a locally tested Singer source preview. It is not on Meltano Hub or PyPI. A successful authenticated export remains unverified. Synthetic tap output has been loaded into target-duckdb 0.8.0 with DuckDB 1.5.5; other destinations remain unverified. A prior free-account run stopped at `403 filter_requires_paid` without emitting records or using credits. The tap keeps the requested filters when access is refused.
+This is a locally tested Singer source preview. It is not on Meltano Hub or PyPI. A successful authenticated export remains unverified. Synthetic tap output has been loaded into target-duckdb 0.8.0 with DuckDB 1.5.5; other destinations remain unverified. A free key exports nothing. Free plans refuse the `before` filter, which every run sends, with `403 filter_requires_paid`, and recommendations need Pro+. A prior free-account run stopped at that refusal without emitting records or using credits. The tap keeps the requested filters when access is refused.
 
 ## Try the source
 
@@ -18,7 +18,7 @@ export TAP_ARCMIRA_API_KEY='your-key'
 meltano invoke tap-arcmira --discover
 ```
 
-Before exporting, replace `entity_ids`, `after` and `before` in `meltano.yml` with your intended scope. Resolve entity names with the [API](https://arcmira.com/docs). `before` is exclusive. You can set `channel_id` to one channel and opt into `include_recommendations` if your account permits it. Keep credentials in the environment, outside the project file.
+Before exporting, replace `entity_ids`, `after` and `before` in `meltano.yml` with your intended scope. Resolve entity names with the [API](https://arcmira.com/docs). `before` is exclusive. You can set `channel_id` to one channel and opt into `include_recommendations` on a Pro+ plan. Keep credentials in the environment, outside the project file.
 
 ```sh
 meltano invoke tap-arcmira > records.jsonl
@@ -32,6 +32,8 @@ The tap reads `GET /v1/mentions` and optionally `GET /v1/recommendations`. It do
 
 Each run starts a full-table read for the configured entities and window. Defaults allow ten pages of up to 100 records per entity per stream. The tap retains filters and account authentication when following opaque cursors. Repeated cursors, preview responses, malformed records and a page limit with more results remaining stop the run. HTTP errors stop without automatic retry or fallback. Request failures do not print the API key.
 
+When your plan does not include a stream, the API refuses it with HTTP 403 and the tap skips that stream. Recommendations below Pro+ are the common case. The tap logs one warning that names the stream, the refusal code and the unlock URL from the response, then runs the other streams. A skipped stream still sends its schema message, so some targets create an empty table for it; check the log before you read an empty table as no data. If the plan refuses every selected stream, the run exits nonzero. A refusal after a stream has emitted records still stops the run, because that stream would be partial.
+
 The output contains API-visible records in the configured scope, not a complete YouTube archive. Publication dates are not incremental state. Backfilled or edited records may change between runs; there is no transactionally consistent snapshot guarantee. Page-level index and coverage metadata are not emitted as Singer records. Keep the configuration with the resulting dataset to retain its scope.
 
 A failed run may already have emitted records. In the tested target-duckdb 0.8.0 configuration with record validation enabled, a repeat run updated an existing `id` without duplicating it. A row omitted from that run remained in DuckDB. This is upsert behavior, not dataset replacement or deletion.
@@ -42,7 +44,7 @@ These results cover one native target and configuration using synthetic API resp
 
 ## Local checks
 
-The 23 tests exercise the Singer CLI and source behavior with synthetic HTTP responses. They cover pagination, preserved records, recommendations, preview refusals, errors, page limits and configuration validation. No successful authenticated export is claimed. Meltano installation and discovery passed separately; the prior live checks covered invalid-key and paid-filter refusals only.
+The 30 tests exercise the Singer CLI and source behavior with synthetic HTTP responses. They cover pagination, preserved records, recommendations, preview refusals, plan refusals that skip one stream, a run that every stream refuses, errors, page limits and configuration validation. No successful authenticated export is claimed. Meltano installation and discovery passed separately; the prior live checks covered invalid-key and paid-filter refusals only.
 
 A separate native pipeline test connected the actual tap CLI to the unmodified [target-duckdb 0.8.0](https://github.com/jwills/target-duckdb) entrypoint, using DuckDB 1.5.5 and synthetic API responses. The first run stored two mentions and one recommendation, preserving nested entity/media JSON, timestamps and the recommendation quote. A repeat run and a later-page source refusal established the upsert and partial-commit behavior described above. These checks did not use a live Arcmira account.
 

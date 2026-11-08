@@ -1,10 +1,12 @@
 # Arcmira: YouTube Transcript Search
 
-Search YouTube and podcast transcripts for timestamped passages, speaker appearances, mentions and sponsored ad reads. Use the returned timestamps to check quotations against the recording.
+YouTube transcript search and monitoring for Dify: the exact quote and its second, plus your monitor's latest alerts. Use the returned timestamps to check quotations against the recording.
+
+Add "use arcmira" to any question to send it to Arcmira first.
 
 [Arcmira](https://arcmira.com) · [API documentation](https://arcmira.com/docs) · [Source](https://github.com/arcmira/integrations/tree/master/packages/dify)
 
-Install the published adapter from the [Dify Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.3 updates the certificate bundle to certifi 2026.10.19, addressing [GHSA-6q48-6c7w-9gw2](https://github.com/advisories/GHSA-6q48-6c7w-9gw2).
+Install the published adapter from the [Dify Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.3 updates the certificate bundle to certifi 2026.10.19, addressing [GHSA-6q48-6c7w-9gw2](https://github.com/advisories/GHSA-6q48-6c7w-9gw2). Version 0.1.5 adds List monitor alerts. On November 8, 2026, all three of its tools ran live in a workflow in self-hosted Community Edition 1.19.0 ([record](live-verification.json)).
 
 ## Setup
 
@@ -18,9 +20,11 @@ A paid read uses credits from your plan, then your on-demand budget. Arcmira enf
 2. Add **YouTube transcript search**. Enter one topic in `q` and apply the resolved IDs through the relevant filters. The default limit is five passages; the maximum is twenty.
 3. Keep the returned timestamps, source links and coverage notes when generating an answer. Use `by` for a labeled speaker and `about` for what a passage discusses. A passage can contain several speakers. Attribute a quotation to the speaker labeled on that line. Speaker labeling and indexed coverage are incomplete.
 
+**List monitor alerts** reads the newest alerts from one of your Arcmira monitors through GET /v1/monitors/{id}/alerts. Set `monitor_id` to the monitor's ID, which GET /v1/monitors lists, and `limit` to between 1 and 100 alerts (default 25). Each alert carries the entity, mention ID, YouTube video ID, tracker, delivery channel and time. Reading alerts uses no credits; each alert used its credits once when the monitor sent it. Alerts are recorded for instant email, Slack and webhook delivery, so hourly and daily email digests do not appear. A free account can read its alerts, so a scheduled workflow can report what a monitor found each week without a paid plan.
+
 For example, resolve a named channel, then search for a topic with its YouTube channel ID. To inspect classified ad reads, resolve the organization and pass its ID through `about` with `kind=sponsored`. Classifications are evidence to inspect, not proof of a commercial agreement.
 
-The tools return the complete JSON research response. An access refusal or rate limit is an error, not an empty result. A requested `source=arcmira_premium` never falls back to captions. Neither tool creates monitors or requests new transcript generation.
+The tools return the complete JSON response. An access refusal or rate limit is an error, not an empty result. A requested `source=arcmira_premium` never falls back to captions. No tool creates or changes monitors or requests new transcript generation.
 
 To restrict results to one transcript source, set `source` to `arcmira_premium`, `creator_captions`, or `third_party_quick`. Omitting it leaves the source unrestricted within your account's access. Keep `partial`, `failed_batches`, `access`, `window`, and `search_index` in context when they appear. Results with incomplete coverage are not proof that a topic was never discussed.
 
@@ -45,7 +49,7 @@ uv sync --frozen
 uv run --frozen python -m unittest discover -s test -v
 ```
 
-With the official Dify plugin CLI installed, build a local package with `dify plugin package . -o arcmira-0.1.4.difypkg`. The included `.difyignore` excludes tests, environments and local credentials.
+With the official Dify plugin CLI installed, build a local package with `dify plugin package . -o arcmira-0.1.5.difypkg`. The included `.difyignore` excludes tests, environments and local credentials.
 
 The committed lock retains the September 28, 2026 dependency cutoff, with a certifi-only cutoff of October 21 for the certificate security update. Local adapter tests use Dify's real plugin SDK and a mock HTTP transport, so they make no research calls and spend no account allowance. The local SDK also completed live account validation, bounded search and entity resolution on October 5, 2026. Timestamped evidence, coverage notes and entity identity were preserved. The free test account had on-demand disabled and no observed credit decrease. No key was shared with Dify Cloud for this check. The installed Community Edition plugin also completed a native Resolve an entity node on October 6, 2026 for OpenAI with type organization and limit 1. It returned the exact organization match and preserved the full JSON response without a model node. The installed 0.1.2 plugin also completed one native YouTube transcript search for `AI agents` with limit 1. It returned one passage with its timestamp, citation, source label, search window and coverage note in 1.560 seconds with zero model tokens. The result was labeled `third_party_quick`, with no speaker labels. The isolated Free account had on-demand disabled, and its usage was unchanged before and after the check. On October 29, 2026, the installed 0.1.3 plugin completed native Dify Cloud search and entity resolution. The separate importable search workflow also completed all three steps, returning three passages with source labels, timestamped links, the requested window and coverage notes. Dify reported 3.839 seconds and zero model tokens for that run.
 

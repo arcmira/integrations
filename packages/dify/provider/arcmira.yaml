@@ -6,7 +6,7 @@
       "en_US": "Arcmira: YouTube Transcript Search"
     },
     "description": {
-      "en_US": "Search YouTube and podcast transcripts for timestamped passages, speaker appearances, mentions and sponsored ad reads."
+      "en_US": "YouTube transcript search and monitoring for Dify: the exact quote and its second, plus your monitor's latest alerts."
     },
     "icon": "icon.svg",
     "tags": [
@@ -28,7 +28,8 @@
   },
   "tools": [
     "tools/search.yaml",
-    "tools/resolve.yaml"
+    "tools/resolve.yaml",
+    "tools/list_alerts.yaml"
   ],
   "extra": {
     "python": {

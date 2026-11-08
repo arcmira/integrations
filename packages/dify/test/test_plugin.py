@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT))
 from arcmira_api import request
 from tools.search import ArcmiraSearch
 from tools.resolve import ArcmiraResolve
+from tools.list_alerts import ArcmiraListAlerts
 from provider.arcmira import ArcmiraProvider
 from dify_plugin.errors.tool import ToolProviderCredentialValidationError
 from dify_plugin.core.plugin_registration import PluginRegistration
@@ -41,9 +42,9 @@ class PluginTests(unittest.TestCase):
         tool = cls.from_credentials(credentials or {'api_key': KEY}, user_id='test')
         return list(tool.invoke(tool_parameters=params or {'q': 'climate'}))
 
-    def test_sdk_registration_loads_both_tools(self):
+    def test_sdk_registration_loads_every_tool(self):
         reg = PluginRegistration(DifyPluginEnv())
-        self.assertEqual(set(reg.tools_mapping['arcmira'][2]), {'search', 'resolve'})
+        self.assertEqual(set(reg.tools_mapping['arcmira'][2]), {'search', 'resolve', 'list_alerts'})
         self.assertEqual(yaml.safe_load((ROOT / 'manifest.yaml').read_text())['privacy'], 'PRIVACY.md')
         self.assertTrue((ROOT / 'PRIVACY.md').is_file())
 
@@ -66,6 +67,34 @@ class PluginTests(unittest.TestCase):
         result = self.invoke(ArcmiraResolve, {'q':'Alex','type':'person','context':'a guest on a show','limit':3})
         self.assertEqual(result[0].message.json_object, self.response)
         self.assertEqual(self.requests[0].url.path, '/v1/entities/resolve')
+
+    def test_list_alerts_reads_one_monitor(self):
+        self.response = json.loads((Path(__file__).parent / 'fixtures/alerts.json').read_text())
+        result = self.invoke(ArcmiraListAlerts, {'monitor_id': ' mon_fixture ', 'limit': 50, 'src': 'mcp-tool'})
+        self.assertEqual(result[0].message.json_object, self.response)
+        self.assertEqual(str(self.requests[0].url), 'https://api.arcmira.com/v1/monitors/mon_fixture/alerts?limit=50')
+        self.assertEqual(self.requests[0].headers['authorization'], 'Bearer ' + KEY)
+
+    def test_list_alerts_defaults_to_twenty_five(self):
+        self.response = {'alerts': [], 'has_more': False, 'next_cursor': None}
+        self.assertEqual(self.invoke(ArcmiraListAlerts, {'monitor_id': 'mon_fixture'})[0].message.json_object, self.response)
+        self.assertEqual(dict(self.requests[0].url.params), {'limit': '25'})
+
+    def test_list_alerts_input_is_checked_before_network(self):
+        for params in [{}, {'monitor_id': ''}, {'monitor_id': '../me'}, {'monitor_id': 'mon_1/trackers'}, {'monitor_id': 'mon_1?limit=1'}, {'monitor_id': 'x' * 101}]:
+            with self.subTest(params=params), self.assertRaisesRegex(ValueError, 'monitor id'):
+                self.invoke(ArcmiraListAlerts, params)
+        for limit in [0, 101, 2.5]:
+            with self.subTest(limit=limit), self.assertRaisesRegex(ValueError, 'between 1 and 100'):
+                self.invoke(ArcmiraListAlerts, {'monitor_id': 'mon_1', 'limit': limit})
+        self.assertEqual(self.requests, [])
+
+    def test_list_alerts_errors_stay_errors(self):
+        for status, code in [(401, 'invalid_api_key'), (403, 'insufficient_scope'), (404, 'monitor_not_found')]:
+            with self.subTest(status=status):
+                self.status = status; self.response = {'error': {'code': code, 'message': 'Synthetic refusal.'}}
+                with self.assertRaisesRegex(ValueError, 'Arcmira HTTP ' + str(status) + '.*' + code):
+                    self.invoke(ArcmiraListAlerts, {'monitor_id': 'mon_fixture'})
 
     def test_access_errors_never_become_empty_results_or_caption_fallback(self):
         for status, code in [(401,'invalid_api_key'),(402,'quota_exceeded'),(403,'filter_requires_paid'),(429,'rate_limited'),(500,'internal_error'),(503,'search_unavailable')]:
@@ -135,7 +164,8 @@ class PluginTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'unexpected response shape'):self.invoke()
 
     def test_private_operations_cannot_be_invoked(self):
-        with self.assertRaisesRegex(ValueError,'Unsupported'):request(KEY,'/v1/me/settings',{})
+        for path in ['/v1/me/settings', '/v1/monitors', '/v1/monitors/mon_1', '/v1/monitors/mon_1/trackers', '/v1/monitors/../me/alerts', '/v1/monitors//alerts']:
+            with self.subTest(path=path), self.assertRaisesRegex(ValueError,'Unsupported'):request(KEY,path,{})
         self.assertEqual(self.requests,[])
 
 

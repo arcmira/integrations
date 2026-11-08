@@ -1,0 +1,50 @@
+name: Publish AI SDK tools
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-ai-sdk
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'arcmira/integrations' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.22.3'
+      - name: Build and test the package
+        working-directory: packages/ai-sdk
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+          npm test
+      - name: Stop if this version is already on npm
+        id: version
+        working-directory: packages/ai-sdk
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./package.json').version")"
+          if npx --yes npm@11.15.0 view "@arcmira/ai-sdk@${version}" version >/dev/null 2>&1; then
+            echo "@arcmira/ai-sdk ${version} is already on npm."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publish with npm trusted publishing and provenance
+        if: steps.version.outputs.publish == 'true'
+        working-directory: packages/ai-sdk
+        run: npx --yes npm@11.15.0 publish --ignore-scripts --provenance --access public

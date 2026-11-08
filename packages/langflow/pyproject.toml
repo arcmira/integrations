@@ -1,7 +1,7 @@
 [project]
 name = "lfx-arcmira"
 version = "0.1.0"
-description = "Search YouTube and podcast transcripts with Arcmira for Langflow. Find timestamped passages across indexed videos and resolve entities."
+description = "YouTube transcript search for AI agents: the exact quote, often who said it, and a watch link cued to the second."
 keywords = ["youtube-transcript-search", "podcast-transcript-search", "langflow", "arcmira", "transcript-api"]
 readme = "README.md"
 requires-python = ">=3.10,<3.15"

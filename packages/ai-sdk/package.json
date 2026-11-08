@@ -2,7 +2,7 @@
   "name": "@arcmira/ai-sdk",
   "version": "0.1.1",
   "type": "module",
-  "description": "YouTube transcript search for the AI SDK. Find timestamped passages across indexed videos and podcasts and return source links.",
+  "description": "YouTube transcript search for AI agents: the exact quote, often who said it, and a watch link cued to the second.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

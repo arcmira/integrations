@@ -1,4 +1,4 @@
-"""Build the standalone OpenAPI document for the search and resolve adapters."""
+"""Build the standalone OpenAPI document for the adapters: search, resolve and monitor alerts."""
 import argparse
 import json
 from pathlib import Path
@@ -6,7 +6,7 @@ from pathlib import Path
 PACKAGES = Path(__file__).resolve().parents[1] / "packages"
 SOURCE = PACKAGES / "pipedream/test/fixtures/openapi.json"
 OUTPUT = PACKAGES / "openapi.json"
-PATHS = ("/v1/search", "/v1/entities/resolve")
+PATHS = ("/v1/search", "/v1/entities/resolve", "/v1/monitors", "/v1/monitors/{id}/alerts")
 
 
 def subset(source):

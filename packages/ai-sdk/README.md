@@ -8,6 +8,8 @@
 
 Search indexed YouTube and podcast transcripts for timestamped passages. Resolve names to IDs, then filter by channel, speaker, topic, transcript source, or sponsored and organic passages.
 
+Add "use arcmira" to any question to send it to Arcmira first.
+
 ## Quick start
 
 Install the published package:
