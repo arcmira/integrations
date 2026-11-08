@@ -1,0 +1,102 @@
+{
+  "channel": {
+    "id": "ent_14",
+    "youtube_channel_id": "UC-DRzaGnL_vtBUpCFH5M0tg",
+    "name": "Synthetic channel",
+    "page": "https://arcmira.com/channel/synthetic"
+  },
+  "sponsors": [
+    {
+      "entity": {
+        "id": "ent_901",
+        "name": "Synthetic sponsor 1",
+        "type": "organization",
+        "slug": "synthetic-sponsor-1",
+        "page": "https://arcmira.com/organization/synthetic-sponsor-1"
+      },
+      "ad_reads": 19,
+      "videos": 17,
+      "first_seen": "2026-03-02",
+      "last_seen": "2026-10-28",
+      "sponsor_status": null
+    },
+    {
+      "entity": {
+        "id": "ent_902",
+        "name": "Synthetic sponsor 2",
+        "type": "organization",
+        "slug": "synthetic-sponsor-2",
+        "page": "https://arcmira.com/organization/synthetic-sponsor-2"
+      },
+      "ad_reads": 18,
+      "videos": 16,
+      "first_seen": "2026-03-02",
+      "last_seen": "2026-10-28",
+      "sponsor_status": null
+    },
+    {
+      "entity": {
+        "id": "ent_903",
+        "name": "Synthetic sponsor 3",
+        "type": "organization",
+        "slug": "synthetic-sponsor-3",
+        "page": "https://arcmira.com/organization/synthetic-sponsor-3"
+      },
+      "ad_reads": 17,
+      "videos": 15,
+      "first_seen": "2026-03-02",
+      "last_seen": "2026-10-28",
+      "sponsor_status": null
+    },
+    {
+      "entity": {
+        "id": "ent_904",
+        "name": "Synthetic sponsor 4",
+        "type": "organization",
+        "slug": "synthetic-sponsor-4",
+        "page": "https://arcmira.com/organization/synthetic-sponsor-4"
+      },
+      "ad_reads": 16,
+      "videos": 14,
+      "first_seen": "2026-03-02",
+      "last_seen": "2026-10-28",
+      "sponsor_status": null
+    },
+    {
+      "entity": {
+        "id": "ent_905",
+        "name": "Synthetic sponsor 5",
+        "type": "organization",
+        "slug": "synthetic-sponsor-5",
+        "page": "https://arcmira.com/organization/synthetic-sponsor-5"
+      },
+      "ad_reads": 15,
+      "videos": 13,
+      "first_seen": "2026-03-02",
+      "last_seen": "2026-10-28",
+      "sponsor_status": null
+    }
+  ],
+  "meta": {
+    "min_ad_reads": 3,
+    "count": 5,
+    "total": 12
+  },
+  "access": {
+    "type": "permission_error",
+    "code": "recommendations_not_enabled",
+    "gate": "plan",
+    "message": "The full sponsor list requires Pro+. Open unlock.url to start Pro+; the free slice above is what Pro+ extends.",
+    "resource": {
+      "kind": "commercial",
+      "what": "sponsors"
+    },
+    "unlock": {
+      "tier": "pro_plus",
+      "url": "https://arcmira.com/pricing?src=api-boundary",
+      "offer": null
+    },
+    "doc_url": "https://arcmira.com/docs/errors#recommendations_not_enabled",
+    "request_id": "req_fixture"
+  }
+}

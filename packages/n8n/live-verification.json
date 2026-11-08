@@ -1,0 +1,40 @@
+{
+  "checked_at": "2026-11-08T05:57:53+00:00",
+  "host_version": "2.41.3",
+  "image": "n8nio/n8n@sha256:a92e49f8dee93d11a56574cafd98c78681bd9b839ead3b2e7268b2a22db18234",
+  "package": "n8n-nodes-arcmira",
+  "version": "0.2.0",
+  "package_sha256": "f6f7a0df024e1b3e17fe05926e998728a65809bc63c44e3e59cf90b6944a2c08",
+  "execution_method": "Install the packed package as a community node, import a published workflow (Arcmira Trigger polling every minute, then the Arcmira node searching transcripts), and run n8n start. The trigger's stored record was seeded with every delivered alert of a live monitor except the newest one.",
+  "network": "Live api.arcmira.com with a test account key",
+  "live_api_requests": "GET /v1/monitors/{id}/alerts per poll, one GET /v1/search per execution",
+  "checks": [
+    {
+      "case": "first poll in trigger mode emits only the alert missing from the record",
+      "result": "pass",
+      "executions": 1,
+      "execution_status": "success",
+      "execution_mode": "trigger"
+    },
+    {
+      "case": "the Arcmira node runs after the trigger and returns passages with watch links",
+      "result": "pass",
+      "watch_links": 6
+    },
+    {
+      "case": "the record stores the emitted alert first",
+      "result": "pass",
+      "seen_after": 62
+    },
+    {
+      "case": "the next poll emits nothing",
+      "result": "pass",
+      "executions_after_second_poll": 1
+    }
+  ],
+  "limits": [
+    "Does not verify the browser editor, Fetch Test Event in the editor, n8n Cloud or Creator Portal review.",
+    "Does not verify npm publication or provenance.",
+    "The live monitor had no alert that was still sending, held back or failed during the run; those cases are covered by the trigger tests in n8n's polling context."
+  ]
+}

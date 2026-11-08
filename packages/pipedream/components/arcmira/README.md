@@ -10,7 +10,7 @@ Arcmira searches indexed YouTube videos and livestreams, including podcast shows
 | --- | --- |
 | Search YouTube Transcripts | Full API response with passages, timestamps, source classes, filters, publication window, index coverage, notes and any access restriction. |
 | Resolve Entity | Full response with confidence, best match, suggestions, clarification options and candidates. No automatic selection or follow-up request. |
-| List Channel Sponsors | Full response with channel, sponsor evidence, returned/total counts and any account access restriction. |
+| List Channel Sponsors | Full response with channel, sponsor evidence, returned/total counts and any account access restriction. Below Pro+ the API returns only the first sponsors; `note` and the step summary then say how many of the total came back and give the unlock URL. |
 
 Connect a customer-owned Arcmira API key with read access. The connection test uses `/v1/me` and does not require a remaining usage allowance. Credentials belong in Pipedream's managed connection, never action inputs.
 

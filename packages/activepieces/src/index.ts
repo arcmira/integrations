@@ -74,7 +74,7 @@ const search = createAction({
 
 export const arcmira = createPiece({
   displayName: 'Arcmira: YouTube Transcript Search',
-  description: 'Search indexed YouTube and podcast transcripts for timestamped evidence in your workflows. API documentation: https://arcmira.com/docs',
+  description: 'YouTube transcript search for AI agents: the exact quote, often who said it, and a watch link cued to the second.',
   logoUrl: 'https://arcmira.com/apple-touch-icon.png',
   authors: ['zealous1'],
   minimumSupportedRelease: '0.92.0',

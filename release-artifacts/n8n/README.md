@@ -13,7 +13,7 @@ The [0.1.0 release](https://github.com/arcmira/integrations/releases/tag/n8n-v0.
 
 ## Publish and verify
 
-1. Confirm npm publishing access for `n8n-nodes-arcmira`. The trusted publisher is `arcmira/integrations`, workflow `publish-n8n.yml`, environment `npm`. First publication also requires npm authorization.
+1. Confirm npm publishing access for `n8n-nodes-arcmira`. The trusted publisher is `arcmira/integrations`, workflow `publish-n8n.yml`, environment `npm`. npm adds a trusted publisher only to a package that exists, so the first publication runs once with `first_publish` checked. That stages the version with a one-time `NPM_TOKEN` secret on the `npm` environment and the same provenance. A maintainer then promotes it on npm, adds the trusted publisher and deletes the token.
 2. Run `python3 scripts/verify-n8n-release.py ARCHIVE_DIRECTORY --tag RELEASE_TAG` from the repository root.
 3. Dispatch the [release workflow](../../.github/workflows/publish-n8n.yml) from master. It verifies the tagged archive and rebuilds the package on the runner. It compares every file’s contents and mode with the tested archive before publishing the rebuilt package with npm provenance.
 4. Verify the published version, package contents and provenance on npm before submitting the node for n8n review.

@@ -1,9 +1,9 @@
 {
   "version": "1.0.6",
-  "scope": "Reviewed 1.0.6 service candidate. Speaker-filter help matches the API document of November 6, 2026. Request code is unchanged from 1.0.5. Publication and hosted verification are pending.",
+  "scope": "Reviewed 1.0.6 service candidate. Speaker-filter help matches the API document of November 6, 2026, and the connector description is updated. Request code is unchanged from 1.0.5. Publication and hosted verification are pending.",
   "files": {
     "auth.js": "509d28aee4696c79b0103a15822268d510956180ad6258f10e43e8766f0a5a16",
-    "bundle.json": "b37ca9df672cbedbaedc6713a341d170f96d170f01b708e5b1a2340a5b00d99c",
+    "bundle.json": "cd5c6f1c714af4e1a7992eea68e4aef751ed79d540e7c5834e75073098d497fc",
     "core/MakeApiCall/MakeApiCall.js": "92ffefa067d81d9b48c2f7e88662d022b35df2d0f1d0d66659469e0e22488713",
     "core/MakeApiCall/component.json": "2cf2d4268d941241a612382fc9ffc184ffee2e8d4c6898750c619e07fe22e020",
     "core/ResolveEntities/ResolveEntities.js": "279a13a0b415b05883ed86c71cd77a4eb61b43a4b73507b6e1d16fc0b99d611c",
@@ -12,6 +12,6 @@
     "core/SearchTranscripts/component.json": "802ae58c842abdf9705bafb49b5c8ce654bfb0badef5befc06f4f63dfaccdea0",
     "lib.js": "b989e4d2d4a34ce46d01ff005862616b2ddf71c03de83101df973b6fa5c8ad1e",
     "package.json": "38bbd81802e36ebe516e3c6e9734f5a5ed5750fee7d72d897c7cd58c9b558bcc",
-    "service.json": "5ffbc195dba5bee57b813ec796ef20b0577f79bcf33ff9fc63e3f647bcbb80b2"
+    "service.json": "2ebee40e4534af5eefb3d2d70c14fca9015754330d3cc06c15cd4381cf08863a"
   }
 }

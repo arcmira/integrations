@@ -364,6 +364,352 @@
           }
         }
       }
+    },
+    "/v1/monitors": {
+      "get": {
+        "tags": [
+          "Monitors"
+        ],
+        "operationId": "list_monitors",
+        "summary": "List monitors",
+        "description": "All monitors for the account with tracker counts, alert counts for the current calendar month, and Slack display metadata. Single page, no pagination.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Arcmira-Version": {
+                "$ref": "#/components/headers/X-Arcmira-Version"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimit-Limit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimit-Remaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonitorListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationError"
+          },
+          "403": {
+            "$ref": "#/components/responses/PermissionError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Monitors"
+        ],
+        "operationId": "create_monitor",
+        "summary": "Create monitor",
+        "description": "Creating with notify_webhook: true and a webhook_url enables HMAC-signed webhook delivery and returns the signing secret (monitor.webhook_secret) in this response. Store it securely. A retry with the original Idempotency-Key recovers the same secret for up to 24 hours while it remains the current secret or the valid previous secret. An expired or displaced secret returns 409 idempotency_result_expired without rotating again. Reads do not expose the secret. All subsequent reads expose only webhook_secret_set and webhook_secret_hint. Creating monitors and trackers is free. Each alert uses 25 credits once, however many channels and recipients deliver it: credits from your plan, then your on-demand budget. When the account is out of credits, alerts wait instead of sending.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "Idempotency-Key",
+            "in": "header",
+            "example": "8b2f6c3e-4d1a-4e7b-9c05-2f6a1b7d3e90",
+            "description": "One key per intent, 1 to 255 printable ASCII characters (0x21 to 0x7E); anything else is 400 invalid_idempotency_key. Keys are scoped to the account, credential and resource family. The same key and normalized method, path and body returns the committed response with Idempotency-Replayed: true. A changed intent within the same family returns 409 idempotency_conflict. Monitor and tracker families have independent namespaces. Secret recovery is limited as described by the operation."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "description": "Display name (1-100 characters). Required on create."
+                  },
+                  "notify_emails": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "maxItems": 20,
+                    "description": "Desired email recipients. External recipients must confirm before delivery. Free includes one additional recipient per monitor; paid plans allow up to 20 total. Default []."
+                  },
+                  "notify_frequency": {
+                    "type": "string",
+                    "enum": [
+                      "realtime",
+                      "hourly",
+                      "daily"
+                    ],
+                    "description": "Delivery cadence. Default realtime. Values: realtime (as analysis completes), hourly (hourly digest), daily (daily digest)."
+                  },
+                  "digest_day": {
+                    "type": "string",
+                    "description": "Digest day of week. Default \"monday\". Consulted only by weekly digests, which are dashboard-configured today; inert for API-set frequencies."
+                  },
+                  "digest_time": {
+                    "type": "string",
+                    "description": "Digest send hour as HH:MM (account timezone). Default \"09:00\". Applies to daily digests."
+                  },
+                  "notify_webhook": {
+                    "type": "boolean",
+                    "description": "Enable HMAC-signed webhook delivery (paid plans). When enabled together with webhook_url, the response returns the signing secret (monitor.webhook_secret), recoverable with the original Idempotency-Key during the valid recovery window. PATCHing true also re-enables an auto-disabled webhook and resets its failure counter."
+                  },
+                  "webhook_url": {
+                    "type": "string",
+                    "description": "Destination URL for webhook alert deliveries."
+                  },
+                  "notify_slack": {
+                    "type": "boolean",
+                    "description": "Enable Slack delivery. Requires a Slack integration connected in the dashboard."
+                  },
+                  "slack_integration_id": {
+                    "type": "string",
+                    "description": "Slack integration id from the dashboard OAuth flow."
+                  },
+                  "slack_channel_id": {
+                    "type": "string",
+                    "description": "Slack channel id to deliver to."
+                  },
+                  "team_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Retired. A monitor belongs to the account the key acts in. Absent or null is ignored; any other value answers 400 team_id_retired. Create only.",
+                    "deprecated": true
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Arcmira-Version": {
+                "$ref": "#/components/headers/X-Arcmira-Version"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimit-Limit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimit-Remaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimit-Reset"
+              },
+              "Idempotency-Replayed": {
+                "$ref": "#/components/headers/Idempotency-Replayed"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonitorMutationResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Monitor created. When this request enabled webhook signing, monitor.webhook_secret is present and recoverable by retrying with the original Idempotency-Key during its recovery window.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Arcmira-Version": {
+                "$ref": "#/components/headers/X-Arcmira-Version"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimit-Limit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimit-Remaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimit-Reset"
+              },
+              "Idempotency-Replayed": {
+                "$ref": "#/components/headers/Idempotency-Replayed"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonitorMutationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationError"
+          },
+          "403": {
+            "$ref": "#/components/responses/PermissionError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "Conflict. idempotency_conflict means the Idempotency-Key was finalized with a different request intent.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Arcmira-Version": {
+                "$ref": "#/components/headers/X-Arcmira-Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/v1/monitors/{id}/alerts": {
+      "get": {
+        "tags": [
+          "Monitors"
+        ],
+        "operationId": "list_monitor_alerts",
+        "summary": "List recent monitor alerts",
+        "description": "The newest limit alert deliveries for the monitor (default 25, at most 100), as a single page. has_more is true when older alerts exist past limit; this endpoint does not paginate, so next_cursor is always null and a larger limit reads further. entity_id (\"ent_{n}\") and mention_id (\"men_{n}\") are the ids GET /v1/entities/{id} and GET /v1/mentions use, and video_id is the YouTube video id that GET /v1/transcripts/{video_id} reads. Dispute a fired alert via POST /v1/feedback with type monitor_alert.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Monitor id."
+            },
+            "required": true,
+            "description": "Monitor id.",
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Alerts to return, newest first, 1 to 100. Default 25."
+            },
+            "required": false,
+            "description": "Alerts to return, newest first, 1 to 100. Default 25.",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Arcmira-Version": {
+                "$ref": "#/components/headers/X-Arcmira-Version"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimit-Limit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimit-Remaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationError"
+          },
+          "403": {
+            "$ref": "#/components/responses/PermissionError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -405,6 +751,15 @@
         "description": "Seconds to wait before retrying. error.retry_after_seconds carries the same value on an error.",
         "schema": {
           "type": "integer"
+        }
+      },
+      "Idempotency-Replayed": {
+        "description": "true when this is the stored response to an earlier request with the same Idempotency-Key; the request did not run again.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "true"
+          ]
         }
       }
     },
@@ -2188,6 +2543,502 @@
           }
         ],
         "description": "Set when best is null but one entity stands out, with the reason and evidence. Use it and tell the user you assumed it."
+      },
+      "MonitorListResponse": {
+        "type": "object",
+        "properties": {
+          "monitors": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Monitor"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "tracker_count": {
+                      "type": "integer",
+                      "description": "Number of trackers in the monitor."
+                    },
+                    "alerts_this_month": {
+                      "type": "integer",
+                      "description": "Alert deliveries written for this monitor since the start of the calendar month."
+                    },
+                    "slack_integration": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Slack integration id."
+                        },
+                        "team_name": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Slack workspace name."
+                        },
+                        "channel_name": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Slack channel the integration posts to."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "team_name",
+                        "channel_name"
+                      ],
+                      "description": "Display metadata for the connected Slack integration. Null/absent when Slack is not configured."
+                    }
+                  },
+                  "required": [
+                    "tracker_count",
+                    "alerts_this_month"
+                  ]
+                }
+              ]
+            },
+            "description": "The monitors of the account the caller acts in, ordered by dashboard sort position, then name."
+          }
+        },
+        "required": [
+          "monitors"
+        ]
+      },
+      "Monitor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Monitor id."
+          },
+          "name": {
+            "type": "string",
+            "description": "Monitor name."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "True when delivery is paused for all trackers in this monitor. New alerts are not queued, and queued email delivery checks the pause state again before sending. Use PATCH /v1/trackers/{id} with paused: true to pause one tracker."
+          },
+          "notify_emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Configured email recipients. External recipients must confirm before delivery. Free includes one additional recipient per monitor."
+          },
+          "email_recipients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "owner",
+                    "member",
+                    "external"
+                  ],
+                  "description": "owner: the address of the account the monitor belongs to. member: a teammate in that account. external: anyone else, who must confirm first."
+                },
+                "user_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The Arcmira user behind an owner or member address. Null for external recipients."
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "active",
+                    "pending",
+                    "unsubscribed",
+                    "suppressed",
+                    "removed",
+                    "owner_unverified",
+                    "plan_limited"
+                  ]
+                },
+                "invitation_status": {
+                  "type": "string",
+                  "enum": [
+                    "sent",
+                    "failed",
+                    "limited",
+                    "pending"
+                  ]
+                }
+              },
+              "required": [
+                "email",
+                "role",
+                "user_id",
+                "status"
+              ]
+            },
+            "description": "Every address the monitor reaches, with consent and invitation state. An account is not required to accept."
+          },
+          "notify_frequency": {
+            "type": "string",
+            "default": "realtime",
+            "description": "Delivery cadence. Values: realtime (deliver immediately), hourly (hourly digest), daily (daily digest)."
+          },
+          "digest_day": {
+            "type": "string",
+            "default": "monday",
+            "description": "Day of week for digest delivery."
+          },
+          "digest_time": {
+            "type": "string",
+            "default": "09:00",
+            "description": "Time of day (HH:MM) for digest delivery."
+          },
+          "notify_webhook": {
+            "type": "boolean",
+            "description": "True when webhook delivery is enabled."
+          },
+          "webhook_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Webhook destination URL. Null when no webhook is configured."
+          },
+          "webhook_secret_set": {
+            "type": "boolean",
+            "description": "True when a webhook signing secret exists for this monitor. The secret itself is never returned on reads; enablement and rotation responses support recovery with the original Idempotency-Key during the valid recovery window."
+          },
+          "webhook_secret_hint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Last 4 characters of the current signing secret, for identifying which secret you hold. Null until a secret exists."
+          },
+          "webhook_failures": {
+            "type": "integer",
+            "default": 0,
+            "description": "Consecutive webhook delivery failures recorded for this monitor. Reset by a secret rotation or PATCHing notify_webhook: true; 10 consecutive failures auto-disable a webhook."
+          },
+          "webhook_disabled_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the webhook was auto-disabled after repeated failures. Null while delivery is enabled. Re-enable by PATCHing notify_webhook: true; rotation alone never re-enables."
+          },
+          "webhook_disabled_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why the webhook was auto-disabled. Null while delivery is enabled."
+          },
+          "notify_slack": {
+            "type": "boolean",
+            "description": "True when Slack delivery is enabled."
+          },
+          "slack_integration_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Slack integration used for delivery. Null when Slack is not configured."
+          },
+          "slack_channel_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Slack channel to deliver to. Null when Slack is not configured."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the monitor was created."
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "When the monitor was last updated."
+          },
+          "access": {
+            "type": "string",
+            "enum": [
+              "account",
+              "member"
+            ],
+            "description": "account: the caller owns the account the monitor belongs to, or is an admin in it. member: the caller is a member of that team account, who may edit the monitor and its webhook but may not delete it."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "paused",
+          "notify_emails",
+          "notify_webhook",
+          "webhook_disabled_at",
+          "webhook_disabled_reason",
+          "notify_slack",
+          "slack_integration_id",
+          "slack_channel_id",
+          "created_at",
+          "updated_at",
+          "access"
+        ]
+      },
+      "MonitorMutationResponse": {
+        "type": "object",
+        "properties": {
+          "monitor": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Monitor"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "tracker_count": {
+                    "type": "integer",
+                    "description": "Number of trackers in the monitor. Always 0 in the create response."
+                  },
+                  "webhook_secret": {
+                    "type": "string",
+                    "description": "The webhook signing secret (\"whsec_...\"). Only present when this request NEWLY enabled webhook signing: a create with notify_webhook: true and a webhook_url, or a PATCH that turns the webhook on (or sets a URL) where no secret existed before. Store it securely. The same Idempotency-Key can recover it for up to 24 hours while it remains the current or valid previous secret. A displaced or expired secret returns idempotency_result_expired without rotating again."
+                  }
+                },
+                "required": [
+                  "tracker_count"
+                ]
+              }
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable confirmation."
+          }
+        },
+        "required": [
+          "monitor",
+          "message"
+        ]
+      },
+      "AlertListResponse": {
+        "type": "object",
+        "properties": {
+          "alerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Alert"
+            },
+            "description": "Newest alerts first."
+          },
+          "has_more": {
+            "type": "boolean",
+            "description": "True when older alerts exist past limit. The endpoint does not paginate: raise limit, up to 100, to read them."
+          },
+          "next_cursor": {
+            "type": "null",
+            "description": "Always null: this endpoint does not paginate."
+          }
+        },
+        "required": [
+          "alerts",
+          "has_more",
+          "next_cursor"
+        ]
+      },
+      "Alert": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Alert delivery id."
+          },
+          "tracker_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Id of the tracker (tracked entity) that produced the alert."
+          },
+          "monitor_id": {
+            "type": "string",
+            "description": "Id of the monitor whose delivery sent the alert."
+          },
+          "entity_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Public id (\"ent_{n}\") of the entity that triggered the alert, when recorded. Null on older alerts recorded before entity_id was stored. Resolve the entity through mention_id or the embedded tracker when this is null."
+          },
+          "mention_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Public id (\"men_{n}\") of the mention or appearance that triggered the alert. Matches the id on /v1/mentions results. Null when not appearance-scoped."
+          },
+          "video_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "YouTube video id (11 characters) of the video that triggered the alert. Null when not media-scoped."
+          },
+          "excerpt_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Id of the active mention excerpt used as mention evidence. Null when the alert was sent before evidence was recorded."
+          },
+          "evidence_kind": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "excerpt",
+              null
+            ],
+            "description": "Which evidence layer was sent. Null on older alerts."
+          },
+          "channel": {
+            "type": "string",
+            "description": "Delivery channel. Values: email (sent by email), webhook (POSTed to the configured webhook URL), slack (sent to Slack)."
+          },
+          "status": {
+            "type": "string",
+            "description": "Delivery status. Values: pending (queued for delivery), sent (delivered), failed (delivery failed; see error_message), skipped (delivery intentionally skipped)."
+          },
+          "final_status": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Terminal status after retries. Null while delivery is still in progress."
+          },
+          "error_message": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Error details for failed deliveries. Null unless delivery failed."
+          },
+          "scheduled_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When delivery was scheduled. Null when delivered immediately."
+          },
+          "sent_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the alert was actually sent. Null until delivery succeeds."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "When the alert was created."
+          },
+          "tracker": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Tracker id."
+              },
+              "entity_name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Tracked entity name."
+              },
+              "entity_type": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Tracked entity type."
+              },
+              "display_name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "User-facing display name for the tracker. Null when not customized."
+              }
+            },
+            "required": [
+              "id",
+              "entity_name",
+              "entity_type",
+              "display_name"
+            ],
+            "description": "The tracker the alert belongs to. Fields are null when the tracker was deleted."
+          },
+          "monitor": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Monitor id."
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Monitor name."
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ],
+            "description": "The monitor the tracker belongs to. Null when that monitor was deleted."
+          }
+        },
+        "required": [
+          "id",
+          "tracker_id",
+          "monitor_id",
+          "entity_id",
+          "mention_id",
+          "video_id",
+          "excerpt_id",
+          "evidence_kind",
+          "channel",
+          "status",
+          "final_status",
+          "error_message",
+          "scheduled_at",
+          "sent_at",
+          "created_at",
+          "tracker",
+          "monitor"
+        ],
+        "description": "One delivery of an alert. Each alert uses 25 credits once, however many channels and recipients deliver it."
       }
     },
     "responses": {

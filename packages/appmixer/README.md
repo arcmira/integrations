@@ -57,7 +57,7 @@ Local tests exercise the actual component modules with synthetic HTTP responses.
 
 Request behavior is unchanged from the privately tested 1.0.3 source. Version 1.0.5 describes paid reads as credits from your plan, then your on-demand budget. Its changes are limited to usage descriptions, version metadata and documentation. Appmixer Backoffice confirmed installation of 1.0.5 on October 12. See the release status for hosted action tests on earlier versions. Upstream E2E templates and the copied publisher manifest schema are not included in this first-party package.
 
-Version 1.0.6 updates the speaker-filter help to match the API document of November 6, 2026. Request code is unchanged from 1.0.5. This candidate has not been installed or executed in an Appmixer host.
+Version 1.0.6 updates the speaker-filter help to match the API document of November 6, 2026, and the connector description. Request code is unchanged from 1.0.5. This candidate has not been installed or executed in an Appmixer host.
 
 ## Feedback
 

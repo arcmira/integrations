@@ -29,6 +29,20 @@ for (const [resource,operation,url] of [['transcript','search','/search'],['enti
  }
  results.push({resource,operation,parameters:expected.length,contract:'pass'});
 }
+const {ArcmiraTrigger} = require(path.join(candidate,'dist/nodes/ArcmiraTrigger/ArcmiraTrigger.node.js'));
+const trigger = new ArcmiraTrigger().description;
+const alerts = spec.paths['/v1/monitors/{id}/alerts'].get;
+assert.equal(alerts.operationId,'list_monitor_alerts');
+assert.equal(alerts.parameters.find(p=>p.name==='limit').schema.maximum,100);
+const alertSchema = spec.components.schemas.Alert;
+for (const field of ['id','tracker_id','mention_id']) assert.ok(alertSchema.required.includes(field),`Alert.${field} is required`);
+assert.equal(spec.components.schemas.AlertListResponse.properties.alerts.items.$ref,'#/components/schemas/Alert');
+assert.equal(spec.paths['/v1/monitors'].get.operationId,'list_monitors');
+assert.ok(spec.components.schemas.Monitor.required.includes('id'));
+for (const field of ['paused','notify_emails','email_recipients','notify_frequency','notify_slack','slack_integration_id','notify_webhook','webhook_url','webhook_disabled_at']) assert.ok(spec.components.schemas.Monitor.properties[field],`Monitor.${field} feeds the picker's delivery warning`);
+assert.equal(trigger.polling,true);
+assert.deepEqual(trigger.credentials,[{name:'arcmiraApi',required:true}]);
+results.push({node:'arcmiraTrigger',operation:'list_monitor_alerts',contract:'pass'});
 assert.equal(node.requestDefaults.baseURL,'https://api.arcmira.com/v1');
 assert.equal(node.requestDefaults.disableFollowRedirect,true);
 assert.equal(credentials.test.request.url,'/me');

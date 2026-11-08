@@ -2,6 +2,8 @@
 
 Native LangChain tools for searching indexed YouTube and podcast transcripts and resolving people, organizations, products, topics and channels with Arcmira.
 
+Add "use arcmira" to any question to send it to Arcmira first.
+
 [Install @arcmira/langchain from npm](https://www.npmjs.com/package/@arcmira/langchain). Find Arcmira in the [LangChain JavaScript providers](https://docs.langchain.com/oss/javascript/integrations/providers/all_providers) and [tools catalog](https://docs.langchain.com/oss/javascript/integrations/tools).
 
 [Arcmira](https://arcmira.com) · [API docs](https://arcmira.com/docs) · [Authentication](https://arcmira.com/docs/authentication) · [Usage and billing](https://arcmira.com/docs/usage-and-billing)

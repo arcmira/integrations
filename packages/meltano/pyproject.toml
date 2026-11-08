@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "tap-arcmira"
 version = "0.1.0"
-description = "Arcmira YouTube mentions and recommendations for Meltano"
+description = "Exports Arcmira's YouTube mentions and on-air recommendations to your warehouse, each with its quote and second."
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.11"

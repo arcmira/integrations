@@ -53,7 +53,43 @@ export default {
       limit: integer(this.limit, "Sponsor limit", 200),
     });
     if (!Array.isArray(response.sponsors)) throw new Error("Arcmira sponsor response is missing its sponsors array.");
-    $.export("$summary", `Returned ${response.sponsors.length} sponsor records within account access. Check meta.total and access for withheld results.`);
-    return response;
+    const note = cutListNote(response);
+    if (!note) {
+      $.export("$summary", `Returned ${response.sponsors.length} sponsor records within account access. Check meta.total and access for withheld results.`);
+      return response;
+    }
+    $.export("$summary", note);
+    return {
+      ...response,
+      note: response.note
+        ? `${note} ${response.note}`
+        : note,
+    };
   },
 };
+
+const PLAN_NAMES = {
+  pro: "Pro",
+  pro_plus: "Pro+",
+  ultra: "Ultra",
+  enterprise: "Enterprise",
+};
+
+// Below Pro+ the API serves only the first sponsors, with meta.total naming the true count and
+// access naming the gate. Say so in the result itself, so a later step cannot read it as the full list.
+function cutListNote({
+  sponsors, meta, access,
+}) {
+  const total = meta?.total;
+  const counted = Number.isInteger(total) && total > sponsors.length;
+  if (!counted && !access) return undefined;
+  const unlock = access?.unlock;
+  const plan = PLAN_NAMES[unlock?.tier] ?? "a paid plan";
+  const url = typeof unlock?.url === "string" && unlock.url.startsWith("https://arcmira.com/")
+    ? unlock.url
+    : "https://arcmira.com/pricing";
+  const first = counted
+    ? `First ${sponsors.length} of ${total} sponsors.`
+    : `First ${sponsors.length} sponsors.`;
+  return `${first} The full list needs ${plan}: ${url}`;
+}

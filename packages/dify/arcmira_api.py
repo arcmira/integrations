@@ -1,16 +1,19 @@
 """Fixed-origin, read-only Arcmira API requests for the Dify tools."""
 import json
 import math
+import re
 
 import httpx
 
 ORIGIN = "https://api.arcmira.com"
+READ_PATHS = frozenset({"/v1/me", "/v1/search", "/v1/entities/resolve"})
+MONITOR_ID = re.compile(r"[A-Za-z0-9_-]{1,100}")
 
 
 def request(api_key: str, path: str, params: dict | None = None) -> dict:
     if not isinstance(api_key, str) or not api_key.strip():
         raise ValueError("An Arcmira API key is required. See https://arcmira.com/docs.")
-    if path not in ("/v1/me", "/v1/search", "/v1/entities/resolve"):
+    if path not in READ_PATHS and not alerts_path(path):
         raise ValueError("Unsupported Arcmira operation.")
     try:
         response = httpx.get(
@@ -38,14 +41,22 @@ def request(api_key: str, path: str, params: dict | None = None) -> dict:
     return body
 
 
+def alerts_path(path: str) -> bool:
+    prefix, suffix = "/v1/monitors/", "/alerts"
+    return path.startswith(prefix) and path.endswith(suffix) and MONITOR_ID.fullmatch(path[len(prefix):-len(suffix)]) is not None
+
+
+def whole_limit(value, max_limit: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or int(value) != value or not 1 <= value <= max_limit:
+        raise ValueError(f"Limit must be a whole number between 1 and {max_limit}.")
+    return int(value)
+
+
 def parameters(values: dict, allowed: set[str], max_limit: int, default_limit: int) -> dict:
     query = values.get("q")
     if not isinstance(query, str) or len(query.strip()) < 2:
         raise ValueError("Enter a query with at least two characters.")
     params = {k: v for k, v in values.items() if k in allowed and v is not None and v != ""}
     params["q"] = query.strip()
-    value = values.get("limit", default_limit)
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or int(value) != value or not 1 <= value <= max_limit:
-        raise ValueError(f"Limit must be a whole number between 1 and {max_limit}.")
-    params["limit"] = int(value)
+    params["limit"] = whole_limit(values.get("limit", default_limit), max_limit)
     return params

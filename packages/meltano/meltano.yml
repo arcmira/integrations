@@ -9,7 +9,7 @@ plugins:
     label: Arcmira
     pip_url: .
     executable: tap-arcmira
-    description: Export YouTube mentions and recommendations for a defined entity and publication window.
+    description: 'Exports Arcmira''s YouTube mentions and on-air recommendations to your warehouse, each with its quote and second.'
     capabilities: [catalog, discover, activate-version, about]
     settings:
     - name: api_key

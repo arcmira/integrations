@@ -10,7 +10,7 @@ export class Arcmira implements INodeType {
   ],
   "version": 1,
   "subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
-  "description": "Find timestamped YouTube passages, speaker appearances, mentions and sponsored ad reads",
+  "description": "YouTube transcript search for AI agents: the exact quote, often who said it, and a watch link cued to the second.",
   "defaults": {
     "name": "Arcmira: YouTube Transcript Search"
   },

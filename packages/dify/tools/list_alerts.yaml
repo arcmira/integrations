@@ -1,0 +1,51 @@
+{
+  "identity": {
+    "author": "arcmira",
+    "name": "list_alerts",
+    "label": {
+      "en_US": "List monitor alerts"
+    }
+  },
+  "description": {
+    "human": {
+      "en_US": "List a monitor's newest alerts, newest first: each alert's entity, mention id, YouTube video id, tracker, delivery channel and time. Use it to report what a monitor found since a date, or to start a workflow from new alerts. Reading alerts uses no credits. Hourly and daily email digests do not appear here; instant email, Slack and webhook alerts do."
+    },
+    "llm": "List a monitor's newest alerts, newest first: each alert's entity, mention id, YouTube video id, tracker, delivery channel and time. Use it to report what a monitor found since a date, or to start a workflow from new alerts. Reading alerts uses no credits. Hourly and daily email digests do not appear here; instant email, Slack and webhook alerts do."
+  },
+  "parameters": [
+    {
+      "name": "monitor_id",
+      "type": "string",
+      "required": true,
+      "label": {
+        "en_US": "Monitor id"
+      },
+      "human_description": {
+        "en_US": "The monitor to read, such as mon_... GET /v1/monitors lists your monitors and their ids."
+      },
+      "llm_description": "The monitor to read, such as mon_... GET /v1/monitors lists your monitors and their ids.",
+      "form": "llm"
+    },
+    {
+      "name": "limit",
+      "type": "number",
+      "required": false,
+      "label": {
+        "en_US": "Limit"
+      },
+      "human_description": {
+        "en_US": "Alerts to return, newest first, 1 to 100. Default 25. has_more is true when older alerts exist past limit."
+      },
+      "llm_description": "Alerts to return, newest first, 1 to 100. Default 25. has_more is true when older alerts exist past limit.",
+      "form": "llm",
+      "default": 25,
+      "min": 1,
+      "max": 100
+    }
+  ],
+  "extra": {
+    "python": {
+      "source": "tools/list_alerts.py"
+    }
+  }
+}
