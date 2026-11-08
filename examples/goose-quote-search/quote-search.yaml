@@ -10,7 +10,7 @@ extensions:
   - name: arcmira
     type: streamable_http
     uri: https://mcp.arcmira.com/mcp
-    description: Search indexed YouTube and podcast transcripts.
+    description: "YouTube transcript search and monitoring for your AI: exact quotes, full transcripts and speakers."
     available_tools:
       - arcmira_describe
       - arcmira_execute_read
