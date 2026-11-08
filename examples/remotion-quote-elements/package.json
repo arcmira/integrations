@@ -1,0 +1,35 @@
+{
+  "name": "arcmira-remotion-quote-elements",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "homepage": "https://arcmira.com",
+  "scripts": {
+    "dev": "npm run prepare:assets && vite --host 127.0.0.1",
+    "build": "npm run prepare:assets && tsc --noEmit && vite build",
+    "check": "tsc --noEmit",
+    "test": "npm run prepare:assets && node --experimental-strip-types --test test/*.test.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "studio": "remotion studio remotion/index.tsx",
+    "render:stills": "node scripts/render-stills.mjs",
+    "prepare:assets": "node --experimental-strip-types scripts/build-assets.mjs"
+  },
+  "dependencies": {
+    "@remotion/player": "4.0.540",
+    "@remotion/studio-protocol": "4.0.540",
+    "remotion": "4.0.540",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.540",
+    "@remotion/bundler": "4.0.540",
+    "@remotion/renderer": "4.0.540",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/node": "24.10.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "@vitejs/plugin-react": "6.1.2"
+  }
+}

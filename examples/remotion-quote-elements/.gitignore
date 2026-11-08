@@ -1,0 +1,6 @@
+node_modules/
+dist/
+out/
+public/source/
+public/payloads/
+public/llms-components.txt

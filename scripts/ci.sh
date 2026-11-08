@@ -107,6 +107,12 @@ fi
   pnpm install --frozen-lockfile --ignore-scripts ${install_args[@]+"${install_args[@]}"}
   pnpm check
 )
+(
+  cd examples/remotion-quote-elements
+  npm ci --ignore-scripts --no-audit --no-fund ${install_args[@]+"${install_args[@]}"}
+  npm run build
+  npm test
+)
 python3 -m unittest discover -s examples/transcript-webvtt -p 'test_*.py' -v
 python3 -m unittest discover -s examples/resumable-channel-index -p 'test_*.py' -v
 node --test examples/quote-timeline/timeline.test.cjs
