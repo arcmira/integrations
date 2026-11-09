@@ -12,7 +12,7 @@ import { z } from "zod";
 import { searchInput, resolveInput } from "./inputs.js";
 
 export type ArcmiraToolsOptions = {
-  apiKey: string;
+  apiKey?: string;
   fetch?: typeof fetch;
 };
 
@@ -21,8 +21,10 @@ export type ArcmiraTools = {
   arcmiraResolve: Tool<z.infer<typeof resolveInput>, Awaited<ReturnType<ArcmiraClient["entities"]["resolve"]>>>;
 };
 
-export function createArcmiraTools(options: ArcmiraToolsOptions): ArcmiraTools {
-  const apiKey = z.string().trim().min(1).parse(options.apiKey);
+export function createArcmiraTools(options: ArcmiraToolsOptions = {}): ArcmiraTools {
+  const apiKey = z.string().trim().min(1).parse(
+    options.apiKey ?? (typeof process !== "undefined" ? process.env.ARCMIRA_API_KEY : undefined),
+  );
   const client = new ArcmiraClient({
     apiKey,
     fetch: options.fetch,
