@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube and podcast transcript search for Strands Agents | Arcmira</title>
+<meta name="description" content="Add YouTube and podcast transcript search to Strands Agents. Find quotes with speaker attribution and timestamped sources, then narrow by date or entity.">
+<link rel="canonical" href="https://arcmira.github.io/integrations/strands/">
+<meta property="og:title" content="YouTube and podcast transcript search for Strands Agents | Arcmira">
+<meta property="og:description" content="Find quotes with speaker attribution and timestamped sources in your Strands agent.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://arcmira.github.io/integrations/strands/">
+<link rel="stylesheet" href="../ai-sdk/style.css"><script defer src="../ai-sdk/guide.js"></script>
+<style>pre{white-space:pre-wrap;overflow-wrap:anywhere;padding-top:48px;padding-right:20px;tab-size:4}h2{scroll-margin-top:24px}table{border-collapse:collapse;width:100%}th,td{padding:10px;text-align:left;border-bottom:1px solid #303a4b}h1{max-width:880px}.hero>p:first-of-type{font-size:20px;color:#c1cbd9}</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "name": "Search YouTube and podcast transcripts from a Strands agent", "url": "https://arcmira.github.io/integrations/strands/", "publisher": {"@type": "Organization", "name": "Arcmira", "url": "https://arcmira.com"}}</script></head><body>
+<a class="skip" href="#content">Skip to guide</a><header><a class="brand" href="https://arcmira.com"><span class="logo-text">Arcmira</span></a><nav aria-label="Resources"><a href="../">Examples</a><a href="https://arcmira.com/docs">API docs</a><a href="https://github.com/arcmira/integrations/tree/master/packages/strands">Source</a></nav></header>
+<main id="content"><section class="hero"><h1>Search YouTube and podcast transcripts from a Strands agent</h1>
+<p>Search YouTube videos and podcast transcripts for quotes and clips, first with a direct tool call and then from a Strands agent. Each result keeps the exact quote, the speakers when the transcript names them, and a watch link cued to the second.</p>
+<p>You need Python 3.10 or later and an <a href="https://arcmira.com">Arcmira</a> account.</p>
+</section><section class="notes"><h2 id="install-the-adapter">Install the adapter</h2>
+<div class="code-box"><button type="button" class="copy" data-copy="code-1" aria-label="Copy example 1">Copy</button><pre><code id="code-1" tabindex="0" class="language-bash">python -m pip install strands-arcmira
+</code></pre></div>
+</section><section class="notes"><h2 id="set-your-api-key">Set your API key</h2>
+<p>Create an API key in your Arcmira account. Set the key in the environment where your code runs:</p>
+<div class="code-box"><button type="button" class="copy" data-copy="code-2" aria-label="Copy example 2">Copy</button><pre><code id="code-2" tabindex="0" class="language-bash">export ARCMIRA_API_KEY=&quot;your-api-key&quot;
+</code></pre></div>
+<p>Do not put the key in an agent prompt or a tool argument.</p>
+</section><section class="notes"><h2 id="run-a-search">Run a search</h2>
+<p>A direct tool call uses your Arcmira key and no model provider. Keep the topic in a <code>query</code> variable so that the later steps can reuse it.</p>
+<div class="code-box"><button type="button" class="copy" data-copy="code-3" aria-label="Copy example 3">Copy</button><pre><code id="code-3" tabindex="0" class="language-python">from urllib.parse import urljoin
+
+from strands_arcmira import arcmira_search
+
+query = &quot;AI video production&quot;
+
+
+def show(result):
+	for passage in result[&quot;chunks&quot;]:
+		print(passage[&quot;text&quot;])
+		print(&quot;Video:    &quot;, passage.get(&quot;video_title&quot;) or &quot;Unknown&quot;)
+		print(&quot;Channel:  &quot;, passage.get(&quot;channel_name&quot;) or &quot;Unknown&quot;)
+		print(&quot;Published:&quot;, (passage.get(&quot;published_at&quot;) or &quot;Unknown&quot;)[:10])
+		if passage.get(&quot;speakers&quot;):
+			print(&quot;Speakers: &quot;, &quot;, &quot;.join(passage[&quot;speakers&quot;]))
+		watch = urljoin(&quot;https://arcmira.com&quot;, passage[&quot;watch_url&quot;])
+		print(&quot;Watch:    &quot;, watch)
+		print()
+
+
+show(arcmira_search(q=query))
+</code></pre></div>
+<p>For each passage, <code>show</code> prints the quote, the video, the channel, the publication date, and the watch link. <code>show</code> prints the speakers when the result supplies them.</p>
+<p>A search with the default <code>limit</code> of 5 uses no credits. Before you raise <code>limit</code>, read <a href="https://arcmira.com/docs/usage-and-billing">usage and billing</a>.</p>
+</section><section class="notes"><h2 id="limit-the-search-to-recent-videos">Limit the search to recent videos</h2>
+<p>Search videos published in the last 60 days. Your account's coverage window applies.</p>
+<div class="code-box"><button type="button" class="copy" data-copy="code-4" aria-label="Copy example 4">Copy</button><pre><code id="code-4" tabindex="0" class="language-python">from datetime import datetime, timedelta, timezone
+
+now = datetime.now(timezone.utc)
+day = timedelta(days=1)
+after = (now - 60 * day).isoformat()
+before = now.isoformat()
+
+recent = arcmira_search(q=query, after=after, before=before)
+print(&quot;Window starts:&quot;, recent[&quot;window&quot;][&quot;after&quot;])
+show(recent)
+</code></pre></div>
+<p>Check the returned window and coverage notes before drawing conclusions about recent conversations.</p>
+</section><section class="notes"><h2 id="filter-by-a-person-or-a-company">Filter by a person or a company</h2>
+<p>The <code>by</code> and <code>about</code> filters take entity IDs, not names. Resolve the name first.</p>
+<div class="code-box"><button type="button" class="copy" data-copy="code-5" aria-label="Copy example 5">Copy</button><pre><code id="code-5" tabindex="0" class="language-python">import json
+
+from strands_arcmira import arcmira_resolve
+
+name = &quot;PlanetScale&quot;
+candidates = arcmira_resolve(q=name, type=&quot;organization&quot;)
+print(json.dumps(candidates, indent=2))
+</code></pre></div>
+<p>Read the candidates and copy the ID of the entity you mean. If more than one candidate fits, ask the person who made the request. Do not guess an ID.</p>
+<div class="code-box"><button type="button" class="copy" data-copy="code-6" aria-label="Copy example 6">Copy</button><pre><code id="code-6" tabindex="0" class="language-python">entity_id = &quot;PASTE_THE_ID&quot;
+entity_query = &quot;database&quot;
+show(arcmira_search(q=entity_query, about=entity_id))
+</code></pre></div>
+<p><code>about</code> narrows the keyword search to passages mentioning the entity. To find a person speaking the query words, resolve the person and pass the ID as <code>by</code>.</p>
+</section><section class="notes"><h2 id="give-the-tools-to-an-agent">Give the tools to an agent</h2>
+<p>Configure a <a href="https://strandsagents.com/latest/documentation/docs/user-guide/concepts/model-providers/amazon-bedrock/">Strands model provider</a> before running this example. <code>Agent()</code> defaults to Amazon Bedrock, which needs AWS credentials and model access. Model usage is billed separately from Arcmira.</p>
+<div class="code-box"><button type="button" class="copy" data-copy="code-7" aria-label="Copy example 7">Copy</button><pre><code id="code-7" tabindex="0" class="language-python">from strands import Agent
+from strands_arcmira import arcmira_resolve, arcmira_search
+
+query = &quot;AI video production&quot;
+
+agent = Agent(tools=[arcmira_search, arcmira_resolve])
+agent(
+	f&quot;Find five passages about {query}. &quot;
+	&quot;Keep the exact quotes and timestamped watch links. &quot;
+	&quot;Include speaker attribution when the result supplies it.&quot;
+)
+</code></pre></div>
+</section><section class="notes"><h2 id="keep-the-source-attached">Keep the source attached</h2>
+<p>Open the watch link to inspect the surrounding exchange before quoting it. An empty result does not prove that something was never said, and speaker labels cover only part of the index.</p>
+<p>Want coverage for a channel, speaker, industry, or workflow? <a href="https://arcmira.com/docs/feedback#help-shape-the-index">Help shape the index</a>. Tell us what you want to research and why it matters. Feedback is free to give and helps us prioritize what to build next.</p>
+</section><section class="notes"><h2 id="keep-going">Keep going</h2>
+<ul>
+<li>Read the <a href="https://github.com/arcmira/integrations/tree/master/packages/strands">README</a> for every parameter, the response fields, and the error behavior.</li>
+<li><a href="https://arcmira.com/docs/workflows/investment-research">Continue this investment research example workflow</a>. You will learn how to test competing explanations, inspect the surrounding exchanges, and bring timestamped sources into a research brief.</li>
+<li>Read the <a href="https://arcmira.com/docs">API documentation</a> for the rest of the Arcmira API.</li>
+</ul>
+</section><footer>Direct search and native tool dispatch verified. Agent examples require your configured model provider.</footer></main><p class="sr-only" id="copy-status" role="status" aria-live="polite"></p></body></html>
