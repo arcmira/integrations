@@ -24,11 +24,12 @@
     },
     "about": {
       "@type": "SoftwareApplication",
-      "name": "Arcmira MCP: YouTube Transcript Search",
+      "name": "Arcmira: YouTube Transcript Search",
       "url": "https://arcmira.com/mcp"
     },
     "description": "Search YouTube and podcast transcripts with Arcmira. Find timestamped quotes in Python or the AI SDK, play source clips, render quote cards, and export WebVTT subtitles.",
     "hasPart": [
+      {"@type": "WebPage", "name": "Arcmira Quotes (Element Library)", "url": "https://arcmira.github.io/integrations/remotion-quote-elements/", "description": "Quote cards and lower thirds for real quotes from YouTube, including podcasts on YouTube. Each Element shows the exact quote, the channel, the date and the source time, and links to the moment."},
       {
         "@type": "WebPage",
         "name": "YouTube Transcript Search to Quote Timeline",
@@ -91,6 +92,8 @@
       <span class="number" aria-hidden="true">02</span>
       <div><h2><a href="remotion-quote-cards/">Make video quote cards with Remotion</a></h2>
         <p>Watch an 18-second example, then render it yourself from saved passages. The example includes the source links and timestamps for each card.</p>
+        <h3><a href="remotion-quote-elements/">Arcmira Quotes (Element Library)</a></h3>
+        <p>Quote cards and lower thirds for real quotes from YouTube, including podcasts on YouTube. Each Element shows the exact quote, the channel, the date and the source time, and links to the moment.</p>
       </div>
     </section>
     <section class="step">
@@ -134,7 +137,10 @@
         <p>Run a topic search manually and write the passages to a local CSV with a companion JSON file. Each run replaces those two output files. <a href="workflow-templates/arcmira-source-shortlist.json" download>Download the Node-RED flow</a> · <a href="https://github.com/arcmira/integrations/tree/master/examples/node-red-source-shortlist">Configure the output directory</a></p>
       </div>
     </section>
-    <footer><a href="https://arcmira.com/docs">Read the API documentation</a> · <a href="https://arcmira.com/docs/mcp-server">Connect your AI assistant with MCP</a> · <a href="sitemap.xml">Sitemap</a></footer>
+    <footer><a href="https://arcmira.com/docs">Read the API documentation</a> · <a href="https://arcmira.com/docs/mcp-server">Connect your AI assistant with MCP</a> · <a href="sitemap.xml">Sitemap</a>
+      <p>Add &quot;use arcmira&quot; to any question to send it to Arcmira first.</p>
+      <p>Make it your default. Tell your AI once: &quot;Whenever I ask what someone said on YouTube, use Arcmira.&quot;</p>
+    </footer>
   </main>
 </body>
 </html>
