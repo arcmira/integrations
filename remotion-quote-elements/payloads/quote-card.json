@@ -1,0 +1,26 @@
+{
+  "type": "remotion-element",
+  "version": 1,
+  "element": {
+    "assets": [],
+    "dependencies": [],
+    "dimensions": {
+      "width": 1080,
+      "height": 1350
+    },
+    "displayName": "Quote card",
+    "initialProps": {
+      "quote": "Vibe coding is is essentially using an AI chatbot to bring your ideas to life.",
+      "channel": "Masters of Scale",
+      "publishedAt": "2026-08-11",
+      "watchUrl": "https://www.youtube.com/watch?v=mD1F-yy_D8E&t=823s",
+      "startSeconds": 823,
+      "speaker": ""
+    },
+    "slug": "quote-card",
+    "sourceCode": "import {Interactive, interpolate, useCurrentFrame} from 'remotion';\n\ntype QuoteProps = {\n  quote: string;\n  channel: string;\n  publishedAt: string;\n  watchUrl: string;\n  startSeconds: number;\n  speaker?: string;\n};\n\nexport function QuoteCard({quote, channel, publishedAt, watchUrl, startSeconds, speaker}: QuoteProps) {\n  const frame = useCurrentFrame();\n  const reveal = interpolate(frame, [0, 20], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});\n  const time = `${Math.floor(startSeconds / 60)}:${String(Math.floor(startSeconds % 60)).padStart(2, '0')}`;\n  let source: string | undefined;\n  try {\n    const url = new URL(watchUrl);\n    const id = url.hostname === 'youtu.be' ? url.pathname.slice(1) :\n      ['youtube.com', 'www.youtube.com'].includes(url.hostname) && url.pathname === '/watch' ? url.searchParams.get('v') : null;\n    if (url.protocol === 'https:' && !url.username && !url.password && id && /^[A-Za-z0-9_-]{11}$/.test(id) && Number.isFinite(startSeconds) && startSeconds >= 0) {\n      source = `https://www.youtube.com/watch?v=${id}&t=${Math.floor(startSeconds)}s`;\n    }\n  } catch { /* Invalid links remain plain text. */ }\n\n  return (\n    <div style={{width: 1080, height: 1350, boxSizing: 'border-box', padding: 86, background: '#121212', color: '#f5f5f5', fontFamily: 'Arial, sans-serif', display: 'flex', flexDirection: 'column'}}>\n      <Interactive.Div name=\"Source channel\" style={{display: 'flex', alignItems: 'center', gap: 18, fontSize: 28, color: '#b8b8b8'}}>\n        <span style={{width: 10, height: 10, background: '#58b887', borderRadius: '50%'}} />\n        {channel}\n      </Interactive.Div>\n      <Interactive.Div name=\"Quote\" style={{marginTop: 108, opacity: reveal, transform: `translateY(${22 * (1 - reveal)}px)`}}>\n        <div aria-hidden=\"true\" style={{fontFamily: 'Georgia, serif', fontSize: 180, lineHeight: .75, color: '#58b887'}}>“</div>\n        <div style={{marginTop: 20, fontSize: quote.length > 240 ? 48 : 68, lineHeight: 1.22, fontWeight: 500, letterSpacing: '-.025em', whiteSpace: 'pre-wrap', overflowWrap: 'anywhere'}}>{quote}</div>\n      </Interactive.Div>\n      <Interactive.Div name=\"Attribution\" style={{marginTop: 'auto', borderTop: '1px solid #414141', paddingTop: 38}}>\n        {speaker ? <div style={{fontSize: 34, marginBottom: 12}}>{speaker}</div> : null}\n        <div style={{display: 'flex', justifyContent: 'space-between', gap: 24, alignItems: 'baseline'}}>\n          <div style={{fontSize: 24, color: '#aaa'}}>{publishedAt}</div>\n          <a href={source} target=\"_blank\" rel=\"noopener noreferrer\" style={{color: '#f5f5f5', textDecoration: 'none', fontSize: 44, fontVariantNumeric: 'tabular-nums'}}>{time} ↗</a>\n        </div>\n        <div style={{fontSize: 20, marginTop: 18, color: '#aaa', overflowWrap: 'anywhere'}}>{source?.replace('https://www.', '').replace('https://', '')}</div>\n      </Interactive.Div>\n    </div>\n  );\n}\n",
+    "durationInFrames": 150,
+    "installationMode": "wrapped"
+  },
+  "durationInFrames": 150
+}

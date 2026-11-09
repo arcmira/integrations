@@ -1,0 +1,26 @@
+{
+  "type": "remotion-element",
+  "version": 1,
+  "element": {
+    "assets": [],
+    "dependencies": [],
+    "dimensions": {
+      "width": 1280,
+      "height": 300
+    },
+    "displayName": "Lower third quote",
+    "initialProps": {
+      "quote": "Vibe coding is is essentially using an AI chatbot to bring your ideas to life.",
+      "channel": "Masters of Scale",
+      "publishedAt": "2026-08-11",
+      "watchUrl": "https://www.youtube.com/watch?v=mD1F-yy_D8E&t=823s",
+      "startSeconds": 823,
+      "speaker": ""
+    },
+    "slug": "lower-third-quote",
+    "sourceCode": "import {Interactive, interpolate, useCurrentFrame} from 'remotion';\n\ntype QuoteProps = {\n  quote: string;\n  channel: string;\n  publishedAt: string;\n  watchUrl: string;\n  startSeconds: number;\n  speaker?: string;\n};\n\nexport function LowerThirdQuote({quote, channel, publishedAt, watchUrl, startSeconds, speaker}: QuoteProps) {\n  const frame = useCurrentFrame();\n  const reveal = interpolate(frame, [0, 18], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});\n  const time = `${Math.floor(startSeconds / 60)}:${String(Math.floor(startSeconds % 60)).padStart(2, '0')}`;\n  let source: string | undefined;\n  try {\n    const url = new URL(watchUrl);\n    const id = url.hostname === 'youtu.be' ? url.pathname.slice(1) :\n      ['youtube.com', 'www.youtube.com'].includes(url.hostname) && url.pathname === '/watch' ? url.searchParams.get('v') : null;\n    if (url.protocol === 'https:' && !url.username && !url.password && id && /^[A-Za-z0-9_-]{11}$/.test(id) && Number.isFinite(startSeconds) && startSeconds >= 0) {\n      source = `https://www.youtube.com/watch?v=${id}&t=${Math.floor(startSeconds)}s`;\n    }\n  } catch { /* Invalid links remain plain text. */ }\n\n  return (\n    <Interactive.Div name=\"Lower third quote\" style={{width: 1280, height: 300, boxSizing: 'border-box', padding: '38px 48px', background: '#f0f0eb', color: '#161616', borderLeft: '8px solid #187246', fontFamily: 'Arial, sans-serif', opacity: reveal, transform: `translateX(${-28 * (1 - reveal)}px)`, display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>\n      <div style={{fontSize: quote.length > 200 ? 27 : 38, lineHeight: 1.22, letterSpacing: '-.02em', whiteSpace: 'pre-wrap', overflowWrap: 'anywhere'}}>“{quote}”</div>\n      <div style={{display: 'flex', alignItems: 'baseline', gap: 24, marginTop: 26, fontSize: 20, color: '#555'}}>\n        <span style={{color: '#161616', fontWeight: 600}}>{speaker ? `${speaker} · ${channel}` : channel}</span>\n        <span>{publishedAt}</span>\n        <a href={source} target=\"_blank\" rel=\"noopener noreferrer\" style={{marginLeft: 'auto', color: '#185d3c', textDecoration: 'none', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap'}}>{time} ↗</a>\n      </div>\n    </Interactive.Div>\n  );\n}\n",
+    "durationInFrames": 150,
+    "installationMode": "wrapped"
+  },
+  "durationInFrames": 150
+}

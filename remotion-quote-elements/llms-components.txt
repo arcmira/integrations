@@ -1,0 +1,38 @@
+# Arcmira Quotes
+
+Quote cards and lower thirds for real quotes from YouTube, including podcasts on YouTube. Each Element shows the exact quote, the channel, the date and the source time, and links to the moment.
+
+Library: https://arcmira.github.io/integrations/remotion-quote-elements/
+
+Each component is self-contained. React and Remotion are required in the receiving project.
+
+## Inputs
+
+quote (required): The passage text, trimmed to one or two sentences.
+channel (required): The channel or show name.
+watchUrl (required): The watch link at the second the passage starts.
+speaker: The speaker's name.
+publishedAt: Publication date in YYYY-MM-DD format.
+startSeconds: Non-negative source timestamp in seconds.
+
+## QuoteCard
+
+Preview: https://arcmira.github.io/integrations/remotion-quote-elements/quote-card/
+Source: https://arcmira.github.io/integrations/remotion-quote-elements/source/quote-card.tsx
+Studio payload: https://arcmira.github.io/integrations/remotion-quote-elements/payloads/quote-card.json
+Dimensions: 1080 × 1350. Duration: 150 frames at 30 fps.
+
+## LowerThirdQuote
+
+Preview: https://arcmira.github.io/integrations/remotion-quote-elements/lower-third-quote/
+Source: https://arcmira.github.io/integrations/remotion-quote-elements/source/lower-third-quote.tsx
+Studio payload: https://arcmira.github.io/integrations/remotion-quote-elements/payloads/lower-third-quote.json
+Dimensions: 1280 × 300. Duration: 150 frames at 30 fps.
+
+## SourceCredit
+
+Preview: https://arcmira.github.io/integrations/remotion-quote-elements/source-credit/
+Source: https://arcmira.github.io/integrations/remotion-quote-elements/source/source-credit.tsx
+Studio payload: https://arcmira.github.io/integrations/remotion-quote-elements/payloads/source-credit.json
+Dimensions: 1280 × 500. Duration: 150 frames at 30 fps.
+
