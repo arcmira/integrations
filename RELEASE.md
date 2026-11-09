@@ -5,7 +5,16 @@
 Current guides and agent-visible descriptions say paid reads use credits from your plan, then your on-demand budget. Python LangChain 0.1.5 includes this correction. Other package versions and request behavior are unchanged. Their published archives and registry packages retain their released content until the next version is published; do not replace an existing release asset with a rebuilt archive. Appmixer 1.0.5 includes this correction; its published 1.0.4 ZIP is unchanged.
 
 
-The TypeScript LangChain, AI SDK and Activepieces packages are published on npm at 0.1.0. The [n8n 0.1.0 release archive](https://github.com/arcmira/integrations/releases/tag/n8n-v0.1.0) is available on GitHub. Its first npm publication is pending. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify 0.1.3 is [published in the Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.2 was tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/). The Python and TypeScript packages are listed in their respective LangChain provider directories and tools catalogs. Other framework catalog reviews remain separate.
+TypeScript LangChain 0.1.1, AI SDK 0.1.2 and Activepieces 0.1.0 are published on npm. The [n8n 0.1.0 release archive](https://github.com/arcmira/integrations/releases/tag/n8n-v0.1.0) is available on GitHub. Its first npm publication is pending. Pipedream is a separate unpublished native-component preview at 0.0.1. Dify 0.1.3 is [published in the Marketplace](https://marketplace.dify.ai/plugin/arcmira/arcmira). Version 0.1.2 was tested in Community Edition 1.17.1. Version 0.1.1 was installed separately as a local Cloud plugin. The Python LangChain package is [published on PyPI at 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/). The Python and TypeScript packages are listed in their respective LangChain provider directories and tools catalogs. Other framework catalog reviews remain separate.
+
+## TypeScript LangChain 0.1.1 and AI SDK 0.1.2
+
+Published November 9, 2026 with Arcmira SDK 0.6.2. LangChain passed 15 tests and the AI SDK passed 20. Fresh npm installations executed transcript search and preserved returned evidence. Registry signatures and provenance attestations were verified.
+
+AI SDK 0.1.2 adds the `ARCMIRA_API_KEY` default for `createArcmiraTools()`. Explicit keys take precedence, and missing or blank keys fail before a request. The no-argument setup was verified against the installed npm package.
+
+- [LangChain 0.1.1](https://www.npmjs.com/package/@arcmira/langchain/v/0.1.1) · [Publish run](https://github.com/arcmira/integrations/actions/runs/42710716533)
+- [AI SDK 0.1.2](https://www.npmjs.com/package/@arcmira/ai-sdk/v/0.1.2) · [Publish run](https://github.com/arcmira/integrations/actions/runs/42712350710)
 
 ## Python LangChain 0.1.7
 
@@ -23,9 +32,9 @@ Published October 13, 2026 with Arcmira SDK 0.6.0. Third-party dependencies are 
 
 | Package | Framework | Arcmira SDK | Checks |
 | --- | --- | --- | --- |
-| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.6.0 | TypeScript, 14 workflow tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
+| @arcmira/langchain | @langchain/core 1.2.13; @langchain/langgraph 1.4.18 | 0.6.2 | TypeScript, 15 workflow tests, registry installation and provenance checks; earlier live search and resolution used SDK 0.4.3 |
 | langchain-arcmira | langchain-core 1.6.5; langchain-tests 1.1.9; langgraph 1.2.12 | 0.6.2 | 58 source tests and 58 built-wheel tests; public archive hashes match; no new live API test for this dependency update |
-| @arcmira/ai-sdk | ai 7.0.127 | 0.6.0 | TypeScript, 14 tool-loop tests, archive checks; earlier live search and resolution used SDK 0.4.3 |
+| @arcmira/ai-sdk | ai 7.0.127 | 0.6.2 | TypeScript, 20 tests, registry installation and provenance checks; earlier live search and resolution used SDK 0.4.3 |
 | @arcmira/piece-arcmira | Activepieces host 0.92.0; pieces-framework 0.32.0 | Direct HTTP | TypeScript, 13 action tests, isolated bundle check, live native-host search |
 | n8n-nodes-arcmira | n8n host 2.41.3; routing engine 2.41.2; workflow 2.41.0 | Direct HTTP | TypeScript, strict lint, seven routing tests, parameter contract, live native-host search and resolution |
 | Arcmira for Dify | dify-plugin 0.10.2; plugin 0.1.3 published; Community Edition 1.17.1 | Direct HTTP | 18 SDK tests, local SDK research, native Community Edition resolution and bounded search; Cloud 0.1.3 research and credential-free workflow import/run verified |
@@ -76,7 +85,7 @@ Version 0.1.4 pins released Arcmira SDK 0.5.1. Full local `scripts/ci.sh --offli
 
 [PyPI 0.1.4](https://pypi.org/project/langchain-arcmira/0.1.4/) · [Signed release artifacts](https://github.com/arcmira/integrations/releases/tag/langchain-python-v0.1.4) · [Publication run](https://github.com/arcmira/integrations/actions/runs/37855506741)
 
-The published TypeScript LangChain and AI SDK packages pin SDK 0.6.0. Each passed 14 source tests and 14 packed-artifact tests.
+The October 13 TypeScript LangChain and AI SDK 0.1.0 releases pinned SDK 0.6.0. Each passed 14 source tests and 14 packed-artifact tests.
 
 ### Previous release 0.1.3
 
