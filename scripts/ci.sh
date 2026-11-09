@@ -64,6 +64,14 @@ done
   uv run --frozen twine check dist/*
 )
 (
+  cd packages/strands
+  uv sync --frozen ${install_args[@]+"${install_args[@]}"}
+  uv run --frozen ruff check .
+  uv run --frozen pytest -q
+  uv build
+  uv run --frozen twine check dist/*
+)
+(
   cd examples/dlt
   uv sync --frozen ${install_args[@]+"${install_args[@]}"}
   RUNTIME__DLTHUB_TELEMETRY=false uv run --frozen python -m unittest discover -s test -v

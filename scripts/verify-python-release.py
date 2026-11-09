@@ -61,7 +61,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
     parser.add_argument("--tag")
-    parser.add_argument("--package", choices=("langchain-python", "langflow"), default="langchain-python")
+    parser.add_argument("--package", choices=("langchain-python", "langflow", "strands"), default="langchain-python")
     args = parser.parse_args()
     verify(
         args.directory, args.tag,

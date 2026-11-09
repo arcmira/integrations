@@ -144,5 +144,12 @@ class LangflowReleaseVerificationTests(ReleaseVerificationTests):
     tag = "langflow-v0.1.0"
 
 
+class StrandsReleaseVerificationTests(ReleaseVerificationTests):
+    package_path = "packages/strands"
+    package_name = "strands-arcmira"
+    artifact_name = "strands_arcmira"
+    tag = "strands-v0.1.0"
+
+
 if __name__ == "__main__":
     unittest.main()

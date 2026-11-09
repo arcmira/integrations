@@ -216,3 +216,10 @@ The manual `publish-langflow.yml` workflow uploads prebuilt, checksum-verified w
 For publisher recovery, the PyPI trusted publisher for project `lfx-arcmira`, owner `arcmira`, repository `integrations`, workflow `publish-langflow.yml`, environment `pypi` must match the workflow. This configuration grants only this project's publishing access. No publishing token belongs in this repository.
 
 For the next release, finish the package's release copy, run local CI, commit `release-artifacts/langflow/current.json` with the verified package tree and artifact SHA-256 hashes, create its signed release tag and upload those exact files. Run `python3 scripts/verify-python-release.py --package langflow --tag <release-tag> packages/langflow/dist` before dispatch. Do not claim a PyPI release until the public registry files and provenance have been verified. Version 0.1.0 has a release manifest and the `langflow-v0.1.0` tag. On October 15, 2026, both public PyPI artifact hashes matched the manifest.
+
+
+### Strands 0.1.0
+
+The Strands adapter provides native transcript search and entity resolution tools. The package passed 21 adapter tests and 33 shared release-verifier tests. A direct live search and native tool dispatch returned timestamped passages without model inference. The hosted guide includes direct search, date windows, entity resolution and agent setup.
+
+The publishing-only `publish-strands.yml` workflow uses the `pypi` environment. It verifies the package tree and both prebuilt artifacts against `release-artifacts/strands/current.json` before uploading. Configure the PyPI pending publisher for project `strands-arcmira`, repository `arcmira/integrations`, workflow `publish-strands.yml`, environment `pypi`. Publication is complete only after the registry artifacts and provenance have been verified.
