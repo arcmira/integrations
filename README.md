@@ -16,10 +16,10 @@ Try the [YouTube Transcript Search API starter in Postman](https://www.postman.c
 | Nix CLI | [Package and installation](nix) | Run once with `nix run github:arcmira/integrations -- search --help`. |
 | Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.6.2 |
 | mise CLI | [npm backend](https://mise.jdx.dev/dev-tools/backends/npm.html) | With Node.js 18 or later on your PATH, run `mise exec npm:arcmira@0.6.2 -- arcmira search --help` for transcript search options. |
-| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/langchain); [LangChain providers](https://docs.langchain.com/oss/javascript/integrations/providers/all_providers) and [tools catalog](https://docs.langchain.com/oss/javascript/integrations/tools) |
+| LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | [npm 0.1.1](https://www.npmjs.com/package/@arcmira/langchain); [LangChain providers](https://docs.langchain.com/oss/javascript/integrations/providers/all_providers) and [tools catalog](https://docs.langchain.com/oss/javascript/integrations/tools) |
 | LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
 | Langflow | [Setup and components](packages/langflow) | [PyPI 0.1.0](https://pypi.org/project/lfx-arcmira/0.1.0/); authenticated editor search and entity resolution verified; catalog review pending |
-| Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/ai-sdk); catalog submission pending |
+| Vercel AI SDK | [Setup guide](https://arcmira.github.io/integrations/ai-sdk/) · [Source](packages/ai-sdk) | [npm 0.1.2](https://www.npmjs.com/package/@arcmira/ai-sdk); catalog submission pending |
 | Activepieces | [Setup and action](packages/activepieces) | [npm 0.1.0](https://www.npmjs.com/package/@arcmira/piece-arcmira); native editor verified; manual installation available |
 | n8n | [Setup and node](packages/n8n) | Source preview; native editor search and entity resolution verified. npm publication and n8n review pending |
 | n8n CSV workflow | [YouTube clip shortlist](examples/n8n-clip-shortlist) | Native n8n 2.41.3 fixture and live CSV export verified; importable example |
@@ -71,7 +71,7 @@ See the [Python guide](packages/langchain-python) for entity resolution, filters
 ## Install the TypeScript package
 
 ```sh
-npm install @arcmira/langchain@0.1.0 @langchain/core zod
+npm install @arcmira/langchain@0.1.1 @langchain/core zod
 export ARCMIRA_API_KEY='your-key'
 node --input-type=module <<'JS'
 import { createArcmiraTools } from '@arcmira/langchain';
@@ -96,7 +96,7 @@ A paid read uses credits from your plan, then your on-demand budget. Coverage an
 
 Python LangChain 0.1.7 uses Arcmira SDK 0.6.2. Its wheel passed 58 adapter tests with external network connections blocked, and both public PyPI archives match the tested artifacts. Earlier live integration checks used no credits or model inference. See [release verification](RELEASE.md#python-langchain-017) for evidence and scope.
 
-The TypeScript LangChain package and AI SDK each have 14 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
+The TypeScript LangChain package has 15 tests and the AI SDK has 20 tests covering native tool execution, input filters, source evidence, ambiguous entities, errors and cancellation. LangChain runs through a compiled LangGraph; the AI SDK runs its tool loop with simulated model decisions. Both have also completed authenticated search and entity resolution against the live Arcmira API. No model inference is included in these checks.
 
 Activepieces has 13 tests, a bundled-package check, and a successful authenticated search through its native host. n8n has seven routing-engine tests, 16 polling tests for the Arcmira Trigger, a parameter-contract check, and successful authenticated search and entity resolution through its native host. The trigger has not yet run in a native n8n host. Dify has 22 SDK tests and successful local SDK calls to the live API. Plugin 0.1.2 also completed native entity resolution and a bounded transcript search in Community Edition 1.17.1, preserving source labels, citations and coverage notes with no model tokens or observed credit use. Dify Cloud also completed native search and entity resolution with plugin 0.1.3 on October 29, 2026. The credential-free [search workflow](examples/dify-transcript-search) imported and returned three timestamped passages in three steps with zero model tokens. The Activepieces and n8n adapters retain their MIT licenses; LangChain, AI SDK and Dify use Apache-2.0.
 
