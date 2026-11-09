@@ -24,18 +24,17 @@ Set `ARCMIRA_API_KEY` and your model provider's credentials in the server enviro
 import { generateText, isStepCount } from 'ai';
 import { createArcmiraTools } from '@arcmira/ai-sdk';
 
-const apiKey = process.env.ARCMIRA_API_KEY;
-if (!apiKey) throw new Error('Set ARCMIRA_API_KEY');
-
 const { text } = await generateText({
   model: 'openai/gpt-5-mini',
-  tools: createArcmiraTools({ apiKey }),
+  tools: createArcmiraTools(),
   prompt: 'Find passages discussing AI agents. Return timestamped source links and preserve any coverage limitations.',
   stopWhen: isStepCount(5),
 });
 
 console.log(text);
 ```
+
+`createArcmiraTools()` reads `ARCMIRA_API_KEY` from the server environment. Pass `{ apiKey }` to use a different key. Missing or blank keys fail before any request.
 
 The model string uses the AI SDK's gateway. Configure its credentials separately. Model inference may have its own cost.
 

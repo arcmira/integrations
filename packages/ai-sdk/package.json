@@ -1,6 +1,6 @@
 {
   "name": "@arcmira/ai-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": "YouTube transcript search for AI agents: the exact quote, often who said it, and a watch link cued to the second.",
   "main": "./dist/index.js",
