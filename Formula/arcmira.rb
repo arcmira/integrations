@@ -1,8 +1,8 @@
 class Arcmira < Formula
   desc "YouTube transcript search for timestamped quotes in videos and podcasts"
   homepage "https://arcmira.com"
-  url "https://registry.npmjs.org/arcmira/-/arcmira-0.6.2.tgz"
-  sha256 "5b8cbeb59228bd86e7662213ef0a2e07ae49c772066478fb85e82944580dea73"
+  url "https://registry.npmjs.org/arcmira/-/arcmira-0.6.3.tgz"
+  sha256 "b197995a2ff04f1e81e4fd8a9e37a686550bed19ae1cf9eb351acfb52f9ffbb1"
   license "Apache-2.0"
 
   depends_on "node@24"

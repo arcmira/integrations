@@ -14,8 +14,8 @@ Try the [YouTube Transcript Search API starter in Postman](https://www.postman.c
 | goose | [Topic-to-quote recipe](examples/goose-quote-search) | Find timestamped passages in indexed YouTube and podcast transcripts and check each quote against its recording. |
 | Replit Agent | [Add Arcmira to Replit](https://replit.com/integrations?mcp=eyJkaXNwbGF5TmFtZSI6IkFyY21pcmE6IFlvdVR1YmUgVHJhbnNjcmlwdCBTZWFyY2giLCJiYXNlVXJsIjoiaHR0cHM6Ly9tY3AuYXJjbWlyYS5jb20vbWNwIn0%3D) · [MCP setup](https://arcmira.com/docs/mcp-server) | Connect a custom MCP server, sign in with Arcmira, and ask Replit Agent to find timestamped passages in YouTube and podcast transcripts. |
 | Nix CLI | [Package and installation](nix) | Run once with `nix run github:arcmira/integrations -- search --help`. |
-| Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.6.2 |
-| mise CLI | [npm backend](https://mise.jdx.dev/dev-tools/backends/npm.html) | With Node.js 18 or later on your PATH, run `mise exec npm:arcmira@0.6.2 -- arcmira search --help` for transcript search options. |
+| Homebrew CLI | [Formula and installation](Formula) | First-party tap; CLI 0.6.3 |
+| mise CLI | [npm backend](https://mise.jdx.dev/dev-tools/backends/npm.html) | With Node.js 18 or later on your PATH, run `mise exec npm:arcmira@0.6.3 -- arcmira search --help` for transcript search options. |
 | LangChain / LangGraph, TypeScript | [Setup and tools](packages/langchain) | [npm 0.1.1](https://www.npmjs.com/package/@arcmira/langchain); [LangChain providers](https://docs.langchain.com/oss/javascript/integrations/providers/all_providers) and [tools catalog](https://docs.langchain.com/oss/javascript/integrations/tools) |
 | Strands Agents | [Setup guide](https://arcmira.github.io/integrations/strands/) · [Tools and parameters](packages/strands) | Search transcript passages and resolve entities with native Strands tools. |
 | LangChain / LangGraph, Python | [Setup and tools](packages/langchain-python) | [PyPI 0.1.7](https://pypi.org/project/langchain-arcmira/0.1.7/); [LangChain catalog](https://docs.langchain.com/oss/python/integrations/providers/all_providers) |
