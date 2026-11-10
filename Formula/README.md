@@ -11,7 +11,7 @@ arcmira --version
 arcmira search --help
 ```
 
-The formula installs CLI 0.6.2 and declares Node 24 LTS. Homebrew can install or upgrade dependencies. If your environment enforces a release-age policy, check the current dependency releases before installing. Arcmira does not pin Homebrew's dependency catalog.
+The formula installs CLI 0.6.3 and declares Node 24 LTS. Homebrew can install or upgrade dependencies. If your environment enforces a release-age policy, check the current dependency releases before installing. Arcmira does not pin Homebrew's dependency catalog.
 
 The version and help commands work without an API key. After [authenticating](https://arcmira.com/docs/authentication), find up to three passages about agent payments:
 
@@ -33,6 +33,8 @@ brew upgrade arcmira/integrations/arcmira
 The wrapper disables npm update notices. Homebrew manages the installed CLI version.
 
 ## Validation
+
+On November 9, 2026, Homebrew 7.0.13 installed CLI 0.6.3 on Apple Silicon macOS with the existing Node 24.19.0 runtime. The unlinked installation passed the formula's version and schema assertions, a search against a local test server, and `brew audit --strict --online`. The standard `brew test` command stopped at its dependency check because newer dependencies were available. The assertions ran directly through Homebrew's Ruby API without upgrading those dependencies. CLI 0.6.3 has not been tested on Linux.
 
 On November 2, 2026, a fresh ARM64 Debian 12 installation with Homebrew 7.0.11 installed CLI 0.6.2 and its dependencies from the October 22 Homebrew Core catalog. Node 24.22.1 ran the CLI. The formula passed `brew test --force arcmira/integrations/arcmira`. The search example above sent the expected query and limit to a local test server.
 
