@@ -64,13 +64,72 @@
     },
     {
       "parameters": {
-        "jsCode": "const s = $input.first().json;\nconst names = [...new Set(String(s.competitors || '').split(',').map((x) => x.trim()).filter(Boolean))];\nconst after = new Date(Date.now() - Number(s.days || 14) * 86400000).toISOString().slice(0, 10);\nconst ad_reads = s.ad_reads === true || String(s.ad_reads).toLowerCase() === 'true';\nreturn names.map((name) => ({ json: { name, after, ad_reads } }));"
+        "url": "https://api.arcmira.com/v1/me",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "n8n-template/competitor-mentions-sheet"
+            },
+            {
+              "name": "x-arcmira-client",
+              "value": "n8n-template/competitor-mentions-sheet"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Check the plan's dates",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        300
+      ],
+      "id": "check-the-plans-dates",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "name": "Get rows from the sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        660,
+        300
+      ],
+      "id": "get-rows-from-the-sheet",
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  // n8n hands a refusal on as \"403 - <the body as a JSON string>\", or, from a node that pages, as statusCode and the body in error.\n  const raw = e.error ?? msg.slice(msg.indexOf(' - ') + 3);\n  let body = null;\n  try { body = typeof raw === 'string' ? JSON.parse(raw) : raw; if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.statusCode || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg || String(e.response?.statusText || ''), unlock: body?.error?.unlock?.url || '',\n    through: body?.error?.details?.limit?.served_through || '' };\n};\nconst keyError = (e) => new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Check the plan's dates\", \"Resolve entity in Arcmira\", \"Get mentions from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst today = new Date().toISOString().slice(0, 10);\nconst note = (competitor, text) => ({ mention_id: `note:${competitor}:${today}`, found_on: today, competitor, published: '', show: '', video: '', said_at: '', link: '', what_was_said: '', why_it_came_up: text, ad_read: '', views: '' });\nconst s = $('Settings').first().json;\nconst names = [...new Set(String(s.competitors || '').split(',').map((x) => x.trim()).filter(Boolean))];\n// When the plan check fails, the run can't tell which dates the plan reads, so it stops rather than guess.\nconst me = $(\"Check the plan's dates\").first().json;\nif (me.error) {\n  const e = refusal(me.error);\n  if (e.status === 401 || e.status === 403) throw keyError(e);\n  throw new Error(`Arcmira didn't answer \"Check the plan's dates\" after 5 tries (${e.code || e.status || 'error'}). Run the workflow again.`);\n}\n// A plan that reads media after a delay (Free) reads up to delay_days ago, which falls on served_through, and the\n// window ends there, so the list is answered on the first try. A current plan's window ends now. after is exact to\n// the second, so weekly runs meet and a mention is listed in two of them.\nconst day = 86400000;\nconst end = Date.now() - (Number(me.freshness?.delay_days) || 0) * day;\nconst after = new Date(end - Number(s.days || 14) * day).toISOString().replace(/\\.\\d{3}Z$/, 'Z');\nconst ad_reads = s.ad_reads === true || String(s.ad_reads).toLowerCase() === 'true';\nreturn names.map((name) => ({ json: { name, after, ad_reads } }));"
       },
       "name": "One item per competitor",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        440,
+        880,
         300
       ],
       "id": "one-item-per-competitor"
@@ -84,7 +143,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        720,
+        1160,
         300
       ],
       "id": "one-name-at-a-time"
@@ -130,7 +189,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        940,
+        1380,
         300
       ],
       "id": "resolve-entity-in-arcmira",
@@ -141,13 +200,13 @@
     },
     {
       "parameters": {
-        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  // n8n hands a refusal on as \"403 - <the body as a JSON string>\", or, from a node that pages, as statusCode and the body in error.\n  const raw = e.error ?? msg.slice(msg.indexOf(' - ') + 3);\n  let body = null;\n  try { body = typeof raw === 'string' ? JSON.parse(raw) : raw; if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.statusCode || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg || String(e.response?.statusText || ''), unlock: body?.error?.unlock?.url || '',\n    through: body?.error?.details?.limit?.served_through || '' };\n};\nconst keyError = (e) => new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Resolve entity in Arcmira\", \"Get mentions from Arcmira\", \"Get older mentions from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst today = new Date().toISOString().slice(0, 10);\nconst note = (competitor, text) => ({ mention_id: `note:${competitor}:${today}`, found_on: today, competitor, published: '', show: '', video: '', said_at: '', link: '', what_was_said: '', why_it_came_up: text, ad_read: '', views: '' });\n\nconst PAGE = 100;const asked = $('One item per competitor').all().map((i) => i.json);\nreturn $input.all().map((item, n) => {\n  const r = item.json;\n  const { name, after, ad_reads } = asked[n];\n  // The mentions read. details=full adds Arcmira's commercial class (ad reads), which Pro+ and above return.\n  const found = (entity_id, label, extra = {}) => ({ json: { name, after, entity_id, label, ...extra,\n    query: { entity_id, after, limit: PAGE, ...(ad_reads ? { details: 'full' } : {}) } } });\n  // An id pasted in Settings skips the lookup's answer.\n  if (/^ent_[A-Za-z0-9]+$/.test(name)) return found(name, name);\n  if (r.error) {\n    const e = refusal(r.error);\n    if (e.status === 401 || e.status === 403) throw keyError(e);\n    return { json: note(name, `Arcmira couldn't look up \"${name}\" (${e.code || e.status}). ${e.text}`) };\n  }\n  if (r.best?.id) return found(r.best.id, r.best.name || name);\n  if (r.suggested?.id) return found(r.suggested.id, r.suggested.name || name,\n    { note: `Arcmira assumed \"${name}\" means ${r.suggested.name} (${r.suggested.id}). If not, put the right id in Settings.` });\n  // A name Arcmira can't place leaves here as a note row, and \"Found it?\" sends it straight to the sheet.\n  const options = (r.ask?.options || r.candidates || []).slice(0, 4).map((o) => `${o.name} (${o.id})`).join(', ');\n  return { json: note(name, options\n    ? `Arcmira couldn't tell which \"${name}\" you mean. Put one of these ids in Settings instead: ${options}.`\n    : `Arcmira found no company called \"${name}\".`) };\n});"
+        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  // n8n hands a refusal on as \"403 - <the body as a JSON string>\", or, from a node that pages, as statusCode and the body in error.\n  const raw = e.error ?? msg.slice(msg.indexOf(' - ') + 3);\n  let body = null;\n  try { body = typeof raw === 'string' ? JSON.parse(raw) : raw; if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.statusCode || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg || String(e.response?.statusText || ''), unlock: body?.error?.unlock?.url || '',\n    through: body?.error?.details?.limit?.served_through || '' };\n};\nconst keyError = (e) => new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Check the plan's dates\", \"Resolve entity in Arcmira\", \"Get mentions from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst today = new Date().toISOString().slice(0, 10);\nconst note = (competitor, text) => ({ mention_id: `note:${competitor}:${today}`, found_on: today, competitor, published: '', show: '', video: '', said_at: '', link: '', what_was_said: '', why_it_came_up: text, ad_read: '', views: '' });\n\nconst PAGE = 100;const asked = $('One item per competitor').all().map((i) => i.json);\nreturn $input.all().map((item, n) => {\n  const r = item.json;\n  const { name, after, ad_reads } = asked[n];\n  // The mentions read. details=full adds Arcmira's commercial class (ad reads), which Pro+ and above return.\n  const found = (entity_id, label, extra = {}) => ({ json: { name, after, entity_id, label, ...extra,\n    query: { entity_id, after, limit: PAGE, ...(ad_reads ? { details: 'full' } : {}) } } });\n  // An id pasted in Settings skips the lookup's answer.\n  if (/^ent_[A-Za-z0-9]+$/.test(name)) return found(name, name);\n  if (r.error) {\n    const e = refusal(r.error);\n    if (e.status === 401 || e.status === 403) throw keyError(e);\n    return { json: note(name, `Arcmira couldn't look up \"${name}\" (${e.code || e.status}). ${e.text}`) };\n  }\n  if (r.best?.id) return found(r.best.id, r.best.name || name);\n  if (r.suggested?.id) return found(r.suggested.id, r.suggested.name || name,\n    { note: `Arcmira assumed \"${name}\" means ${r.suggested.name} (${r.suggested.id}). If not, put the right id in Settings.` });\n  // A name Arcmira can't place leaves here as a note row, and \"Found it?\" sends it straight to the sheet.\n  const options = (r.ask?.options || r.candidates || []).slice(0, 4).map((o) => `${o.name} (${o.id})`).join(', ');\n  return { json: note(name, options\n    ? `Arcmira couldn't tell which \"${name}\" you mean. Put one of these ids in Settings instead: ${options}.`\n    : `Arcmira found no company called \"${name}\".`) };\n});"
       },
       "name": "Pick the competitor",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1160,
+        1600,
         300
       ],
       "id": "pick-the-competitor"
@@ -181,7 +240,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1380,
+        1820,
         300
       ],
       "id": "found-it"
@@ -195,7 +254,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1640,
+        2080,
         300
       ],
       "id": "one-competitor-at-a-time"
@@ -246,7 +305,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1860,
+        2300,
         300
       ],
       "id": "get-mentions-from-arcmira",
@@ -257,128 +316,26 @@
     },
     {
       "parameters": {
-        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  // n8n hands a refusal on as \"403 - <the body as a JSON string>\", or, from a node that pages, as statusCode and the body in error.\n  const raw = e.error ?? msg.slice(msg.indexOf(' - ') + 3);\n  let body = null;\n  try { body = typeof raw === 'string' ? JSON.parse(raw) : raw; if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.statusCode || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg || String(e.response?.statusText || ''), unlock: body?.error?.unlock?.url || '',\n    through: body?.error?.details?.limit?.served_through || '' };\n};\nconst keyError = (e) => new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Resolve entity in Arcmira\", \"Get mentions from Arcmira\", \"Get older mentions from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst today = new Date().toISOString().slice(0, 10);\nconst note = (competitor, text) => ({ mention_id: `note:${competitor}:${today}`, found_on: today, competitor, published: '', show: '', video: '', said_at: '', link: '', what_was_said: '', why_it_came_up: text, ad_read: '', views: '' });\nconst days = Number($('Settings').first().json.days || 14);\nconst asked = $('One competitor at a time').first().json;  // the loop's competitor, whose pages these are\nreturn $input.all().map((item, k) => {\n  const e = item.json.error ? refusal(item.json.error) : null;\n  // Any other failed read carries its competitor's name out of the loop, for the sheet's note row.\n  if (e?.code !== 'freshness_requires_paid' || !/^\\d{4}-\\d{2}-\\d{2}$/.test(e.through)) return { json: e ? { ...item.json, competitor: asked.label || asked.name } : item.json, pairedItem: { item: k } };\n  const after = new Date(Date.parse(e.through) - days * 86400000).toISOString().slice(0, 10);\n  return { json: { name: asked.name, entity_id: asked.entity_id, label: asked.label, gate: [e.text, e.unlock].filter(Boolean).join(' '),\n    query: { ...asked.query, after } }, pairedItem: { item: k } };\n});"
+        "jsCode": "const asked = $('One competitor at a time').first().json;  // the loop's competitor, whose pages these are\nreturn $input.all().map((item, k) => ({ json: item.json.error ? { ...item.json, competitor: asked.label || asked.name } : item.json, pairedItem: { item: k } }));"
       },
-      "name": "Check the plan's dates",
+      "name": "Name a failed read",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        2080,
-        300
-      ],
-      "id": "check-the-plans-dates"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "plan-stops-earlier",
-              "leftValue": "={{ $json.gate || '' }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "name": "Plan stops earlier?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        2300,
-        300
-      ],
-      "id": "plan-stops-earlier"
-    },
-    {
-      "parameters": {
-        "url": "https://api.arcmira.com/v1/mentions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendQuery": true,
-        "specifyQuery": "json",
-        "jsonQuery": "={{ JSON.stringify($json.query) }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "User-Agent",
-              "value": "n8n-template/competitor-mentions-sheet"
-            },
-            {
-              "name": "x-arcmira-client",
-              "value": "n8n-template/competitor-mentions-sheet"
-            }
-          ]
-        },
-        "options": {
-          "pagination": {
-            "pagination": {
-              "paginationMode": "updateAParameterInEachRequest",
-              "parameters": {
-                "parameters": [
-                  {
-                    "type": "qs",
-                    "name": "cursor",
-                    "value": "={{ $response.body.next_cursor }}"
-                  }
-                ]
-              },
-              "paginationCompleteWhen": "other",
-              "completeExpression": "={{ !$response.body.has_more }}",
-              "limitPagesFetched": true,
-              "maxRequests": 10
-            }
-          }
-        }
-      },
-      "name": "Get older mentions from Arcmira",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
       "position": [
         2520,
-        480
+        300
       ],
-      "id": "get-older-mentions-from-arcmira",
-      "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 5000,
-      "onError": "continueRegularOutput"
+      "id": "name-a-failed-read"
     },
     {
       "parameters": {
-        "jsCode": "const moved = $(\"Check the plan's dates\").first().json;\nreturn $input.all().map((item) => ({ json: { ...item.json, gate: moved.gate, ...(item.json.error ? { competitor: moved.label || moved.name } : {}) } }));"
-      },
-      "name": "Keep the plan's note",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2740,
-        480
-      ],
-      "id": "keep-the-plans-note"
-    },
-    {
-      "parameters": {
-        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  // n8n hands a refusal on as \"403 - <the body as a JSON string>\", or, from a node that pages, as statusCode and the body in error.\n  const raw = e.error ?? msg.slice(msg.indexOf(' - ') + 3);\n  let body = null;\n  try { body = typeof raw === 'string' ? JSON.parse(raw) : raw; if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.statusCode || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg || String(e.response?.statusText || ''), unlock: body?.error?.unlock?.url || '',\n    through: body?.error?.details?.limit?.served_through || '' };\n};\nconst keyError = (e) => new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Resolve entity in Arcmira\", \"Get mentions from Arcmira\", \"Get older mentions from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst today = new Date().toISOString().slice(0, 10);\nconst note = (competitor, text) => ({ mention_id: `note:${competitor}:${today}`, found_on: today, competitor, published: '', show: '', video: '', said_at: '', link: '', what_was_said: '', why_it_came_up: text, ad_read: '', views: '' });\nconst adRead = (ads, at) => (!ads || !at ? '' : ads.some(([s, e]) => s <= at && at <= e) ? 'yes' : 'no');\n\nconst BEFORE = 60, AFTER = 90;const clock = (s) => { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\nconst picks = $('Pick the competitor').all().map((i) => i.json);\nconst notes = picks.filter((p) => p.entity_id && p.note).map((p) => note(p.name, p.note));\nconst items = [];\nconst seen = new Set();\n// The plan's own words, once each: the refusal that moved the window, then any other plan gate.\nconst moved = $input.all().map((i) => i.json.gate).filter(Boolean);\nconst gates = new Set(moved);\nfor (const { json: page } of $input.all()) {\n  if (page.error) {\n    const e = refusal(page.error);\n    // A plan gate answers with unlock.url. The sheet gets Arcmira's own words once, and the run goes on.\n    if (e.unlock) { gates.add([e.text, e.code === 'recommendations_not_enabled' ? 'Set ad_reads to false in Settings to read mentions on this plan.' : '', e.unlock].filter(Boolean).join(' ')); continue; }\n    if (e.status === 401 || e.status === 403) throw keyError(e);\n    if (e.status === 402) throw new Error(`Arcmira refused the mentions read (${e.code || e.status}). ${e.text}`);\n    // Any other failure, such as an id Arcmira doesn't know, is a note row for that competitor, and the others go on.\n    const who = page.competitor || 'Arcmira';\n    // Its own id, so it never overwrites the competitor's other note row from the same day.\n    notes.push({ ...note(who, `Arcmira couldn't read the mentions of \"${who}\" (${e.code || e.status}). ${e.text}`), mention_id: `note:read:${who}:${today}` });\n    continue;\n  }\n  // A list the plan cut short says so. After a moved window the refusal already said it.\n  if (!gates.size && (page.note || page.freshness)) gates.add([page.note || `Mentions on this plan stop at ${page.freshness.served_through}.`, page.unlock?.url].filter(Boolean).join(' '));\n  for (const m of page.mentions || []) {\n    if (seen.has(m.id)) continue;\n    seen.add(m.id);\n    const at = Math.max(0, Math.floor(Number(m.start_seconds) || 0));\n    const vid = m.media?.video_id;\n    const url = m.media?.url || (vid ? `https://www.youtube.com/watch?v=${vid}` : '');\n    const competitor = m.entity?.name || page.entity?.name || '';\n    const ads = m.recommendations ? (m.recommendations.items || []).filter((x) => x.class === 'sponsored' && Number.isFinite(x.start_seconds))\n      .map((x) => [x.start_seconds, Number.isFinite(x.end_seconds) ? x.end_seconds : x.start_seconds]) : null;\n    const row = {\n      mention_id: m.id, found_on: today, competitor,\n      published: String(m.media?.published_at || '').slice(0, 10), show: m.media?.source_channel?.name || '', video: m.media?.title || '',\n      said_at: at ? clock(at) : 'whole episode', link: at && url ? `${url}&t=${at}s` : url,\n      what_was_said: '', why_it_came_up: m.description || '', ad_read: adRead(ads, at), views: m.media?.view_count ?? '',\n    };\n    // A mention at a second reads 150 seconds around it. A whole-episode mention (second 0) reads the full transcript.\n    const asked = picks.find((p) => p.entity_id === (m.entity?.id || page.entity?.id))?.name || '';\n    items.push({ video_id: vid, window: at ? `start=${Math.max(0, at - BEFORE)}&end=${at + AFTER}` : '', at, url, names: [competitor, asked], ads, row });\n  }\n}\nitems.sort((a, b) => a.row.published.localeCompare(b.row.published) || a.row.competitor.localeCompare(b.row.competitor));\nif (gates.size) notes.unshift(note('plan', [...gates].join(' ').trim()));\n// Notes have no video, so \"Has a video?\" sends them to the sheet first. Mentions go on to \"Get transcript from Arcmira\".\nreturn [...notes, ...items].map((json) => ({ json }));  // a quiet fortnight adds nothing"
+        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  // n8n hands a refusal on as \"403 - <the body as a JSON string>\", or, from a node that pages, as statusCode and the body in error.\n  const raw = e.error ?? msg.slice(msg.indexOf(' - ') + 3);\n  let body = null;\n  try { body = typeof raw === 'string' ? JSON.parse(raw) : raw; if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.statusCode || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg || String(e.response?.statusText || ''), unlock: body?.error?.unlock?.url || '',\n    through: body?.error?.details?.limit?.served_through || '' };\n};\nconst keyError = (e) => new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Check the plan's dates\", \"Resolve entity in Arcmira\", \"Get mentions from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst today = new Date().toISOString().slice(0, 10);\nconst note = (competitor, text) => ({ mention_id: `note:${competitor}:${today}`, found_on: today, competitor, published: '', show: '', video: '', said_at: '', link: '', what_was_said: '', why_it_came_up: text, ad_read: '', views: '' });\nconst adRead = (ads, at) => (!ads || !at ? '' : ads.some(([s, e]) => s <= at && at <= e) ? 'yes' : 'no');\n\nconst BEFORE = 60, AFTER = 90;const clock = (s) => { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\nconst picks = $('Pick the competitor').all().map((i) => i.json);\nconst notes = picks.filter((p) => p.entity_id && p.note).map((p) => note(p.name, p.note));\nconst items = [];\n// A mention the sheet already has keeps its row: no second transcript read and no second write.\nconst seen = new Set($('Get rows from the sheet').all().map((i) => String(i.json.mention_id ?? '')).filter(Boolean));\n// The plan's own words, once each.\nconst gates = new Set();\nfor (const { json: page } of $input.all()) {\n  if (page.error) {\n    const e = refusal(page.error);\n    // A plan gate answers with unlock.url. The sheet gets Arcmira's own words once, and the run goes on.\n    if (e.unlock) { gates.add([e.text, e.code === 'recommendations_not_enabled' ? 'Set ad_reads to false in Settings to read mentions on this plan.' : '', e.unlock].filter(Boolean).join(' ')); continue; }\n    if (e.status === 401 || e.status === 403) throw keyError(e);\n    if (e.status === 402) throw new Error(`Arcmira refused the mentions read (${e.code || e.status}). ${e.text}`);\n    // Any other failure, such as an id Arcmira doesn't know, is a note row for that competitor, and the others go on.\n    const who = page.competitor || 'Arcmira';\n    // Its own id, so it never overwrites the competitor's other note row from the same day.\n    notes.push({ ...note(who, `Arcmira couldn't read the mentions of \"${who}\" (${e.code || e.status}). ${e.text}`), mention_id: `note:read:${who}:${today}` });\n    continue;\n  }\n  // A list the plan cut short says so, in the first such answer's words.\n  if (!gates.size && (page.note || page.freshness)) gates.add([page.note || `Mentions on this plan stop at ${page.freshness.served_through}.`, page.unlock?.url].filter(Boolean).join(' '));\n  for (const m of page.mentions || []) {\n    if (seen.has(m.id)) continue;\n    seen.add(m.id);\n    const at = Math.max(0, Math.floor(Number(m.start_seconds) || 0));\n    const vid = m.media?.video_id;\n    const url = m.media?.url || (vid ? `https://www.youtube.com/watch?v=${vid}` : '');\n    const competitor = m.entity?.name || page.entity?.name || '';\n    const ads = m.recommendations ? (m.recommendations.items || []).filter((x) => x.class === 'sponsored' && Number.isFinite(x.start_seconds))\n      .map((x) => [x.start_seconds, Number.isFinite(x.end_seconds) ? x.end_seconds : x.start_seconds]) : null;\n    const row = {\n      mention_id: m.id, found_on: today, competitor,\n      published: String(m.media?.published_at || '').slice(0, 10), show: m.media?.source_channel?.name || '', video: m.media?.title || '',\n      said_at: at ? clock(at) : 'whole episode', link: at && url ? `${url}&t=${at}s` : url,\n      what_was_said: '', why_it_came_up: m.description || '', ad_read: adRead(ads, at), views: m.media?.view_count ?? '',\n    };\n    // A mention at a second reads 150 seconds around it. A whole-episode mention (second 0) reads the full transcript.\n    const asked = picks.find((p) => p.entity_id === (m.entity?.id || page.entity?.id))?.name || '';\n    items.push({ video_id: vid, window: at ? `start=${Math.max(0, at - BEFORE)}&end=${at + AFTER}` : '', at, url, names: [competitor, asked], ads, row });\n  }\n}\nitems.sort((a, b) => a.row.published.localeCompare(b.row.published) || a.row.competitor.localeCompare(b.row.competitor));\nif (gates.size) notes.unshift(note('plan', [...gates].join(' ').trim()));\n// Notes have no video, so \"Has a video?\" sends them to the sheet first. Mentions go on to \"Get transcript from Arcmira\".\nreturn [...notes, ...items].map((json) => ({ json }));  // a quiet fortnight adds nothing"
       },
       "name": "One row per mention",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2960,
+        2740,
         300
       ],
       "id": "one-row-per-mention"
@@ -412,7 +369,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3180,
+        2960,
         300
       ],
       "id": "has-a-video"
@@ -426,7 +383,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        3440,
+        3220,
         300
       ],
       "id": "one-mention-at-a-time"
@@ -455,7 +412,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3660,
+        3440,
         300
       ],
       "id": "get-transcript-from-arcmira",
@@ -466,13 +423,13 @@
     },
     {
       "parameters": {
-        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  // n8n hands a refusal on as \"403 - <the body as a JSON string>\", or, from a node that pages, as statusCode and the body in error.\n  const raw = e.error ?? msg.slice(msg.indexOf(' - ') + 3);\n  let body = null;\n  try { body = typeof raw === 'string' ? JSON.parse(raw) : raw; if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.statusCode || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg || String(e.response?.statusText || ''), unlock: body?.error?.unlock?.url || '',\n    through: body?.error?.details?.limit?.served_through || '' };\n};\nconst keyError = (e) => new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Resolve entity in Arcmira\", \"Get mentions from Arcmira\", \"Get older mentions from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst today = new Date().toISOString().slice(0, 10);\nconst note = (competitor, text) => ({ mention_id: `note:${competitor}:${today}`, found_on: today, competitor, published: '', show: '', video: '', said_at: '', link: '', what_was_said: '', why_it_came_up: text, ad_read: '', views: '' });\nconst adRead = (ads, at) => (!ads || !at ? '' : ads.some(([s, e]) => s <= at && at <= e) ? 'yes' : 'no');\n// One mention at a time: the loop hands this node one transcript, and the row it belongs to.\nconst a = $('One mention at a time').first()?.json;\nif (!a?.row) throw new Error('The loop gave this node no mention. Connect \"One mention at a time\" (loop output) to \"Get transcript from Arcmira\".');\nconst MAX = 300;\nconst clock = (s) => { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\nconst lev = (a, b) => { let prev = [...Array(b.length + 1).keys()]; for (let i = 1; i <= a.length; i++) { const cur = [i]; for (let j = 1; j <= b.length; j++) cur.push(Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] !== b[j - 1]))); prev = cur; } return prev[b.length]; };\n// Transcripts misspell names (\"Superbase\" for Supabase). A word counts when it is the name, or starts with the same three\n// letters, ends in the same letter and is at most one letter off (two for names of six letters or more). A word that\n// starts with the whole name (\"renderer\") is another word.\nconst near = (w, t) => w === t || (!w.startsWith(t) && t.length >= 5 && w.slice(0, 3) === t.slice(0, 3) && w.slice(-1) === t.slice(-1)\n  && Math.abs(w.length - t.length) <= (t.length >= 6 ? 2 : 1) && lev(w, t) <= (t.length >= 6 ? 2 : 1));\nconst WORD = /[A-Za-z0-9]+/g;\nconst words = (s) => (clean(s).match(WORD) || []).map((w) => w.toLowerCase());\n// A name counts only in whole words, and each way of saying it is tried over every line before the next: first its own\n// words in order (\"Hugging Face\", even across two lines), then its letters run together (\"Cloud flare\" for Cloudflare),\n// then, for a one-word name only, a close spelling. So \"renderer\" or \"hugging\" never stand for Render or Hugging Face.\n// A way returns how many words, from word w on, say the name.\nconst ways = [\n  (ws, w, p) => (p.every((x, k) => ws[w + k] === x) ? p.length : 0),\n  (ws, w, p) => { const key = p.join(''); let run = '', b = w; while (b < ws.length && run.length < key.length) run += ws[b++]; return run === key ? b - w : 0; },\n  (ws, w, p) => (p.length === 1 && near(ws[w], p[0]) ? 1 : 0),\n];\n\n// The quote is the whole sentence (or sentences) that holds the moment, read across transcript lines, up to about MAX\n// characters. Without punctuation to go by, it is the text around the name, cut at words, with \"…\" where it was cut.\nconst quote = (lines, at, names) => {\n  const wanted = names.map(words).filter((p) => p.join('').length >= 3);\n  // [line, first word, word count] of the first hit. Each way is tried over every line in `order` before the next way.\n  const find = (order) => {\n    for (const way of ways) for (const k of order) {\n      const here = lines[k] ? words(lines[k].text) : [], ws = [...here, ...(lines[k + 1] ? words(lines[k + 1].text) : [])];\n      for (let w = 0; w < here.length; w++) for (const p of wanted) { const n = way(ws, w, p); if (n) return [k, w, n]; }\n    }\n    return null;\n  };\n  let i = -1, hit = null;\n  if (at) {\n    lines.forEach((l, k) => { if (Number(l.start) <= at + 1) i = k; });\n    i = Math.max(i, 0);\n    // The name is usually on the line at the second, sometimes on the line after it.\n    hit = find([i, i + 1, i - 1]);\n    if (hit) i = hit[0];\n  } else {\n    hit = find([...lines.keys()]);\n    if (!hit) return null;\n    i = hit[0];\n  }\n  const lo = Math.max(0, i - 15), hi = Math.min(lines.length, i + 16);\n  let T = '', p0 = 0, p1 = 0;\n  const starts = [0];\n  for (let k = lo; k < hi; k++) {\n    const text = clean(lines[k].text);\n    if (k === i) p0 = p1 = T.length + (T && text ? 1 : 0);\n    if (!text) continue;\n    if (T) T += ' ';\n    if (/^\\s*>>/.test(String(lines[k].text)) && T) starts.push(T.length);  // a new speaker starts a sentence\n    if (k === i) { p0 = T.length; p1 = T.length + text.length; }\n    T += text;\n  }\n  if (!T) return null;  // no lines, or only blank and [Music] lines: nothing to quote\n  // The name's span: from its first word to its last, which may sit on the next line.\n  if (hit) { const ws = [...T.slice(p0).matchAll(WORD)], [, w, n] = hit; p1 = p0 + ws[w + n - 1].index + ws[w + n - 1][0].length; p0 += ws[w].index; }\n  for (const m of T.matchAll(/[.?!]+[\"')\\]]*\\s+/g)) {\n    const before = T.slice(0, m.index);\n    if (/\\b(mr|mrs|ms|dr|st|vs|jr|sr|e\\.g|i\\.e|u\\.s)$/i.test(before) || /\\b[A-Z]$/.test(before)) continue;\n    starts.push(m.index + m[0].length);\n  }\n  const S = [...new Set(starts)].filter((s) => s < T.length).sort((x, y) => x - y);\n  const end = (k) => (k + 1 < S.length ? S[k + 1] : T.length);\n  let a = S.findLastIndex((s) => s <= p0);\n  let b = S.findLastIndex((s) => s < Math.max(p1, p0 + 1));\n  const fromTop = lo === 0 && Number(lines[0].start) < 1;\n  const closed = /[.?!][\"')\\]]*$/.test(T);\n  if (end(b) - S[a] < 40 && b + 1 < S.length && (b + 2 < S.length || closed) && end(b + 1) - S[a] <= MAX) b += 1;  // \"Yeah, Vercel.\" alone says little\n  let s = S[a], e = end(b), pre = a === 0 && !fromTop, post = b === S.length - 1 && !closed;\n  if (e - s > MAX) {\n    const cs = Math.max(s, Math.min(p0 - 100, e - MAX));\n    const ce = Math.min(e, cs + MAX);\n    if (cs > s) { s = T[cs - 1] === ' ' ? cs : T.indexOf(' ', cs) + 1; pre = true; }\n    if (ce < e) { e = T.lastIndexOf(' ', ce); post = true; }\n  }\n  let text = T.slice(s, e).trim();\n  if (post) text = text.replace(/[,;:]$/, '');\n  return { text: (pre ? '…' : '') + text + (post ? '…' : ''), start: Number(lines[i].start) };\n};\nconst clean = (t) => String(t || '').replace(/>>/g, ' ').replace(/\\[[^\\]]*\\]/g, ' ').replace(/\\s+/g, ' ').trim();\n\nconst t = $input.first().json;\nconst row = { ...a.row };\nif (t.error) {\n  const e = refusal(t.error);\n  if (e.status === 401 || (e.status === 403 && !e.unlock)) throw keyError(e);\n  if (e.status === 402) throw new Error(`Arcmira refused the transcript for credits (${e.code || 402}). ${e.text}`);\n  return [{ json: row }];  // no transcript for this video: the row keeps its link and why_it_came_up, with no quote\n}\nif (t.video?.id && t.video.id !== a.video_id) throw new Error(`The transcript of ${t.video.id} came back for ${a.video_id}. Nothing was written.`);\nconst q = quote((t.lines || []).filter((l) => l && typeof l.text === 'string'), a.at, a.names);\nif (q) {\n  row.what_was_said = q.text;\n  // A whole-episode mention now has a second: the first line that names the competitor.\n  if (!a.at && a.url) { const at = Math.floor(q.start); row.said_at = clock(at); row.link = `${a.url}&t=${at}s`; row.ad_read = adRead(a.ads, at); }\n}\nreturn [{ json: row }];"
+        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  // n8n hands a refusal on as \"403 - <the body as a JSON string>\", or, from a node that pages, as statusCode and the body in error.\n  const raw = e.error ?? msg.slice(msg.indexOf(' - ') + 3);\n  let body = null;\n  try { body = typeof raw === 'string' ? JSON.parse(raw) : raw; if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.statusCode || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg || String(e.response?.statusText || ''), unlock: body?.error?.unlock?.url || '',\n    through: body?.error?.details?.limit?.served_through || '' };\n};\nconst keyError = (e) => new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Check the plan's dates\", \"Resolve entity in Arcmira\", \"Get mentions from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst today = new Date().toISOString().slice(0, 10);\nconst note = (competitor, text) => ({ mention_id: `note:${competitor}:${today}`, found_on: today, competitor, published: '', show: '', video: '', said_at: '', link: '', what_was_said: '', why_it_came_up: text, ad_read: '', views: '' });\nconst adRead = (ads, at) => (!ads || !at ? '' : ads.some(([s, e]) => s <= at && at <= e) ? 'yes' : 'no');\n// One mention at a time: the loop hands this node one transcript, and the row it belongs to.\nconst a = $('One mention at a time').first()?.json;\nif (!a?.row) throw new Error('The loop gave this node no mention. Connect \"One mention at a time\" (loop output) to \"Get transcript from Arcmira\".');\nconst MAX = 300;\nconst clock = (s) => { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\nconst lev = (a, b) => { let prev = [...Array(b.length + 1).keys()]; for (let i = 1; i <= a.length; i++) { const cur = [i]; for (let j = 1; j <= b.length; j++) cur.push(Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] !== b[j - 1]))); prev = cur; } return prev[b.length]; };\n// Transcripts misspell names (\"Superbase\" for Supabase). A word counts when it is the name, or starts with the same three\n// letters, ends in the same letter and is at most one letter off (two for names of six letters or more). A word that\n// starts with the whole name (\"renderer\") is another word.\nconst near = (w, t) => w === t || (!w.startsWith(t) && t.length >= 5 && w.slice(0, 3) === t.slice(0, 3) && w.slice(-1) === t.slice(-1)\n  && Math.abs(w.length - t.length) <= (t.length >= 6 ? 2 : 1) && lev(w, t) <= (t.length >= 6 ? 2 : 1));\nconst WORD = /[A-Za-z0-9]+/g;\nconst words = (s) => (clean(s).match(WORD) || []).map((w) => w.toLowerCase());\n// A name counts only in whole words, and each way of saying it is tried over every line before the next: first its own\n// words in order (\"Hugging Face\", even across two lines), then its letters run together (\"Cloud flare\" for Cloudflare),\n// then, for a one-word name only, a close spelling. So \"renderer\" or \"hugging\" never stand for Render or Hugging Face.\n// A way returns how many words, from word w on, say the name.\nconst ways = [\n  (ws, w, p) => (p.every((x, k) => ws[w + k] === x) ? p.length : 0),\n  (ws, w, p) => { const key = p.join(''); let run = '', b = w; while (b < ws.length && run.length < key.length) run += ws[b++]; return run === key ? b - w : 0; },\n  (ws, w, p) => (p.length === 1 && near(ws[w], p[0]) ? 1 : 0),\n];\n\n// The quote is the whole sentence (or sentences) that holds the moment, read across transcript lines, up to about MAX\n// characters. Without punctuation to go by, it is the text around the name, cut at words, with \"…\" where it was cut.\nconst quote = (lines, at, names) => {\n  const wanted = names.map(words).filter((p) => p.join('').length >= 3);\n  // [line, first word, word count] of the first hit. Each way is tried over every line in `order` before the next way.\n  const find = (order) => {\n    for (const way of ways) for (const k of order) {\n      const here = lines[k] ? words(lines[k].text) : [], ws = [...here, ...(lines[k + 1] ? words(lines[k + 1].text) : [])];\n      for (let w = 0; w < here.length; w++) for (const p of wanted) { const n = way(ws, w, p); if (n) return [k, w, n]; }\n    }\n    return null;\n  };\n  let i = -1, hit = null;\n  if (at) {\n    lines.forEach((l, k) => { if (Number(l.start) <= at + 1) i = k; });\n    i = Math.max(i, 0);\n    // The name is usually on the line at the second, sometimes on the line after it.\n    hit = find([i, i + 1, i - 1]);\n    if (hit) i = hit[0];\n  } else {\n    hit = find([...lines.keys()]);\n    if (!hit) return null;\n    i = hit[0];\n  }\n  const lo = Math.max(0, i - 15), hi = Math.min(lines.length, i + 16);\n  let T = '', p0 = 0, p1 = 0;\n  const starts = [0];\n  for (let k = lo; k < hi; k++) {\n    const text = clean(lines[k].text);\n    if (k === i) p0 = p1 = T.length + (T && text ? 1 : 0);\n    if (!text) continue;\n    if (T) T += ' ';\n    if (/^\\s*>>/.test(String(lines[k].text)) && T) starts.push(T.length);  // a new speaker starts a sentence\n    if (k === i) { p0 = T.length; p1 = T.length + text.length; }\n    T += text;\n  }\n  if (!T) return null;  // no lines, or only blank and [Music] lines: nothing to quote\n  // The name's span: from its first word to its last, which may sit on the next line.\n  if (hit) { const ws = [...T.slice(p0).matchAll(WORD)], [, w, n] = hit; p1 = p0 + ws[w + n - 1].index + ws[w + n - 1][0].length; p0 += ws[w].index; }\n  for (const m of T.matchAll(/[.?!]+[\"')\\]]*\\s+/g)) {\n    const before = T.slice(0, m.index);\n    if (/\\b(mr|mrs|ms|dr|st|vs|jr|sr|e\\.g|i\\.e|u\\.s)$/i.test(before) || /\\b[A-Z]$/.test(before)) continue;\n    starts.push(m.index + m[0].length);\n  }\n  const S = [...new Set(starts)].filter((s) => s < T.length).sort((x, y) => x - y);\n  const end = (k) => (k + 1 < S.length ? S[k + 1] : T.length);\n  let a = S.findLastIndex((s) => s <= p0);\n  let b = S.findLastIndex((s) => s < Math.max(p1, p0 + 1));\n  const fromTop = lo === 0 && Number(lines[0].start) < 1;\n  const closed = /[.?!][\"')\\]]*$/.test(T);\n  if (end(b) - S[a] < 40 && b + 1 < S.length && (b + 2 < S.length || closed) && end(b + 1) - S[a] <= MAX) b += 1;  // \"Yeah, Vercel.\" alone says little\n  let s = S[a], e = end(b), pre = a === 0 && !fromTop, post = b === S.length - 1 && !closed;\n  if (e - s > MAX) {\n    const cs = Math.max(s, Math.min(p0 - 100, e - MAX));\n    const ce = Math.min(e, cs + MAX);\n    if (cs > s) { s = T[cs - 1] === ' ' ? cs : T.indexOf(' ', cs) + 1; pre = true; }\n    if (ce < e) { e = T.lastIndexOf(' ', ce); post = true; }\n  }\n  let text = T.slice(s, e).trim();\n  if (post) text = text.replace(/[,;:]$/, '');\n  return { text: (pre ? '…' : '') + text + (post ? '…' : ''), start: Number(lines[i].start) };\n};\nconst clean = (t) => String(t || '').replace(/>>/g, ' ').replace(/\\[[^\\]]*\\]/g, ' ').replace(/\\s+/g, ' ').trim();\n\nconst t = $input.first().json;\nconst row = { ...a.row };\nif (t.error) {\n  const e = refusal(t.error);\n  if (e.status === 401 || (e.status === 403 && !e.unlock)) throw keyError(e);\n  if (e.status === 402) throw new Error(`Arcmira refused the transcript for credits (${e.code || 402}). ${e.text}`);\n  return [{ json: row }];  // no transcript for this video: the row keeps its link and why_it_came_up, with no quote\n}\nif (t.video?.id && t.video.id !== a.video_id) throw new Error(`The transcript of ${t.video.id} came back for ${a.video_id}. Nothing was written.`);\nconst q = quote((t.lines || []).filter((l) => l && typeof l.text === 'string'), a.at, a.names);\nif (q) {\n  row.what_was_said = q.text;\n  // A whole-episode mention now has a second: the first line that names the competitor.\n  if (!a.at && a.url) { const at = Math.floor(q.start); row.said_at = clock(at); row.link = `${a.url}&t=${at}s`; row.ad_read = adRead(a.ads, at); }\n}\nreturn [{ json: row }];"
       },
       "name": "Quote what was said",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3880,
+        3660,
         300
       ],
       "id": "quote-what-was-said"
@@ -613,14 +570,14 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        4240,
+        4020,
         200
       ],
       "id": "add-rows-to-the-sheet"
     },
     {
       "parameters": {
-        "content": "### How it works\nEach Monday, one quoted, linked row per mention.\n\n### Setup\nGet a key at https://arcmira.com/sign-up?src=n8n-competitor-mentions-sheet&utm_source=n8n&utm_campaign=n8n-competitor-mentions-sheet, then follow notes 1 to 5.\n\n### What Arcmira returns\nArcmira returns the exact quote and a watch link cued to the second, so the reader can check the source. This template makes three calls:\n- `GET /v1/entities/resolve`: one entity id per name.\n- `GET /v1/mentions`: each mention, its video, second and description, and on Pro+ its commercial class.\n- `GET /v1/transcripts/{video_id}`: the timed lines around that second.\n\nResolve uses no credits. A mention uses 4 credits. A caption transcript uses 4 credits per started 15 minutes. An ad read or recommendation uses 40 credits.\n\n### Build this with your agent\n```\nUse Arcmira (the arcmira MCP server, or its API with my key). Every Monday, add the last 14 days of YouTube mentions of COMPETITOR_ONE and COMPETITOR_TWO to a Google Sheet.\n1. Resolve each name to one entity (GET /v1/entities/resolve). Tell me if it had to assume.\n2. List its mentions since 14 days ago (GET /v1/mentions?entity_id=...&after=...), following next_cursor. If Arcmira says my plan can't read those dates, say so in one line, then run the same search over the newest 14 days it can read.\n3. Read the transcript from 60 seconds before each start_seconds to 90 after (GET /v1/transcripts/{video_id}?start=...&end=...). Quote the whole sentence naming it, word for word from its first word to its last, up to 300 characters.\n4. Write one row per mention id to a Google Sheet, or a CSV with every field in quotes if you have no Sheets tool: competitor, date, show, video title, the mention's media.url with &t={start_seconds}s, quote, description.\nCheck it worked: run it once, show me the rows, and confirm each quote is in the transcript at that second.\n```",
+        "content": "### How it works\nEach Monday, one quoted, linked row per mention.\n\n### Setup\nGet a key at https://arcmira.com/sign-up?src=n8n-competitor-mentions-sheet&utm_source=n8n&utm_campaign=n8n-competitor-mentions-sheet, then follow notes 1 to 5.\n\n### What Arcmira returns\nArcmira returns the exact quote and a watch link cued to the second, so the reader can check the source. This template makes four calls:\n- `GET /v1/me`: where results stop.\n- `GET /v1/entities/resolve`: one entity id per name.\n- `GET /v1/mentions`: each mention, its video, second and description, and on Pro+ its commercial class.\n- `GET /v1/transcripts/{video_id}?quality=captions&timestamps=true`: the timed lines around that second.\n\nResolve and `/v1/me` use no credits. A mention uses 4 credits. A caption transcript uses 4 credits per started 15 minutes. An ad read or recommendation uses 40 credits.\n\n### Build this with your agent\n```\nUse Arcmira (the arcmira MCP server, or its API with my key). Every Monday, add the last 14 days of YouTube mentions of COMPETITOR_ONE and COMPETITOR_TWO to a Google Sheet.\n1. Resolve each name to one entity (GET /v1/entities/resolve). Tell me if it had to assume.\n2. List its mentions since 14 days ago (GET /v1/mentions?entity_id=...&after=...), following next_cursor. Check arcmira.status() (GET /v1/me) first. If it shows freshness, set after 14 days before served_through and quote Arcmira's note.\n3. Read the transcript from 60 seconds before each start_seconds to 90 after (GET /v1/transcripts/{video_id}?quality=captions&timestamps=true&start=...&end=...). Quote the whole sentence naming it, word for word from its first word to its last, up to 300 characters.\n4. Write one row per mention id to a Google Sheet, or a CSV with every field in quotes if you have no Sheets tool: competitor, date, show, video title, the mention's media.url with &t={start_seconds}s, quote, description.\nCheck it worked: run it once, show me the rows, and confirm each quote is in the transcript at that second.\n```",
         "height": 1360,
         "width": 620,
         "color": 1
@@ -636,9 +593,9 @@
     },
     {
       "parameters": {
-        "content": "### 1. Who and when\nRuns Mondays at 8:00. **Settings** holds your competitors, comma separated, and a few words on what they do, for names several companies share. An Arcmira id like `ent_125036` works in place of a name. The window is 14 days, since some videos are indexed days after they're published. On Pro+ and above, `ad_reads` true fills the `ad_read` column, at 40 credits for every ad read or recommendation in each video it checks.",
+        "content": "### 1. Who and when\nRuns Mondays at 8:00. **Settings** holds your competitors, comma separated, and a few words on what they do, for names several companies share. An Arcmira id like `ent_125036` works in place of a name. The window is 14 days, since some videos are indexed days after they're published. **Check the plan's dates** reads `GET /v1/me`, which uses no credits. On the Free plan the window is the 14 days that end where the plan's results stop. **Get rows from the sheet** reads the mention ids the sheet already has. On Pro+ and above, `ad_reads` true fills the `ad_read` column, at 40 credits for every ad read or recommendation in each video it checks.",
         "height": 560,
-        "width": 660,
+        "width": 1100,
         "color": 7
       },
       "name": "1. Who and when",
@@ -652,7 +609,7 @@
     },
     {
       "parameters": {
-        "content": "### 2. Find each competitor\n`GET /v1/entities/resolve` turns each name into one entity. A name Arcmira can't place, or only assumes, becomes a note row with the ids to paste.\n\nPick a **Header Auth** credential here and in notes 3 and 4, named `Authorization` with the value `Bearer <your key>`.",
+        "content": "### 2. Find each competitor\n`GET /v1/entities/resolve` turns each name into one entity. A name Arcmira can't place, or only assumes, becomes a note row with the ids to paste.\n\nPick a **Header Auth** credential here and in notes 1, 3 and 4, named `Authorization` with the value `Bearer <your key>`.",
         "height": 560,
         "width": 900,
         "color": 7
@@ -661,30 +618,30 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        660,
+        1100,
         100
       ],
       "id": "2.-find-each-competitor"
     },
     {
       "parameters": {
-        "content": "### 3. Mentions from Arcmira\n`GET /v1/mentions` returns each mention published in the window, 100 a page, following `next_cursor`. One row per mention, keyed on its id, so the overlap between weeks updates rows instead of adding them. With `ad_reads` on it asks for `details=full`, and `ad_read` is yes when a sponsored row's span holds the mention's second. On the Free plan the first read is refused, so **Get older mentions from Arcmira** reads the 14 days that end where the plan's results stop, and the sheet gets the refusal's words as one note row.",
+        "content": "### 3. Mentions from Arcmira\n`GET /v1/mentions` returns each mention published in the window, 100 a page, following `next_cursor`. One row per mention, keyed on its id. A mention the sheet already has is skipped, so the overlap between weeks adds no rows and reads no transcript twice. With `ad_reads` on it asks for `details=full`, and `ad_read` is yes when a sponsored row's span holds the mention's second. On the Free plan the list stops where the plan's results stop, and the sheet gets Arcmira's note on it as one note row. **Name a failed read** keeps the competitor's name on a read that fails, for its note row.",
         "height": 560,
-        "width": 1760,
+        "width": 1100,
         "color": 7
       },
       "name": "3. Mentions from Arcmira",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1600,
+        2040,
         100
       ],
       "id": "3.-mentions-from-arcmira"
     },
     {
       "parameters": {
-        "content": "### 4. Quote what was said\n`GET /v1/transcripts/{video_id}` reads 150 seconds around the mention. The quote is the whole sentence that holds it, up to about 300 characters, and allows for misspellings of the name. A whole-episode mention reads the full transcript and links the first line that names the competitor.",
+        "content": "### 4. Quote what was said\n`GET /v1/transcripts/{video_id}?quality=captions&timestamps=true` reads 150 seconds around the mention. The quote is the whole sentence that holds it, up to about 300 characters, and allows for misspellings of the name. A whole-episode mention reads the full transcript and links the first line that names the competitor.",
         "height": 560,
         "width": 740,
         "color": 7
@@ -693,14 +650,14 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        3400,
+        3180,
         100
       ],
       "id": "4.-quote-what-was-said"
     },
     {
       "parameters": {
-        "content": "### 5. Write the sheet\nAdds or updates rows by `mention_id`, notes first, then mentions, oldest first. Row 1 of the sheet: `mention_id, found_on, competitor, published, show, video, said_at, link, what_was_said, why_it_came_up, ad_read, views`",
+        "content": "### 5. Write the sheet\nAdds or updates rows by `mention_id`, notes first, then mentions, oldest first. Pick this sheet in **Get rows from the sheet** too. Row 1 of the sheet: `mention_id, found_on, competitor, published, show, video, said_at, link, what_was_said, why_it_came_up, ad_read, views`",
         "height": 560,
         "width": 300,
         "color": 7
@@ -709,7 +666,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4180,
+        3960,
         100
       ],
       "id": "5.-write-the-sheet"
@@ -728,6 +685,28 @@
       ]
     },
     "Settings": {
+      "main": [
+        [
+          {
+            "node": "Check the plan's dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check the plan's dates": {
+      "main": [
+        [
+          {
+            "node": "Get rows from the sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get rows from the sheet": {
       "main": [
         [
           {
@@ -829,54 +808,14 @@
       "main": [
         [
           {
-            "node": "Check the plan's dates",
+            "node": "Name a failed read",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Check the plan's dates": {
-      "main": [
-        [
-          {
-            "node": "Plan stops earlier?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Plan stops earlier?": {
-      "main": [
-        [
-          {
-            "node": "Get older mentions from Arcmira",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "One competitor at a time",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get older mentions from Arcmira": {
-      "main": [
-        [
-          {
-            "node": "Keep the plan's note",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Keep the plan's note": {
+    "Name a failed read": {
       "main": [
         [
           {

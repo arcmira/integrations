@@ -44,7 +44,7 @@ A link that isn't from YouTube answers 400. A wrong Arcmira key answers 500 and 
 ## What Arcmira returns
 
 Arcmira returns the exact quote and a watch link cued to the second, so the reader can check the source. This template makes one call:
-- `GET /v1/transcripts/{video_id}?quality=captions`: the transcript as timed `lines`, with the video's title, channel, length and `watch_url`.
+- `GET /v1/transcripts/{video_id}?quality=captions&timestamps=true`: the transcript as timed `lines`, with the video's title, channel, length and `watch_url`.
 
 Each summary uses credits from your plan. A caption transcript uses 4 credits per started 15 minutes. Repeating the same request within 7 days costs nothing.
 
@@ -54,7 +54,7 @@ The same summary needs no n8n. Paste this into Claude, or any agent connected to
 
 ```text
 Use Arcmira (the arcmira MCP server, or its API with my key). Whenever I send a YouTube link, summarize the video with timestamped links. Start with YOUR_YOUTUBE_LINK.
-1. Read the whole transcript once, with no start or end (GET /v1/transcripts/{video_id}?quality=captions). If the answer has next_start, read on from there to the last line, one read at a time.
+1. Read the whole transcript once, with no start or end (GET /v1/transcripts/{video_id}?quality=captions&timestamps=true). If the answer has next_start, read on from there to the last line, one read at a time.
 2. Write two or three sentences on what the video covers and who it is for.
 3. Pick the 5 to 8 most useful moments. For each, say in one sentence what is said, then quote the whole sentences that hold it, word for word, at most about 300 characters. If those sentences run longer, quote fewer of them. Start each quote at a sentence's first word.
 4. Link each moment to the start of the line that holds the quote's first word, even when that word ends the line, with the transcript's video.watch_url plus &t={start}s.
