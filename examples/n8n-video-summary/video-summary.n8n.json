@@ -265,7 +265,7 @@
     },
     {
       "parameters": {
-        "content": "### 1. Receive a link\nPOST a YouTube link as `url` (or `link`) to the production URL, like `{\"url\": \"https://youtu.be/...\"}`. Watch, youtu.be, shorts, live and embed links all work. Anything else gets a 400 that says what to send.",
+        "content": "### 1. Receive a link\nPOST a YouTube link as `url` (or `link`) to the production URL, like `{\"url\": \"https://youtu.be/...\"}`. Watch, youtu.be, shorts, live and embed links all work. A link that isn't from YouTube gets a 400 that says what to send.",
         "height": 400,
         "width": 700,
         "color": 7

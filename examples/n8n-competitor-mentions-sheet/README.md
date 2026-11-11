@@ -6,7 +6,7 @@ Every Monday this n8n workflow lists two weeks of YouTube mentions of each compe
 
 The fastest way to follow competitors is built in: an Arcmira [monitor](https://arcmira.com/docs/monitors) can email or post to Slack each new mention of the competitors it follows, with the quoted line and a link to the second. Use this template when you want every mention as a row in a Google Sheet, to sort, filter and share, and to keep a running record.
 
-On the Free plan the sheet runs 30 days behind, because the Free plan withholds the newest 30 days of media, and it reads the first page of each list. A paid plan or the Pro trial reads the last 14 days. Each row uses 8 credits from your plan, 4 for the mention and 4 for the 150 seconds of transcript around it. The first 5 mentions in each request are free. The Free plan has 1,000 credits a month.
+On the Free plan the sheet runs 30 days behind, because the Free plan withholds the newest 30 days of media, and it reads the first page of each list. A paid plan or the Pro trial reads the last 14 days. Each row uses 8 credits from your plan, 4 for the mention and 4 for the 150 seconds of transcript around it. Each run reads 14 days, so a mention is read in two weekly runs and its row can use up to 16 credits. The first 5 mentions in each request are free. The Free plan has 1,000 credits a month.
 
 ## What you get
 
@@ -69,9 +69,9 @@ It tries each Arcmira call up to 5 times. It reads at most 10 pages of 100 menti
 
 ## Verification
 
-- On November 10, 2026, in n8n 2.46.6 with a paid key and a local stand-in for the sheet, seven names gave 73 mention rows and 1 note row for a made-up name. Every quote is in its transcript, within a line of the linked second. With `ad_reads` true, 6 rows were `yes` and 65 `no`. On November 11 the final revision wrote the same 74 rows, every cell the same but the date in the note row's id.
+- On November 10, 2026, in n8n 2.46.6 with a paid key and a local stand-in for the sheet, seven names gave 73 mention rows and 1 note row for a made-up name. Every quote is in its transcript, within a line of the linked second. With `ad_reads` true, 6 rows were `yes` and 65 `no`. On November 11 the final revision wrote the same 74 rows, every cell the same but the date in the note row's id, and 3 rows for videos published that day.
 - On November 10 the Free path ran against a local stand-in. It refused the first mentions read with the documented `freshness_requires_paid` answer and answered the second with real mentions from the 14 days that end on October 11. The sheet got one note row in Arcmira's words, then 18 quoted rows. It has not run with a real Google Sheets account, a Free key or a Pro+ key.
-- It passed n8n's import and export round trip, a check of every node parameter against n8n's own node definitions, and the code-node tests. In a second run on November 11, a stand-in answered one name lookup, one mentions read, one page and one transcript read with a 503. n8n asked each again, and the sheet got the same 74 rows.
+- It passed n8n's import and export round trip, a check of every node parameter against n8n's own node definitions, and the code-node tests. In a second run on November 11, a stand-in answered one name lookup, one mentions read, one page and one transcript read with a 503. n8n asked each again, and the sheet got the same 77 rows as a run without it.
 - The agent prompt above ran once in Claude Sonnet 5.5 with the Arcmira MCP server on November 11, 2026, for Vercel and Netlify. 41 rows. Every quote is word for word in its transcript. 38 are a whole sentence, 1 is all a speaker said before the next one cut in, and 2 come from captions with no punctuation.
 
 ## Files

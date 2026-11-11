@@ -62,9 +62,9 @@ Check it worked: run it once now and show me the digest before you schedule it.
 
 ## Verification
 
-- On November 10, 2026 the workflow ran in n8n 2.46.6 for Fireship and Linus Tech Tips, over videos published November 1 to 8. It found 7 videos and posted 35 points, each quote a whole sentence found in its transcript at its linked second. The same day its Free path ran against a local server that answered last week's dates with Arcmira's documented Free refusal. It listed the 5 videos published October 4 to 11, and the digest opened with the refusal's message and unlock link.
+- On November 10, 2026 the workflow ran in n8n 2.46.6 for Fireship and Linus Tech Tips, over videos published November 1 to 8. It found 7 videos and posted 35 points. 34 quotes are a whole sentence found word for word in the transcript at the linked second, and the 35th leaves out a speaker mark. The same day its Free path ran against a local server that answered last week's dates with Arcmira's documented Free refusal. It listed the 5 videos published October 4 to 11, and the digest opened with the refusal's message and unlock link.
 - It passed n8n's import and export round trip, a check of every node parameter against n8n's own node definitions, and the code-node tests. In a second run on November 11, 2026, a local stand-in failed one channel's list and one transcript read once. n8n asked each again 5 seconds later, and the digest held the same 7 videos as a run without it.
-- The agent prompt above ran once in Claude Sonnet 5.5 with the Arcmira MCP server on November 10, 2026. It read all 7 transcripts to the end and wrote 34 points, each quote a whole sentence found in its transcript at its linked second.
+- The agent prompt above ran once in Claude Sonnet 5.5 with the Arcmira MCP server on November 10, 2026. It read all 7 transcripts to the end and wrote 34 points. Every quote is word for word in its transcript and linked to the line where it starts, and 33 end at a sentence's end.
 - It has not run with a real Slack, Anthropic or Free account. In these runs the same prompt went to Claude Sonnet 5.5 outside n8n, and a local stand-in took Slack's place.
 
 ## Files
