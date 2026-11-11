@@ -42,7 +42,7 @@ The same alert needs no n8n. Paste this into an agent that has the [Arcmira MCP 
 
 ```text
 Use Arcmira (the arcmira MCP server, or its API with my key). Every hour, send new YouTube mentions of my brand to Slack. My Arcmira monitor is mon_YOUR_MONITOR_ID.
-1. Read the monitor's alerts (GET /v1/monitors/{id}/alerts?limit=100) and keep those created in the last hour, one per mention.
+1. Read the monitor's alerts (GET /v1/monitors/{id}/alerts?limit=100) and keep those created in the last whole hour, one per mention.
 2. Read each video's whole transcript (GET /v1/transcripts/{video_id}). If the answer has next_start, read on from there to the last line, one read at a time.
 3. Find the whole sentence that names the brand, allowing for misspellings in the transcript.
 4. Post the brand, the video title, that sentence in quotes, word for word, and the transcript's video.watch_url plus &t={start}s, where start is the start of the line that holds the brand's name, in whole seconds.
