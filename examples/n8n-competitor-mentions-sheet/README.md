@@ -65,7 +65,7 @@ Check it worked: run it once, show me the rows, and confirm each quote is in the
 
 ## Limits
 
-It tries each Arcmira call up to 5 times. It reads at most 10 pages of 100 mentions per competitor each run.
+It tries each Arcmira call up to 5 times. It reads at most 10 pages of 100 mentions per competitor each run. On the Free plan each competitor's first read is refused and tried 5 times before the sheet falls back, which adds about 20 seconds per competitor.
 
 ## Verification
 

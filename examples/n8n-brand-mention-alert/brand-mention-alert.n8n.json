@@ -118,7 +118,7 @@
     },
     {
       "parameters": {
-        "url": "=https://api.arcmira.com/v1/transcripts/{{ $json.video_id }}",
+        "url": "=https://api.arcmira.com/v1/transcripts/{{ $json.video_id }}?quality=captions&timestamps=true",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,

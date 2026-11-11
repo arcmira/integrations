@@ -76,6 +76,10 @@
             {
               "name": "quality",
               "value": "captions"
+            },
+            {
+              "name": "timestamps",
+              "value": "true"
             }
           ]
         },

@@ -26,6 +26,7 @@ The first link opens the video at 0:16: https://www.youtube.com/watch?v=AAraNufc
 - It lists only channels Arcmira indexes. A channel that isn't indexed comes back empty, and the digest names it with a link to ask for it.
 - Arcmira indexes most new videos within two days. So the digest covers the 7 days that ended 2 days before it runs, and the next digest picks up the rest. `days` and `wait_days` in **Settings** change this.
 - On the Free plan the digest runs 30 days behind. Arcmira refuses last week's dates and names the newest date the plan reads, so the run lists the 7 days that end on that date. The digest's first line is Arcmira's message with its unlock link.
+- On the Free plan each channel's first read is refused and tried 5 times before the digest falls back, which adds about 20 seconds per channel.
 - It tries each Arcmira call up to 5 times.
 
 ## Setup
