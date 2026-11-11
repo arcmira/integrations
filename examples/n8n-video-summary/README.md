@@ -57,8 +57,8 @@ Use Arcmira (the arcmira MCP server, or its API with my key). Whenever I send a 
 1. Read the whole transcript once, with no start or end (GET /v1/transcripts/{video_id}?quality=captions&timestamps=true). If the answer has next_start, read on from there to the last line, one read at a time.
 2. Write two or three sentences on what the video covers and who it is for.
 3. Pick the 5 to 8 most useful moments. For each, say in one sentence what is said, then quote the whole sentences that hold it, word for word, at most about 300 characters. If those sentences run longer, quote fewer of them. Start each quote at a sentence's first word.
-4. Link each moment to the start of the line that holds the quote's first word, even when that word ends the line, with the transcript's video.watch_url plus &t={start}s.
-Check it worked: confirm each quote appears word for word in the transcript at its linked second.
+4. Link each moment to the start of the line that holds the quote's first word, even when that word ends the line, with the transcript's video.watch_url plus &t={start}s, in whole seconds.
+Check it worked: confirm each quote appears word for word at its linked second.
 ```
 
 ## Verification
