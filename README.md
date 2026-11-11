@@ -26,6 +26,9 @@ Try the [YouTube Transcript Search API starter in Postman](https://www.postman.c
 | n8n CSV workflow | [YouTube clip shortlist](examples/n8n-clip-shortlist) | Native n8n 2.41.3 fixture and live CSV export verified; importable example |
 | n8n built-in workflow | [Transcript source shortlist](examples/n8n-source-shortlist) | One bounded Free-account execution verified; importable example, not a catalog listing |
 | n8n Slack alert workflow | [YouTube brand mention alert](examples/n8n-brand-mention-alert) | Live n8n 2.46.6 run on November 11, 2026: 15 monitor alerts became 15 messages to a local Slack stand-in; importable example |
+| n8n Slack digest workflow | [Weekly YouTube channel digest](examples/n8n-weekly-channel-digest) | Live n8n 2.46.6 run on November 11, 2026: 7 videos from 2 channels became one digest to a local Slack stand-in; importable example |
+| n8n webhook workflow | [YouTube link summary](examples/n8n-video-summary) | Live n8n 2.46.6 run on November 10, 2026: 4 YouTube links answered with 32 moments, each quote found in its transcript; importable example |
+| n8n Google Sheets workflow | [Competitor mentions sheet](examples/n8n-competitor-mentions-sheet) | Live n8n 2.46.6 run on November 11, 2026: 7 names gave 77 rows to a local sheet stand-in; importable example |
 | Node-RED built-in flow | [Transcript source shortlist CSV](examples/node-red-source-shortlist) | [Node-RED Flow Library](https://flows.nodered.org/flow/522e11603a9e9b901e1e65df57d029eb); native fixture checks and one bounded Free-account execution passed |
 | dlt REST to local files | [Bounded search and channel snapshots](examples/dlt) | Local fixture tests and one live Free-account search export passed; no dlt catalog listing |
 | Python / SQLite | [Resumable channel index](examples/resumable-channel-index) | Six local recovery tests and two bounded live pages passed; source-linked episode metadata |

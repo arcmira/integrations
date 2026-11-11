@@ -1,0 +1,452 @@
+{
+  "name": "Summarize any YouTube video with timestamped links using Arcmira and Claude",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "youtube-summary",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Receive the YouTube link",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "id": "receive-the-youtube-link",
+      "webhookId": "4f0c8a52-5b0e-4d3c-9a57-2b9c3f1e7a10"
+    },
+    {
+      "parameters": {
+        "jsCode": "const req = $input.first().json;\nconst body = req.body && typeof req.body === 'object' ? req.body : {};\nconst raw = String(body.url ?? body.link ?? body.video ?? req.query?.url ?? '').trim();\nconst m = raw.match(/(?:youtube(?:-nocookie)?\\.com\\/(?:watch\\?(?:[^#]*&)?v=|shorts\\/|live\\/|embed\\/|v\\/)|youtu\\.be\\/)([A-Za-z0-9_-]{11})/) || raw.match(/^([A-Za-z0-9_-]{11})$/);\nif (!m) return [{ json: { ok: false, status: 400, error: 'Send a YouTube link as url, like {\"url\": \"https://www.youtube.com/watch?v=dQw4w9WgXcQ\"}.' } }];\nreturn [{ json: { ok: true, video_id: m[1] } }];"
+      },
+      "name": "Find the video id",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "id": "find-the-video-id"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ok-true",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Got a video id?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        300
+      ],
+      "id": "got-a-video-id"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.arcmira.com/v1/transcripts/{{ $json.video_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "quality",
+              "value": "captions"
+            },
+            {
+              "name": "timestamps",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "n8n-template/video-summary"
+            },
+            {
+              "name": "x-arcmira-client",
+              "value": "n8n-template/video-summary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Get transcript from Arcmira",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ],
+      "id": "get-transcript-from-arcmira",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const t = $input.first().json;\nconst { video_id } = $('Find the video id').first().json;\nconst refusal = (e) => {\n  const msg = String(e.message || '');\n  let body = null;\n  try { body = JSON.parse(msg.slice(msg.indexOf(' - ') + 3)); if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg };\n};\nconst fail = (status, error) => [{ json: { ok: false, status, error } }];\nif (t.error) {\n  const e = refusal(t.error);\n  // A wrong key is the workflow owner's to fix, so the caller gets a 500 that says where.\n  if (e.status === 401 || e.status === 403) return fail(500, `Arcmira didn't accept the API key (${e.code || e.status}). In \"Get transcript from Arcmira\", pick a Header Auth credential named Authorization with the value \"Bearer <your key>\".`);\n  if (e.status === 402) return fail(402, `Arcmira refused the transcript for credits (${e.code || 402}). ${e.text}`);\n  if (e.status === 404) return fail(404, `Arcmira found no transcript for this video (${e.code || 404}). ${e.text}`);\n  // 503 transcript_fetching can clear on a later call, so the caller hears it as a 503 too.\n  return fail(e.status === 503 ? 503 : 502, `Arcmira couldn't read the transcript (${e.code || e.status || 'error'}). ${e.text}`);\n}\nconst all = (Array.isArray(t.lines) ? t.lines : [])\n  .map((l) => ({ start: Number(l.start) || 0, end: Number(l.end ?? l.start) || 0, text: String(l.text || '').replace(/\\s+/g, ' ').trim() }));\nconst lines = all.filter((l) => l.text);\nif (!lines.length) return fail(404, 'Arcmira returned an empty transcript for this video.');\nconst clock = (s) => { s = Math.floor(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\n// Transcript lines run 2 to 6 seconds. Blocks of about 30 seconds keep the times useful and the prompt short.\nconst blocks = [];\nfor (const l of lines) {\n  const last = blocks[blocks.length - 1];\n  if (!last || l.start - last.start >= 30) blocks.push({ start: Math.floor(l.start), text: [] });\n  blocks[blocks.length - 1].text.push(l.text);\n}\nconst end = Math.ceil(Number(t.video?.duration_seconds) || all.reduce((m, l) => Math.max(m, l.end, l.start), 0));\nconst title = t.video?.title || '';\nconst channel = t.video?.channel_name || '';\nreturn [{ json: {\n  ok: true, video_id, title, channel, duration_seconds: end, credits: Number(t.rows_billed || 0) * 4,\n  watch_url: t.video?.watch_url || `https://www.youtube.com/watch?v=${video_id}`,\n  lines: lines.map((l) => ({ start: l.start, text: l.text })),\n  prompt: `Video: ${title || video_id}${channel ? ` (${channel})` : ''}\\n\\nTranscript. Each block starts with its time.\\n\\n` + blocks.map((b) => `[${clock(b.start)}] ${b.text.join(' ')}`).join('\\n'),\n} }];"
+      },
+      "name": "Build the timestamped transcript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        300
+      ],
+      "id": "build-the-timestamped-transcript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ok-true",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Got a transcript?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1160,
+        300
+      ],
+      "id": "got-a-transcript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You summarize a YouTube video from its transcript for someone deciding whether to watch it.\n\nStart with two or three sentences on what the video covers and who it is for.\n\nThen list the 5 to 8 most useful moments, one per line, in this form:\n[12:34] One sentence on what is said there. \"The quote.\"\n\nThe time is the block where the quote starts, written exactly as the transcript writes it, like [12:34] or [1:02:05]. Use only times that appear in the transcript.\n\nThe quote is the whole sentence, or the two or three sentences, that hold the moment, copied word for word from the transcript. Start it where a sentence starts and end it where a sentence ends, even when that runs into the next block. Never cut a sentence off. Keep it under about 300 characters. If the transcript has no punctuation, add only the punctuation.\n\nUse quotation marks only around the quote. Write plain text with no headings."
+            }
+          ]
+        }
+      },
+      "name": "Summarize with Claude",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1440,
+        300
+      ],
+      "id": "summarize-with-claude"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "claude-opus-5-5"
+        },
+        "options": {
+          "maxTokensToSample": 16000,
+          "thinkingMode": "adaptive",
+          "effort": "medium"
+        }
+      },
+      "name": "Claude model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        1440,
+        540
+      ],
+      "id": "claude-model"
+    },
+    {
+      "parameters": {
+        "jsCode": "const src = $('Build the timestamped transcript').first().json;\nconst text = String($input.first().json.text || '').trim();\nconst link = (s) => `${src.watch_url}${src.watch_url.includes('?') ? '&' : '?'}t=${s}s`;\nconst TIME = /\\[(?:(\\d{1,2}):)?(\\d{1,2}):(\\d{2})\\]/;\nconst seconds = (h, m, s) => (Number(h) || 0) * 3600 + Number(m) * 60 + Number(s);\nconst clock = (s) => { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\n// Quotes are compared on letters and digits only, so case, punctuation and curly quotes don't matter.\nconst norm = (s) => String(s || '').toLowerCase().replace(/['’]/g, '').replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();\nlet hay = ' ';\nconst marks = [];\nfor (const l of src.lines) {\n  const n = norm(l.text);\n  if (!n) continue;\n  marks.push({ at: hay.length - 1, start: l.start });\n  hay += n + ' ';\n}\nconst lineStart = (pos) => { let lo = 0, hi = marks.length - 1; while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (marks[mid].at <= pos) lo = mid; else hi = mid - 1; } return marks[lo].start; };\n// The line where the quote starts, nearest the time Claude gave. A long quote that differs later still finds its line\n// by its first eight words, but only a whole match counts as found in the transcript.\nconst locate = (quote, near) => {\n  const words = norm(quote).split(' ').filter(Boolean);\n  const tries = [[words, true]];\n  if (words.length > 8) tries.push([words.slice(0, 8), false]);\n  for (const [w, whole] of tries) {\n    if (!w.length) continue;\n    const needle = ' ' + w.join(' ') + ' ';\n    let best = null;\n    for (let pos = hay.indexOf(needle); pos !== -1; pos = hay.indexOf(needle, pos + 1)) {\n      const start = lineStart(pos);\n      if (!best || Math.abs(start - near) < Math.abs(best.start - near)) best = { start, whole };\n    }\n    if (best) return best;\n  }\n  return null;\n};\nconst moments = [];\nlet pastEnd = 0, notFound = 0;\nconst out = text.split('\\n').map((line) => {\n  const hit = line.match(new RegExp('^(\\\\s*(?:[-*•]\\\\s*)?)' + TIME.source + '\\\\s*[-:–]?\\\\s*(.+)$'));\n  if (!hit) {\n    // A time past the end of the video can't be real, so it stays as plain text and is counted.\n    return line.replace(new RegExp(TIME.source, 'g'), (all, h, m, s) => {\n      const at = seconds(h, m, s);\n      if (at > src.duration_seconds) { pastEnd++; return all; }\n      return `[${clock(at)}](${link(at)})`;\n    });\n  }\n  const said = hit[5].trim();\n  const claimed = seconds(hit[2], hit[3], hit[4]);\n  // The quote ends at the line's last quotation mark. Claude sometimes quotes a term earlier in the line too, so each\n  // opening mark is tried and the span found in the transcript wins.\n  const close = Math.max(said.lastIndexOf('\"'), said.lastIndexOf('”'));\n  const opens = [...said.matchAll(/(^|\\s)[\"“]/g)].map((o) => o.index + o[1].length).filter((o) => o < close);\n  let open = opens.length ? opens[0] : -1, found = null;\n  for (const o of opens) {\n    const f = locate(said.slice(o + 1, close), claimed);\n    if (f && !found) { open = o; found = f; }\n    if (f?.whole) { open = o; found = f; break; }\n  }\n  const quote = open !== -1 ? said.slice(open + 1, close).trim() : '';\n  const what = quote ? said.slice(0, open).trim() : said;\n  if (quote && !found?.whole) notFound++;\n  if (!found && claimed > src.duration_seconds) { pastEnd++; return line; }\n  const at = found ? Math.floor(found.start) : claimed;\n  moments.push({ at: clock(at), seconds: at, url: link(at), text: what, quote, quote_in_transcript: Boolean(found?.whole) });\n  return `${hit[1]}[${clock(at)}](${link(at)}) ${said}`;\n});\nreturn [{ json: {\n  video: { id: src.video_id, title: src.title, channel: src.channel, url: src.watch_url },\n  summary: out.join('\\n'), moments,\n  quotes_not_in_transcript: notFound, times_past_the_end: pastEnd, arcmira_credits_used: src.credits,\n} }];"
+      },
+      "name": "Add timestamped links",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        300
+      ],
+      "id": "add-timestamped-links"
+    },
+    {
+      "parameters": {
+        "respondWith": "firstIncomingItem",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "name": "Send the summary",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1980,
+        300
+      ],
+      "id": "send-the-summary"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { error: $json.error } }}",
+        "options": {
+          "responseCode": "={{ $json.status }}"
+        }
+      },
+      "name": "Send the error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1760,
+        540
+      ],
+      "id": "send-the-error"
+    },
+    {
+      "parameters": {
+        "content": "## Summarize any YouTube video with timestamped links using Arcmira and Claude\n\n### How it works\nPOST a YouTube link. Claude quotes its 5 to 8 most useful moments in whole sentences, each linked to its second.\n\n### Setup\nGet a key at https://arcmira.com/sign-up?src=n8n-video-summary&utm_source=n8n&utm_campaign=n8n-video-summary, then follow notes 2 and 3.\n\n### What Arcmira returns\nArcmira returns the exact quote and a watch link cued to the second, so the reader can check the source. This template makes one call:\n- `GET /v1/transcripts/{video_id}?quality=captions`: the transcript as timed `lines`, with the video's title, channel, length and `watch_url`.\n\nEach summary uses credits from your plan. A caption transcript uses 4 credits per started 15 minutes. Repeating the same request within 7 days costs nothing.\n\n### Build this with your agent\n```\nUse Arcmira (the arcmira MCP server, or its API with my key). Whenever I send a YouTube link, summarize the video with timestamped links. Start with YOUR_YOUTUBE_LINK.\n1. Read the whole transcript once, with no start or end (GET /v1/transcripts/{video_id}?quality=captions). If the answer has next_start, read on from there to the last line, one read at a time.\n2. Write two or three sentences on what the video covers and who it is for.\n3. Pick the 5 to 8 most useful moments. For each, say in one sentence what is said, then quote the whole sentences that hold it, word for word, at most about 300 characters. If those sentences run longer, quote fewer of them. Start each quote at a sentence's first word.\n4. Link each moment to the start of the line that holds the quote's first word, even when that word ends the line, with the transcript's video.watch_url plus &t={start}s.\nCheck it worked: confirm each quote appears word for word in the transcript at its linked second.\n```",
+        "height": 1260,
+        "width": 640,
+        "color": 1
+      },
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -40
+      ],
+      "id": "overview"
+    },
+    {
+      "parameters": {
+        "content": "### 1. Receive a link\nPOST a YouTube link as `url` (or `link`) to the production URL, like `{\"url\": \"https://youtu.be/...\"}`. Watch, youtu.be, shorts, live and embed links all work. A link that isn't from YouTube gets a 400 that says what to send.",
+        "height": 400,
+        "width": 700,
+        "color": 7
+      },
+      "name": "1. Receive a link",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        100
+      ],
+      "id": "1.-receive-a-link"
+    },
+    {
+      "parameters": {
+        "content": "### 2. Transcript from Arcmira\n`GET /v1/transcripts/{video_id}?quality=captions` returns timed lines and the video's length. They become blocks of about 30 seconds, each with its time. A refused read answers the caller with a status it can act on.\n\nPick a **Header Auth** credential here: `Authorization`, `Bearer <your key>`.",
+        "height": 400,
+        "width": 700,
+        "color": 7
+      },
+      "name": "2. Transcript from Arcmira",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        680,
+        100
+      ],
+      "id": "2.-transcript-from-arcmira"
+    },
+    {
+      "parameters": {
+        "content": "### 3. Summarize with Claude\nClaude writes two or three sentences, then 5 to 8 moments, each quoting whole sentences word for word.\n\nAdd your Anthropic key in **Claude model**, then activate.",
+        "height": 620,
+        "width": 300,
+        "color": 7
+      },
+      "name": "3. Summarize with Claude",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        100
+      ],
+      "id": "3.-summarize-with-claude"
+    },
+    {
+      "parameters": {
+        "content": "### 4. Link and answer\nEach quote is found in the transcript and linked to the second its line starts. A quote that isn't there keeps Claude's time and is counted. A time past the end stays unlinked.",
+        "height": 620,
+        "width": 480,
+        "color": 7
+      },
+      "name": "4. Link and answer",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        100
+      ],
+      "id": "4.-link-and-answer"
+    }
+  ],
+  "connections": {
+    "Receive the YouTube link": {
+      "main": [
+        [
+          {
+            "node": "Find the video id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find the video id": {
+      "main": [
+        [
+          {
+            "node": "Got a video id?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Got a video id?": {
+      "main": [
+        [
+          {
+            "node": "Get transcript from Arcmira",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send the error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get transcript from Arcmira": {
+      "main": [
+        [
+          {
+            "node": "Build the timestamped transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build the timestamped transcript": {
+      "main": [
+        [
+          {
+            "node": "Got a transcript?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Got a transcript?": {
+      "main": [
+        [
+          {
+            "node": "Summarize with Claude",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send the error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarize with Claude",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize with Claude": {
+      "main": [
+        [
+          {
+            "node": "Add timestamped links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add timestamped links": {
+      "main": [
+        [
+          {
+            "node": "Send the summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
