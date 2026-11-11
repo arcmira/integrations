@@ -1,0 +1,325 @@
+{
+  "name": "Get a Slack alert when your brand is mentioned in a YouTube video with Arcmira",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "5 * * * *"
+            }
+          ]
+        }
+      },
+      "name": "Every hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ],
+      "id": "every-hour"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "monitor_id",
+              "name": "monitor_id",
+              "value": "mon_PASTE_YOUR_MONITOR_ID",
+              "type": "string"
+            },
+            {
+              "id": "lookback_minutes",
+              "name": "lookback_minutes",
+              "value": 65,
+              "type": "number"
+            },
+            {
+              "id": "also_match",
+              "name": "also_match",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        300
+      ],
+      "id": "settings"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.arcmira.com/v1/monitors/{{ $json.monitor_id }}/alerts?limit=100",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "n8n-template/brand-mention-alert"
+            },
+            {
+              "name": "x-arcmira-client",
+              "value": "n8n-template/brand-mention-alert"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Get monitor alerts from Arcmira",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        300
+      ],
+      "id": "get-monitor-alerts-from-arcmira",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "const settings = $('Settings').first().json;\nconst since = Date.now() - Number(settings.lookback_minutes || 65) * 60 * 1000;\nconst alerts = $input.first().json.alerts || [];\nconst seen = new Set();\nconst out = [];\nfor (const a of alerts) {\n  // One alert row per delivery channel, so a moment sent by email and Slack shows up twice.\n  const key = a.mention_id || `${a.video_id}:${a.tracker_id}`;\n  if (!a.video_id || seen.has(key) || !(Date.parse(a.created_at) >= since)) continue;\n  seen.add(key);\n  out.push({ json: { video_id: a.video_id, name: a.tracker?.entity_name || '', display_name: a.tracker?.display_name || '', monitor: a.monitor?.name || '', alerted_at: a.created_at } });\n}\nreturn out;  // nothing new: the run ends quietly and posts nothing"
+      },
+      "name": "Keep new alerts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        740,
+        300
+      ],
+      "id": "keep-new-alerts"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.arcmira.com/v1/transcripts/{{ $json.video_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "n8n-template/brand-mention-alert"
+            },
+            {
+              "name": "x-arcmira-client",
+              "value": "n8n-template/brand-mention-alert"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Get transcript from Arcmira",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        300
+      ],
+      "id": "get-transcript-from-arcmira",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const moments = $('Keep new alerts').all().map((i) => i.json);\nconst refusal = (e) => {\n  const msg = String(e.message || '');\n  let body = null;\n  try { body = JSON.parse(msg.slice(msg.indexOf(' - ') + 3)); if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg };\n};\nconst norm = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '');\nconst clock = (s) => { s = Math.floor(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\n// At most about 300 characters, kept around the mention [s, e) and cut at word boundaries.\nconst clip = (text, a, b, s, e, open = '', shut = '') => {\n  let lead = open, tail = shut;\n  if (b - a > 300) {\n    let x = Math.max(a, Math.min(s - 100, b - 300)), y = Math.min(b, x + 300);\n    if (x > a) { const k = text.indexOf(' ', x); if (k >= 0 && k < s) x = k + 1; lead = '…'; }\n    if (y < b) { const k = text.lastIndexOf(' ', y); if (k >= e) y = k; tail = '…'; }\n    a = x; b = y;\n  }\n  return lead + text.slice(a, b).trim() + tail;\n};\n// The whole sentence that holds the mention, joined across neighbouring transcript lines. A transcript without\n// punctuation has no sentences, so it quotes the line with one line either side.\nconst sentence = (lines, i, keys) => {\n  const from = Math.max(0, i - 4);\n  const parts = lines.slice(from, i + 5).map((l) => String(l.text || '').replace(/\\s+/g, ' ').trim());\n  const starts = [];\n  let text = '';\n  for (const p of parts) { starts.push(text ? text.length + 1 : 0); text += (text ? ' ' : '') + p; }\n  const here = i - from;\n  let s = starts[here], e = s + parts[here].length;\n  if (!/[.!?]|>>/.test(text)) return clip(text, starts[Math.max(0, here - 1)], here + 1 < parts.length ? starts[here + 1] + parts[here + 1].length : text.length, s, e);\n  // Find the name by its letters, so \"Cloud flare\" and \"CLOUD-FLARE\" still place it.\n  const pos = [], flat = [];\n  for (let k = 0; k < text.length; k++) if (/[a-z0-9]/i.test(text[k])) { pos.push(k); flat.push(text[k].toLowerCase()); }\n  const letters = flat.join(''), first = Math.max(0, pos.findIndex((k) => k >= s));\n  for (const key of keys) {\n    const n = letters.indexOf(key, first);\n    if (n >= 0) { s = pos[n]; e = pos[n + key.length - 1] + 1; break; }\n  }\n  // A sentence starts after . ! or ? and a space, or after a \">>\" speaker change, and ends at the next of them.\n  let a = -1;\n  for (const m of text.matchAll(/[.!?][\"')\\]]*\\s+|>>\\s*/g)) { if (m.index + m[0].length > s) break; a = m.index + m[0].length; }\n  const stop = /[.!?][\"')\\]]*(?=\\s|$)|\\s*>>/g;\n  stop.lastIndex = e;\n  const end = stop.exec(text);\n  // With no boundary in reach, start one line back or stop one line on, and mark the cut.\n  const from0 = a >= 0 ? a : starts[Math.max(0, here - 1)];\n  const to = end ? end.index + (end[0].includes('>') ? 0 : end[0].length) : here + 1 < parts.length ? starts[here + 1] + parts[here + 1].length : text.length;\n  return clip(text, from0, to, s, e, a >= 0 || from0 === 0 ? '' : '…', end || to === text.length ? '' : '…');\n};\nreturn $input.all().map((item, n) => {\n  const t = item.json;\n  const m = moments[n] || {};\n  if (t.error) {\n    const e = refusal(t.error);\n    // A wrong key or an account out of credits fails every moment, so stop the run where n8n shows it.\n    if (e.status === 401 || e.status === 403) throw new Error(`Arcmira didn't accept the API key (${e.code || e.status}). Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Get monitor alerts from Arcmira\" and \"Get transcript from Arcmira\".`);\n    if (e.status === 402) throw new Error(`Arcmira refused the transcript for credits (${e.code || 402}). ${e.text}`);\n  }\n  const lines = Array.isArray(t.lines) ? t.lines : [];\n  const title = t.video?.title || 'a new video';\n  const channel = t.video?.channel_name || '';\n  const also = String($('Settings').first().json.also_match || '').split(',');\n  const names = [m.name, m.display_name, ...also].map(norm).filter((x) => x.length >= 3);\n  // Transcript lines split words, so a name can start on one line and end on the next.\n  const hits = [];\n  for (let i = 0; i < lines.length; i++) {\n    const here = norm(lines[i].text), pair = here + norm(lines[i + 1]?.text);\n    if (names.some((x) => here.includes(x) || (pair.includes(x) && !norm(lines[i + 1]?.text).includes(x)))) hits.push(i);\n  }\n  // Transcripts misspell brand names (\"Verscell\" for Vercel). With no exact match, take the closest transcript\n  // word that starts with the name's first three letters, ends in its last letter and is at most two letters off.\n  let guess = '';\n  // Only a one-word name gets a close spelling: \"versel\" is Vercel, not proof that \"Vercel v0\" was said.\n  const target = /\\s/.test(String(m.name || '').trim()) ? '' : norm(m.name);\n  if (!hits.length && target.length >= 5) {\n    const limit = target.length >= 6 ? 2 : 1;\n    const lev = (a, b) => { let prev = [...Array(b.length + 1).keys()]; for (let i = 1; i <= a.length; i++) { const cur = [i]; for (let j = 1; j <= b.length; j++) cur.push(Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] !== b[j - 1]))); prev = cur; } return prev[b.length]; };\n    let best = null;\n    lines.forEach((l, i) => {\n      for (const w of String(l.text || '').toLowerCase().match(/[a-z0-9]+/g) || []) {\n        if (w.slice(0, 3) !== target.slice(0, 3) || w.slice(-1) !== target.slice(-1) || Math.abs(w.length - target.length) > limit) continue;\n        const d = lev(w, target);\n        if (d <= limit && (!best || d < best.d)) best = { d, w };\n      }\n    });\n    if (best) {\n      guess = best.w;\n      lines.forEach((l, i) => { if ((String(l.text || '').toLowerCase().match(/[a-z0-9]+/g) || []).includes(guess)) hits.push(i); });\n    }\n  }\n  const who = m.display_name || m.name || 'Your company';\n  const head = `*${who}* was mentioned on YouTube in *${title}*${channel ? ` (${channel})` : ''}`;\n  if (!hits.length) {\n    const why = t.error ? `Arcmira couldn't read the transcript (${refusal(t.error).code || 'error'})` : \"the transcript doesn't spell the name out\";\n    return { json: { found: false, text: `${head}\\n_The monitor matched it, but ${why}._ <https://www.youtube.com/watch?v=${m.video_id}|Open the video>` } };\n  }\n  const i = hits[0];\n  const quote = sentence(lines, i, guess ? [guess] : names);\n  const at = Math.floor(lines[i].start);\n  const more = (hits.length > 1 ? ` · mentioned ${hits.length} times` : '') + (guess ? ` · the transcript spells it \"${guess}\"` : '');\n  return { json: { found: true, text: `${head}\\n> ${quote}\\n<https://www.youtube.com/watch?v=${m.video_id}&t=${at}s|Watch at ${clock(at)}>${more}` } };\n});"
+      },
+      "name": "Find the brand mention",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        300
+      ],
+      "id": "find-the-brand-mention"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.text }}",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "C_PASTE_SLACK_CHANNEL_ID"
+        },
+        "otherOptions": {}
+      },
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1480,
+        300
+      ],
+      "id": "post-to-slack"
+    },
+    {
+      "parameters": {
+        "content": "## Get a Slack alert when your brand is mentioned in a YouTube video with Arcmira\n\n### How it works\nEvery hour this reads your Arcmira monitor's new alerts, finds the sentence naming your brand in each transcript, even misspelled, and posts it to Slack linked to that second.\n\n### Setup\nAt https://arcmira.com/sign-up?src=n8n-brand-mention-alert&utm_source=n8n&utm_campaign=n8n-brand-mention-alert, make a monitor for your brand. Copy its id (`mon_...`) and an API key, then follow notes 1 to 4.\n\n### What Arcmira returns\nArcmira returns the exact quote and a watch link cued to the second, so the reader can check the source. This template makes two calls:\n- `GET /v1/monitors/{id}/alerts`: newest alerts, each with a `video_id`.\n- `GET /v1/transcripts/{video_id}`: the transcript as timed `lines`.\n\nEach alert uses 25 credits from your plan, once. A caption transcript uses 4 credits per started 15 minutes.\n\n### Build this with your agent\n```\nUse Arcmira (the arcmira MCP server, or its API with my key). Every hour, send new YouTube mentions of my brand to Slack. My Arcmira monitor is mon_YOUR_MONITOR_ID.\n1. Read the monitor's alerts (GET /v1/monitors/{id}/alerts?limit=100) and keep those created in the last hour, one per video.\n2. Read each video's whole transcript (GET /v1/transcripts/{video_id}). If the answer has next_start, read on from there to the last line, one read at a time.\n3. Find the whole sentence that names the brand, allowing for misspellings in the transcript.\n4. Post the brand, the video title, that sentence in quotes, word for word, and the transcript's video.watch_url plus &t={start}s, where start is the start of the line that holds the brand's name, in whole seconds.\nCheck it worked: run steps 1 to 4 once over the last 72 hours and show me the messages before you schedule it.\n```",
+        "height": 1180,
+        "width": 620,
+        "color": 1
+      },
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        -40
+      ],
+      "id": "overview"
+    },
+    {
+      "parameters": {
+        "content": "### 1. When and what\nRuns at five past every hour. **Settings** holds your monitor id, how far back to look (65 minutes covers one run) and other spellings of your brand.",
+        "height": 360,
+        "width": 520,
+        "color": 7
+      },
+      "name": "1. When and what",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        100
+      ],
+      "id": "1.-when-and-what"
+    },
+    {
+      "parameters": {
+        "content": "### 2. New alerts from Arcmira\n`GET /v1/monitors/{id}/alerts` returns the newest 100 alerts. An alert sent by email and by Slack has a row for each, so this keeps one per video and mention.\n\nPick a **Header Auth** credential here and in note 3: `Authorization`, `Bearer <your key>`.",
+        "height": 360,
+        "width": 520,
+        "color": 7
+      },
+      "name": "2. New alerts from Arcmira",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        440,
+        100
+      ],
+      "id": "2.-new-alerts-from-arcmira"
+    },
+    {
+      "parameters": {
+        "content": "### 3. Find the brand mention\n`GET /v1/transcripts/{video_id}` returns timed lines. The finder matches the name, a spelling from `also_match`, or a close spelling, quotes the whole sentence and links to that second.",
+        "height": 360,
+        "width": 520,
+        "color": 7
+      },
+      "name": "3. Find the brand mention",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        920,
+        100
+      ],
+      "id": "3.-find-the-brand-mention"
+    },
+    {
+      "parameters": {
+        "content": "### 4. Send\nOne Slack message per mention: the brand, the video, the sentence and a link that opens the video at that second.\n\nConnect Slack in **Post to Slack** and set the channel id.",
+        "height": 360,
+        "width": 300,
+        "color": 7
+      },
+      "name": "4. Send",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        100
+      ],
+      "id": "4.-send"
+    }
+  ],
+  "connections": {
+    "Every hour": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Get monitor alerts from Arcmira",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get monitor alerts from Arcmira": {
+      "main": [
+        [
+          {
+            "node": "Keep new alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep new alerts": {
+      "main": [
+        [
+          {
+            "node": "Get transcript from Arcmira",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get transcript from Arcmira": {
+      "main": [
+        [
+          {
+            "node": "Find the brand mention",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find the brand mention": {
+      "main": [
+        [
+          {
+            "node": "Post to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
