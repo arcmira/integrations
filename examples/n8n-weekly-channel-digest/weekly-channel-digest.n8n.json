@@ -58,13 +58,46 @@
     },
     {
       "parameters": {
-        "jsCode": "const s = $('Settings').first().json;\n// Set on the second pass, after Arcmira refused the first window for the plan: served_through, its message and link.\nconst gate = $input.first().json.gate || null;\nconst ids = [...new Set(String(s.channel_ids || '').split(',').map((id) => id.trim()).filter(Boolean))];\nif (!ids.length) throw new Error('Add at least one YouTube channel id (it starts with UC) in \"Settings\".');\nfor (const id of ids) if (!/^UC[\\w-]{22}$/.test(id)) throw new Error(`Not a YouTube channel id: ${id}. Channel ids start with UC and have 24 characters.`);\nconst day = 24 * 3600 * 1000;\nconst iso = (t) => new Date(t).toISOString().replace(/\\.\\d{3}Z$/, 'Z');\n// Arcmira indexes most videos within two days, so the window ends wait_days ago and next week's run picks up the rest.\nlet before = Date.now() - Number(s.wait_days ?? 2) * day;\n// On the Free plan it ends on served_through at this hour, where the plan's media stops, so weeks still meet.\nif (gate) before = Date.parse(`${gate.served_through}T${iso(Date.now()).slice(11)}`);\nconst after = before - Number(s.days || 7) * day;\nreturn ids.map((id) => ({ json: { channel_id: id, after: iso(after), before: iso(before), gate } }));"
+        "url": "=https://api.arcmira.com/v1/me",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "n8n-template/weekly-channel-digest"
+            },
+            {
+              "name": "x-arcmira-client",
+              "value": "n8n-template/weekly-channel-digest"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Check the plan's dates",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        300
+      ],
+      "id": "check-the-plan's-dates",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  let body = null;\n  try { body = JSON.parse(msg.slice(msg.indexOf(' - ') + 3)); if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg, unlock: body?.error?.unlock?.url || '', limit: body?.error?.details?.limit || null };\n};\nconst count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;\nconst keyError = () => new Error(`Arcmira didn't accept the API key. Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Check the plan's dates\", \"List channel videos from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst s = $('Settings').first().json;\n// GET /v1/me from \"Check the plan's dates\". freshness is set on a plan that reads media after a delay, such as the\n// Free plan. When this call fails, the run can't tell which dates the plan reads, so it stops rather than guess.\nconst me = $input.first().json;\nif (me.error) {\n  const e = refusal(me.error);\n  if (e.status === 401) throw keyError();\n  throw new Error(`Arcmira didn't answer \"Check the plan's dates\" after 5 tries (${e.code || e.status || 'error'}). Run the workflow again.`);\n}\nconst delay = Number(me.freshness?.delay_days) || 0;\nconst ids = [...new Set(String(s.channel_ids || '').split(',').map((id) => id.trim()).filter(Boolean))];\nif (!ids.length) throw new Error('Add at least one YouTube channel id (it starts with UC) in \"Settings\".');\nfor (const id of ids) if (!/^UC[\\w-]{22}$/.test(id)) throw new Error(`Not a YouTube channel id: ${id}. Channel ids start with UC and have 24 characters.`);\nconst day = 24 * 3600 * 1000;\nconst iso = (t) => new Date(t).toISOString().replace(/\\.\\d{3}Z$/, 'Z');\nconst now = Date.now();\n// Arcmira indexes most videos within two days, so the window ends wait_days ago and next week's run picks up the rest.\nconst before = now - Number(s.wait_days ?? 2) * day;\n// On a delayed plan it ends where the plan's results stop, delay_days ago, which falls on served_through. n8n's clock\n// sets after and Arcmira's sets the cut, so weeks meet to within the seconds the two clocks differ. before is sent as\n// it is. Arcmira cuts a window that runs past the plan's date, and only then does its answer carry the note and unlock link.\nconst end = delay > 0 ? Math.min(before, now - delay * day) : before;\nconst after = end - Number(s.days || 7) * day;\nconst span = `${iso(after).slice(0, 10)} to ${iso(end).slice(0, 10)}`;\nreturn ids.map((id) => ({ json: { channel_id: id, after: iso(after), before: iso(before), span } }));"
       },
       "name": "One item per channel",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        440,
+        660,
         300
       ],
       "id": "one-item-per-channel"
@@ -72,15 +105,13 @@
     {
       "parameters": {
         "batchSize": 1,
-        "options": {
-          "reset": "={{ $prevNode.name === 'One item per channel' }}"
-        }
+        "options": {}
       },
       "name": "One channel at a time",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        660,
+        880,
         300
       ],
       "id": "one-channel-at-a-time"
@@ -109,7 +140,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        880,
+        1100,
         480
       ],
       "id": "list-channel-videos-from-arcmira",
@@ -120,50 +151,16 @@
     },
     {
       "parameters": {
-        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  let body = null;\n  try { body = JSON.parse(msg.slice(msg.indexOf(' - ') + 3)); if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg, unlock: body?.error?.unlock?.url || '', limit: body?.error?.details?.limit || null };\n};\nconst count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;\nconst keyError = () => new Error(`Arcmira didn't accept the API key. Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"List channel videos from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst asked = $('One item per channel').all().map((i) => i.json);\nconst span = `${asked[0].after.slice(0, 10)} to ${asked[0].before.slice(0, 10)}`;\nconst gate = asked[0].gate;\n// On the Free plan the digest opens with Arcmira's own message, word for word, and its unlock link.\nconst lead = gate ? `${gate.text}${gate.unlock ? ` unlock.url: <${gate.unlock}>` : ''}` : '';\nconst seen = new Set();\nconst videos = [];\nconst missing = [];\nconst failed = [];\nconst more = [];\nlet gated = null;\n$input.all().forEach((item, n) => {\n  const r = item.json;\n  const id = asked[n]?.channel_id || `channel ${n + 1}`;\n  if (r.error) {\n    const e = refusal(r.error);\n    if (e.status === 401) throw keyError();\n    // The Free plan withholds the newest 30 days of media, so it refuses every channel's list the same way.\n    if (e.code === 'freshness_requires_paid') { gated = e; return; }\n    if (e.status === 402 || e.status === 403) throw new Error(`Arcmira refused the video list (${e.code || e.status}). ${e.text}`);\n    failed.push(`${id} (${e.code || e.status || 'error'})`);\n    return;\n  }\n  if (!r.indexed_through) { missing.push(id); return; }\n  const name = r.channel?.name || id;\n  if (r.has_more) more.push(name);\n  for (const v of r.episodes || []) {\n    if (!v.video_id || seen.has(v.video_id)) continue;\n    seen.add(v.video_id);\n    videos.push({ video_id: v.video_id, title: v.title || v.video_id, channel: v.channel_name || name });\n  }\n});\nif (gated) {\n  // The Free plan withholds the newest 30 days. List again, once, for the 7 days that end on the newest date it reads.\n  const through = String(gated.limit?.served_through || '');\n  if (!gate && /^\\d{4}-\\d\\d-\\d\\d$/.test(through)) return [{ json: { older: true, gate: { served_through: through, text: gated.text, unlock: gated.unlock } } }];\n  return [{ json: { nothing_new: true, text: `*No digest for videos published ${span}.* Arcmira refused the video list (${gated.code}): \"${gated.text}\"${gated.unlock ? `\\nunlock.url: <${gated.unlock}>` : ''}` } }];\n}\nconst note = [\n  missing.length ? `_Arcmira doesn't index ${count(missing.length, 'channel')} yet: ${missing.join(', ')}. Ask for ${missing.length === 1 ? 'it' : 'them'} at https://arcmira.com/docs/feedback#help-shape-the-index._` : '',\n  failed.length ? `_Arcmira didn't list the videos of ${count(failed.length, 'channel')}: ${failed.join(', ')}._` : '',\n  more.length ? `_${more.join(', ')} published more than 25 videos. The digest has the newest 25 of each._` : '',\n].filter(Boolean).join('\\n');\n// A quiet week posts nothing, unless a channel needs your attention.\nif (!videos.length) return note ? [{ json: { nothing_new: true, text: [lead, `_No new videos published ${span}._`, note].filter(Boolean).join('\\n') } }] : [];\nreturn videos.map((v) => ({ json: { ...v, nothing_new: false, span, note, lead } }));"
+        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  let body = null;\n  try { body = JSON.parse(msg.slice(msg.indexOf(' - ') + 3)); if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg, unlock: body?.error?.unlock?.url || '', limit: body?.error?.details?.limit || null };\n};\nconst count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;\nconst keyError = () => new Error(`Arcmira didn't accept the API key. Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Check the plan's dates\", \"List channel videos from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst asked = $('One item per channel').all().map((i) => i.json);\nconst span = asked[0].span;\nconst seen = new Set();\nconst videos = [];\nconst missing = [];\nconst failed = [];\nconst more = [];\nconst cut = [];\n$input.all().forEach((item, n) => {\n  const r = item.json;\n  const id = asked[n]?.channel_id || `channel ${n + 1}`;\n  if (r.error) {\n    const e = refusal(r.error);\n    if (e.status === 401) throw keyError();\n    // The plan can change between calls, for example when a trial ends, so a list can still be refused for its dates.\n    // The digest names that channel.\n    if (e.code !== 'freshness_requires_paid' && (e.status === 402 || e.status === 403)) throw new Error(`Arcmira refused the video list (${e.code || e.status}). ${e.text}`);\n    failed.push(`${id} (${e.code || e.status || 'error'})`);\n    return;\n  }\n  // On a delayed plan Arcmira cut the window at served_through, and the answer's note says where results stop.\n  if (r.freshness) cut.push(r);\n  if (!r.indexed_through) { missing.push(id); return; }\n  const name = r.channel?.name || id;\n  if (r.has_more) more.push(name);\n  for (const v of r.episodes || []) {\n    if (!v.video_id || seen.has(v.video_id)) continue;\n    seen.add(v.video_id);\n    videos.push({ video_id: v.video_id, title: v.title || v.video_id, channel: v.channel_name || name });\n  }\n});\n// The digest opens with Arcmira's note, word for word, up to its offer sentence, which becomes the link. From the offer\n// on, the note tells agents how to use the list. A channel that had videos in the window carries the plainer note.\nconst OFFER = 'Open unlock.url to try Pro for free';\nconst plan = cut.find((r) => r.returned) || cut[0];\nconst said = String(plan?.note || ''), url = plan?.unlock?.url, at = said.indexOf(OFFER);\nconst words = at < 0 ? [said.match(/^.*?unlock\\.url[^.]*\\./)?.[0] || said, url && `unlock.url: <${url}>`] : [said.slice(0, at).trim(), url && `Try Pro for free: <${url}>`];\nconst lead = plan ? words.filter(Boolean).join(' ') : '';\nconst note = [\n  missing.length ? `_Arcmira doesn't index ${count(missing.length, 'channel')} yet: ${missing.join(', ')}. Ask for ${missing.length === 1 ? 'it' : 'them'} at https://arcmira.com/docs/feedback#help-shape-the-index._` : '',\n  failed.length ? `_Arcmira didn't list the videos of ${count(failed.length, 'channel')}: ${failed.join(', ')}._` : '',\n  more.length ? `_${more.join(', ')} published more than 25 videos. The digest has the newest 25 of each._` : '',\n].filter(Boolean).join('\\n');\n// A quiet week posts nothing, unless a channel needs your attention.\nif (!videos.length) return note ? [{ json: { nothing_new: true, text: [lead, `_No new videos published ${span}._`, note].filter(Boolean).join('\\n') } }] : [];\nreturn videos.map((v) => ({ json: { ...v, nothing_new: false, span, note, lead } }));"
       },
       "name": "Keep new videos",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1100,
-        300
-      ],
-      "id": "keep-new-videos"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "plan-reads",
-              "leftValue": "={{ $json.older === true }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "false",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "name": "Plan reads these dates?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
         1320,
         300
       ],
-      "id": "plan-reads-these-dates"
+      "id": "keep-new-videos"
     },
     {
       "parameters": {
@@ -248,7 +245,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  let body = null;\n  try { body = JSON.parse(msg.slice(msg.indexOf(' - ') + 3)); if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg, unlock: body?.error?.unlock?.url || '', limit: body?.error?.details?.limit || null };\n};\nconst count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;\nconst keyError = () => new Error(`Arcmira didn't accept the API key. Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"List channel videos from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst videos = $('Keep new videos').all().map((i) => i.json);\nconst clock = (s) => { s = Math.floor(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\nconst out = [];\nconst skipped = [];\n$input.all().forEach((item, n) => {\n  const t = item.json;\n  const v = videos[n] || {};\n  // The list carries the video's current title. The transcript keeps the title it was read under.\n  const name = v.title || t.video?.title || v.video_id || 'a video';\n  if (t.error) {\n    const e = refusal(t.error);\n    // A wrong key or an account out of credits fails every video, so stop the run where n8n shows it.\n    if (e.status === 401 || e.status === 403) throw keyError();\n    if (e.status === 402) throw new Error(`Arcmira refused the transcript for credits (${e.code || 402}). ${e.text}`);\n    skipped.push(`${name} (${e.code || e.status || 'error'})`);\n    return;\n  }\n  if (t.state !== 'ready' || !Array.isArray(t.lines) || !t.lines.length) { skipped.push(`${name} (${t.state || 'no lines'})`); return; }\n  // Premium lines carry a speaker number. Only an identified person's name is passed on.\n  const who = new Map((t.speakers || []).filter((p) => p.entity_id).map((p) => [p.id, p.name]));\n  let text = '';\n  for (const line of t.lines) {\n    const row = `[${clock(line.start)}] ${who.has(line.speaker) ? who.get(line.speaker) + ': ' : ''}${line.text}\\n`;\n    if (text.length + row.length > 200000) { text += '[transcript cut for length]\\n'; break; }\n    text += row;\n  }\n  const id = t.video?.id || v.video_id;\n  out.push({ video_id: id, title: name, channel: v.channel || t.video?.channel_name, watch_url: t.video?.watch_url || `https://www.youtube.com/watch?v=${id}`, transcript: text });\n});\nconst note = [videos[0]?.note, skipped.length ? `_No transcript for ${count(skipped.length, 'video')}: ${skipped.join(', ')}._` : ''].filter(Boolean).join('\\n');\nif (!out.length) throw new Error(`Arcmira returned no transcript for the ${count(videos.length, 'new video')}: ${skipped.join(', ')}.`);\nreturn out.map((o) => ({ json: { ...o, span: videos[0].span, note, lead: videos[0].lead } }));"
+        "jsCode": "const refusal = (e) => {\n  const msg = String(e.message || '');\n  let body = null;\n  try { body = JSON.parse(msg.slice(msg.indexOf(' - ') + 3)); if (typeof body === 'string') body = JSON.parse(body); } catch (_) {}\n  return { status: Number(e.status || e.httpCode || msg.slice(0, 3)) || 0, code: body?.error?.code || '', text: body?.error?.message || msg, unlock: body?.error?.unlock?.url || '', limit: body?.error?.details?.limit || null };\n};\nconst count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;\nconst keyError = () => new Error(`Arcmira didn't accept the API key. Pick a Header Auth credential named Authorization with the value \"Bearer <your key>\" in \"Check the plan's dates\", \"List channel videos from Arcmira\" and \"Get transcript from Arcmira\".`);\nconst videos = $('Keep new videos').all().map((i) => i.json);\nconst clock = (s) => { s = Math.floor(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };\nconst out = [];\nconst skipped = [];\n$input.all().forEach((item, n) => {\n  const t = item.json;\n  const v = videos[n] || {};\n  // The list carries the video's current title. The transcript keeps the title it was read under.\n  const name = v.title || t.video?.title || v.video_id || 'a video';\n  if (t.error) {\n    const e = refusal(t.error);\n    // A wrong key or an account out of credits fails every video, so stop the run where n8n shows it.\n    if (e.status === 401 || e.status === 403) throw keyError();\n    if (e.status === 402) throw new Error(`Arcmira refused the transcript for credits (${e.code || 402}). ${e.text}`);\n    skipped.push(`${name} (${e.code || e.status || 'error'})`);\n    return;\n  }\n  if (t.state !== 'ready' || !Array.isArray(t.lines) || !t.lines.length) { skipped.push(`${name} (${t.state || 'no lines'})`); return; }\n  // Premium lines carry a speaker number. Only an identified person's name is passed on.\n  const who = new Map((t.speakers || []).filter((p) => p.entity_id).map((p) => [p.id, p.name]));\n  let text = '';\n  for (const line of t.lines) {\n    const row = `[${clock(line.start)}] ${who.has(line.speaker) ? who.get(line.speaker) + ': ' : ''}${line.text}\\n`;\n    if (text.length + row.length > 200000) { text += '[transcript cut for length]\\n'; break; }\n    text += row;\n  }\n  const id = t.video?.id || v.video_id;\n  out.push({ video_id: id, title: name, channel: v.channel || t.video?.channel_name, watch_url: t.video?.watch_url || `https://www.youtube.com/watch?v=${id}`, transcript: text });\n});\nconst note = [videos[0]?.note, skipped.length ? `_No transcript for ${count(skipped.length, 'video')}: ${skipped.join(', ')}._` : ''].filter(Boolean).join('\\n');\nif (!out.length) throw new Error(`Arcmira returned no transcript for the ${count(videos.length, 'new video')}: ${skipped.join(', ')}.`);\nreturn out.map((o) => ({ json: { ...o, span: videos[0].span, note, lead: videos[0].lead } }));"
       },
       "name": "Transcript to timed text",
       "type": "n8n-nodes-base.code",
@@ -329,7 +326,7 @@
     },
     {
       "parameters": {
-        "content": "## Send a weekly YouTube channel digest to Slack with Arcmira and Claude\n\n### How it works\nEvery Monday Claude summarizes your channels' new videos.\n\n### Setup\nOn the Free plan this digest runs 30 days behind, because the Free plan withholds the newest 30 days of media. A paid plan or the Pro trial reads last week's videos.\nGet a key at https://arcmira.com/sign-up?src=n8n-weekly-channel-digest&utm_source=n8n&utm_campaign=n8n-weekly-channel-digest, then follow notes 1 to 4.\n\n### What Arcmira returns\nArcmira returns the exact quote and a watch link cued to the second, so the reader can check the source. This template makes two calls:\n- `GET /v1/channels/{channel_id}/videos`: a channel's indexed videos, newest first.\n- `GET /v1/transcripts/{video_id}`: the transcript as timed `lines`.\n\nA listed video uses 4 credits from your plan, and the first 5 in each request are free. A caption transcript uses 4 credits per started 15 minutes.\n\n### Build this with your agent\n```\nUse Arcmira (the arcmira MCP server, or its API with my key). Every Monday, post a Slack digest of new videos on my YouTube channels UC_CHANNEL_ID_1 and UC_CHANNEL_ID_2.\n1. List each channel's videos from the 7 days that ended 2 days ago (GET /v1/channels/{channel_id}/videos). If Arcmira says my plan can't read those dates, say so in one line, then run the same search over the newest 7 days it can read.\n2. Read each video's transcript (GET /v1/transcripts/{video_id}).\n3. Read each whole transcript, then write 3 to 5 points per video, each quoting a whole sentence word for word.\n4. Post each video's title from the list, its channel and points. Link each quote to the start of the line that holds its first word, with the transcript's video.watch_url plus &t={start}s.\nCheck it worked: run it once now and show me the digest before you schedule it.\n```",
+        "content": "### How it works\nEvery Monday Claude summarizes your channels' new videos.\n\n### Setup\nOn the Free plan this digest runs 30 days behind, because the Free plan withholds the newest 30 days of media. A paid plan or the Pro trial reads last week's videos.\nGet a key at https://arcmira.com/sign-up?src=n8n-weekly-channel-digest&utm_source=n8n&utm_campaign=n8n-weekly-channel-digest, then follow notes 1 to 4.\n\n### What Arcmira returns\nArcmira returns the exact quote and a watch link cued to the second, so the reader can check the source. This template makes three calls:\n- `GET /v1/me`: the newest date your plan reads (`freshness`). It uses no credits.\n- `GET /v1/channels/{channel_id}/videos`: a channel's indexed videos, newest first.\n- `GET /v1/transcripts/{video_id}?quality=captions&timestamps=true`: the transcript as timed `lines`.\n\nA listed video uses 4 credits from your plan, and the first 5 in each request are free. A caption transcript uses 4 credits per started 15 minutes.\n\n### Build this with your agent\n```\nUse Arcmira (the arcmira MCP server, or its API with my key). Every Monday, post a Slack digest of new videos on my YouTube channels UC_CHANNEL_ID_1 and UC_CHANNEL_ID_2.\n1. Call arcmira.status() (GET /v1/me) first. List each channel's videos from the 7 days that ended 2 days ago (GET /v1/channels/{channel_id}/videos). If status() reports freshness, list the 7 days that end on its served_through instead, and say where results stop.\n2. Read each video's transcript (GET /v1/transcripts/{video_id}?quality=captions&timestamps=true).\n3. Read each whole transcript, then write 3 to 5 points per video, each quoting a whole sentence word for word.\n4. Post each video's title from the list, its channel and points. Link each quote to the start of the line that holds its first word, with the transcript's video.watch_url plus &t={start}s, in whole seconds.\nCheck it worked: run it once now and show me the digest before you schedule it.\n```",
         "height": 1300,
         "width": 640,
         "color": 1
@@ -346,8 +343,8 @@
     {
       "parameters": {
         "content": "### 1. When and what\nRuns every Monday at 8:00. In **Settings**, paste your channel ids (`UC...`), comma separated. `days` (7) is how many days the digest covers, and `wait_days` (2) is how many of the newest days it leaves for next week, so Arcmira has indexed them.",
-        "height": 360,
-        "width": 640,
+        "height": 400,
+        "width": 450,
         "color": 7
       },
       "name": "1. When and what",
@@ -361,23 +358,23 @@
     },
     {
       "parameters": {
-        "content": "### 2. New videos from Arcmira\n`GET /v1/channels/{channel_id}/videos` lists each channel's indexed videos in the window. The loop asks for one channel at a time, so each call gets its own 5 tries. A channel Arcmira doesn't index comes back empty, and the digest names it. A week with nothing new posts nothing. On the Free plan, Arcmira refuses last week and names the newest date the plan reads (`served_through`). The run then lists the 7 days that end on that date, and the digest opens with Arcmira's message and its unlock link.\n\nPick a **Header Auth** credential here and in note 3: `Authorization`, `Bearer <your key>`.",
+        "content": "### 2. New videos from Arcmira\n`GET /v1/channels/{channel_id}/videos` lists each channel's indexed videos in the window. The loop asks for one channel at a time, so each call gets its own 5 tries. A channel Arcmira doesn't index comes back empty, and the digest names it. A week with nothing new posts nothing. On the Free plan, `GET /v1/me` in **Check the plan's dates** names the newest date the plan reads (`freshness.served_through`). It uses no credits. The run then lists the 7 days that end on that date, and the digest opens with Arcmira's note and its unlock link.\n\nPick a **Header Auth** credential here and in note 3: `Authorization`, `Bearer <your key>`.",
         "height": 560,
-        "width": 1040,
+        "width": 1240,
         "color": 7
       },
       "name": "2. New videos from Arcmira",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        620,
+        420,
         100
       ],
       "id": "2.-new-videos-from-arcmira"
     },
     {
       "parameters": {
-        "content": "### 3. Transcripts and summary\n`GET /v1/transcripts/{video_id}` returns timed lines. The loop reads one transcript at a time, so each call gets its own 5 tries. Claude writes 3 to 5 points per video, each with a whole quoted sentence and the time it was said.\n\nConnect Anthropic in **Claude**.",
+        "content": "### 3. Transcripts and summary\n`GET /v1/transcripts/{video_id}?quality=captions&timestamps=true` returns timed lines. The loop reads one transcript at a time, so each call gets its own 5 tries. Claude writes 3 to 5 points per video, each with a whole quoted sentence and the time it was said.\n\nConnect Anthropic in **Claude**.",
         "height": 580,
         "width": 820,
         "color": 7
@@ -424,6 +421,17 @@
       "main": [
         [
           {
+            "node": "Check the plan's dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check the plan's dates": {
+      "main": [
+        [
+          {
             "node": "One item per channel",
             "type": "main",
             "index": 0
@@ -464,25 +472,7 @@
       "main": [
         [
           {
-            "node": "Plan reads these dates?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Plan reads these dates?": {
-      "main": [
-        [
-          {
             "node": "New videos?",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "One item per channel",
             "type": "main",
             "index": 0
           }
