@@ -66,7 +66,7 @@ Check it worked: run it once, show me the rows, and confirm each quote is in the
 
 ## Limits
 
-It tries each Arcmira call up to 5 times. It reads at most 10 pages of 100 mentions per competitor each run. A row is written once, so its `views` are the count on the day it was added. A row with no quote keeps none, since the next run skips it. Delete a row and the next run adds it again while its video is under 14 days old.
+It tries each Arcmira call up to 5 times. It reads at most 10 pages of 100 mentions per competitor each run. A row is written once, so its `views` are the count on the day it was added. A row with no quote keeps none, since the next run skips it. Delete a row and the next run adds it again while its video is still inside the run's 14 days.
 
 ## Verification
 

@@ -65,7 +65,7 @@ Check it worked: confirm each quote appears word for word at its linked second.
 
 - On November 10, 2026 the workflow ran in n8n 2.46.6 as a production webhook, with Claude (`claude-opus-5-5`) in its Anthropic node. Four YouTube links answered 200 with 32 moments. Every quote was found word for word in its transcript, and each links to the line where it starts. A first read of a 56-minute video used 16 credits. A link that isn't from YouTube answered 400, a wrong key 500, and a video with no transcript 404.
 - It passed n8n's import and export round trip, a check of every node parameter against n8n's own node definitions, and the code-node tests.
-- The agent prompt above ran once in Claude Sonnet 5.5 with the Arcmira MCP server on November 10, 2026, on the same Odd Lots episode. It read the transcript to the last line and picked 8 moments, each quote found word for word at its linked second.
+- On November 10, 2026, an earlier wording of the agent prompt ran once in Claude Sonnet 5.5 with the Arcmira MCP server, on the same Odd Lots episode. Its transcript call had no `&timestamps=true`, and its step 4 did not ask for whole seconds. It read the transcript to the last line and picked 8 moments, each quote found word for word at its linked second, and linked all 8 in whole seconds. The wording above has not run.
 - It has not run on the Free plan or in n8n Cloud. In that run the Anthropic node reached Claude through a gateway, not with a key sent straight to Anthropic.
 
 ## Files
